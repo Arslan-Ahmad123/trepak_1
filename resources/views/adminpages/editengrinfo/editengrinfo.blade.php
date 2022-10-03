@@ -1,0 +1,5 @@
+@include('./../../newadminpanel/header')
+@include('./../../newadminpanel/topnavabr')
+@include('./../../newadminpanel/sidebar')
+@include('adminpages/editengrinfo/maincontent')
+@include('./../../newadminpanel/footer')

@@ -1,0 +1,1 @@
+@include('frontedview.homecomponent.homesample');

@@ -1,0 +1,5 @@
+@include('frontedview.homecomponent.header')
+@include('frontedview.homecomponent.preloader')
+@include('frontedview.homecomponent.navbar')
+@include('frontedview.homecomponent.maincontent')
+@include('frontedview.homecomponent.footer')

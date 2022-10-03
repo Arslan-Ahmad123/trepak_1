@@ -1,0 +1,5 @@
+@include('newadminpanel.header')
+@include('newadminpanel.topnavabr')
+@include('newadminpanel.sidebar')
+@include('newadminpanel.maincontent')
+@include('newadminpanel.footer')
