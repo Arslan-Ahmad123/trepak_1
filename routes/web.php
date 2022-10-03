@@ -21,6 +21,7 @@ use App\Http\Controllers\engineerController;
 // dd(  rand(111111,999999));
 // });
 Route::get('/', [index::class,'showindex'])->name('home');
+Route::view('/indexpage', 'newpanel.newpanelview')->name('indexpage');
 // Route::view('/city','city');
 
 Route::post('send_message',[index::class,'send_message'])->name('send_message');

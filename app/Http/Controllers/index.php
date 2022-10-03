@@ -24,8 +24,16 @@ class index extends Controller
         $this->clientservices = $clientservices;
     }
     public function showindex(){
-        // dd("Arfan");
-        $this->clientservices->showIndexpage();
+       $redirectPageName = $this->clientservices->showIndexpage();
+       if($redirectPageName == 'ADMIN'){
+        return redirect(RouteServiceProvider::ADMIN);
+       }elseif($redirectPageName == 'ENGE'){
+        return redirect(RouteServiceProvider::ENGE);
+       }elseif($redirectPageName == 'ENGEFAILED'){
+        dd('Your request go to Admin');
+       }else{
+        return redirect(RouteServiceProvider::INDEXPAGE);
+       }
     }
     public function sessionsearchengineer(Request $res){
         if(session()->has('searchengrpage')){
@@ -45,21 +53,10 @@ class index extends Controller
     }
     public function engineersearch(Request $res){
        
-        //  $res->validate([
-        //     'cityname' => ['required'],
-        //     'date' => ['required'],
-            
-        // ]);
-        //    $engineer_count = User::where('role','enge')->where('city',$res->cityname)->count();
-            $categoryname = engCategory::find($res->id);
-            $engr = User::where('role','enge')->where('engrcategoryid',$res->id)->paginate(10);
-           
-            $totalengr = User::where('role','enge')->where('engrcategoryid',$res->id)->count();
-            return view('searchengineer.searchengineerview')->with(['engr'=>$engr,'tlengr'=>$totalengr,'cate_name'=>$categoryname,'category_id'=>$res->id]);
-            // ->with(['enge'=>$engineer,'enge_count'=>$engineer_count,'cityname'=>$res->cityname,'engcategory'=>$res->date]);
+            $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise($res->id);
+            return view('searchengineer.searchengineerview')->with($resultSearchEngineer);
     }
     public function registerformshow(Request $res){
-        // dd($res->city_name);
         return view('auth.register')->with(['city_name'=>$res->city_name,'eng_type' =>$res->eng_type]);
     }
     public function showuserpanel(){
@@ -69,14 +66,9 @@ class index extends Controller
     // dd(Route::current());
       return view('newpanel.newpanelview');
 }
-    public function destroy(Request $request)
+    public function destroy()
     {
-        Auth::guard('web')->logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
+        $this->clientservices->logoutClient();
         return redirect('/');
     }
     public function viewprofileeng(Request $res){
