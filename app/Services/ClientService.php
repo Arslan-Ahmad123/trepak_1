@@ -42,15 +42,35 @@ class ClientService
             // return view('loginview.loginpageview');
         }
     }
-    public function searchEnginerCategoryWise($id){
+    public function searchEnginerCategoryWise($id)
+    {
         $categoryname = engCategory::find($id);
-        $engr = User::where('role','enge')->where('engrcategoryid',$id)->paginate(10);
-        $totalengr = User::where('role','enge')->where('engrcategoryid',$id)->count();
-        return ['engr'=>$engr,'tlengr'=>$totalengr,'cate_name'=>$categoryname,'category_id'=>$id];
+        $engr = User::where('role', 'enge')->where('engrcategoryid', $id)->paginate(10);
+        $totalengr = User::where('role', 'enge')->where('engrcategoryid', $id)->count();
+        return ['engr' => $engr, 'tlengr' => $totalengr, 'cate_name' => $categoryname, 'category_id' => $id];
     }
-    public function logoutClient(){
+    public function logoutClient()
+    {
         Auth::guard('web')->logout();
         Request()->session()->invalidate();
         Request()->session()->regenerateToken();
+    }
+    public function viewEngineerComment($res)
+    {
+        if (session()->has('cmt_engrid')) {
+            $engr_id = session()->get('cmt_engrid');
+        } else {
+            $engr_id = $res->userid;
+        }
+        // dd(User::where('id',$res->userid)->get());
+        $value = Auth::user()->id;
+        $engr = User::with(['comment' => function ($q) use ($value) {
+            $q->where('clientid', '=', $value); // '=' is optional
+
+        }])->where('id', $engr_id)->get()->toArray();
+
+        // dd(json_encode()); 
+        $object = (object) $engr[0];
+        return $object;
     }
 }

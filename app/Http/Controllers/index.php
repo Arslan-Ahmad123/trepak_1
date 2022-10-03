@@ -35,26 +35,9 @@ class index extends Controller
         return redirect(RouteServiceProvider::INDEXPAGE);
        }
     }
-    public function sessionsearchengineer(Request $res){
-        if(session()->has('searchengrpage')){
-            session()->forget('sessionsearchengineer');
-            session()->forget('sessionsearchengineer_catid');
-            session()->forget('sessionsearchengineer_page');
-            session()->put('sessionsearchengineer',$res->routename);
-            session()->put('sessionsearchengineer_catid',$res->pathparameter);
-            session()->put('sessionsearchengineer_page',$res->subpage);
-            return response()->json('yes');
-        }else{
-            session()->put('sessionsearchengineer',$res->routename);
-            session()->put('sessionsearchengineer_catid',$res->pathparameter);
-            session()->put('sessionsearchengineer_page',$res->subpage);
-            return response()->json('yes');
-        }
-    }
     public function engineersearch(Request $res){
-       
-            $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise($res->id);
-            return view('searchengineer.searchengineerview')->with($resultSearchEngineer);
+        $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise($res->id);
+        return view('searchengineer.searchengineerview')->with($resultSearchEngineer);
     }
     public function registerformshow(Request $res){
         return view('auth.register')->with(['city_name'=>$res->city_name,'eng_type' =>$res->eng_type]);
@@ -72,31 +55,8 @@ class index extends Controller
         return redirect('/');
     }
     public function viewprofileeng(Request $res){
-        if(session()->has('cmt_engrid')){
-            $engr_id = session()->get('cmt_engrid');
-           
-        }else{
-            $engr_id = $res->userid;
-          
-        }
-        // dd(User::where('id',$res->userid)->get());
-        $value = Auth::user()->id;
-        $engr = User::with([ 'comment' => function($q) use($value){
-            $q->where('clientid', '=',$value); // '=' is optional
-        
-        }])->where('id', $engr_id)->get()->toArray(); 
-        
-        // dd(json_encode()); 
-        $object = (object) $engr[0];
-
-      
-        return view('engineerprofile.engineerprofileview')->with(['engr'=>$object]);
-    //     try{
-           
-    //     }catch (\Exception $e) {
-    //          dd($e);
-    // }
-        
+        $engineerComment =  $this->clientservices->viewEngineerComment($res);
+        return view('engineerprofile.engineerprofileview')->with(['engr'=>$engineerComment]);
     }
     public function register_show(){
         return view('registerpage.registerpageview');
@@ -105,35 +65,12 @@ class index extends Controller
         return redirect()->back();
     }
     public function booking(Request $res){
-       
         $engr = User::find($res->bookingid);
         return view('booking.bookingpageview')->with('engr',$engr);
     }
      public function proceed(Request $res){
-        
-        if(Auth::check()){
-            if(session()->has('path')){
-                if(session()->has('date')){
-                    session()->forget('date');
-                    session()->put('date',$res->date);
-                }else{
-                    session()->put('date',$res->date);
-                }
-                return redirect()->route('proceed');
-            }else{
-                return redirect()->route('home');
-            }
-           
-        }else{
-            if(session()->has('date')){
-                session()->forget('date');
-                session()->put('date',$res->date);
-            }else{
-                session()->put('date',$res->date);
-            }
-           
-            return view('loginview.loginpageview');
-        }
+        $engineerFind = User::find($res->engr_id);
+        return view('proceedtopay.proceedpageview')->with(['engr'=>$engineerFind,'meetingdate'=>$res->engr_date,'meetingtime'=>$res->engr_time]);
     }
     public function loginproceed(){
         if(session()->has('path')){

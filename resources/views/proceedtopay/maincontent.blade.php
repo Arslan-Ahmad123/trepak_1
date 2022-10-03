@@ -28,10 +28,10 @@
 									<!-- Checkout Form -->
 									<form action="{{ route('conformorder') }}" method="post">
 									@csrf
-									<input type="text" name="engr_id" value="{{ session()->get('engrid') }}" hidden>
+									<input type="text" name="engr_id" value="{{ $engr->id }}" hidden>
 									<input type="text" name="totalfee" id="totalfee" hidden>
-									<input type="text" name="engrdate" value="{{ session()->get('date') }}" hidden>
-									<input type="text" name="consultingfee" value="{{  getengrprice(session()->get('engrid'))}}" hidden>
+									<input type="text" name="engrdate" value="{{ $meetingdate }}" hidden>
+									<input type="text" name="consultingfee" value="{{getengrprice( $engr->id)}}" hidden>
 									<input type="text" name="bookingfee" id="bookingfee" hidden>
 									{{-- <input type="text" name="paymentmethod" id="paymentmethod" hidden> --}}
 										<!-- Personal Information -->
@@ -168,9 +168,7 @@
 								<div class="card-body">
 									
 									
-								@php
-									$engr = \App\Models\User::find(session()->get('engrid'));
-								@endphp
+							
 									<!-- Booking Doctor Info -->
 									<div class="booking-doc-info">
 										<a href="doctor-profile.html" class="booking-doc-img">
@@ -197,13 +195,14 @@
 										<div class="booking-item-wrap">
 											<ul class="booking-date">
 												
-												<li>Date <span>{{ session()->get('date') }}</span></li>
+												<li>Date <span>{{ $meetingdate }}</span></li>
+												<li>Time <span>{{ $meetingtime }}</span></li>
 												
 											</ul>
 											<ul class="booking-fee">
 												
 												
-												<li >Consulting Fee <span class="amount">${{ $engr->pricerange }}</span></li>
+												<li >Consulting Fee <span class="amount">$20</span></li>
 												<li >Booking Fee <span class="amount">$10</span></li>
 												
 											</ul>
