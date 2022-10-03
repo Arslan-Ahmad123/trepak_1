@@ -10,7 +10,7 @@ use App\Models\engCategory;
 use App\Events\oneChatevent;
 use Illuminate\Http\Request;
 use App\Models\appointmentInfo;
-use App\Secvices\ClientService;
+use App\Services\ClientService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Providers\RouteServiceProvider;
@@ -24,7 +24,7 @@ class index extends Controller
         $this->clientservices = $clientservices;
     }
     public function showindex(){
-        dd("Arfan");
+        // dd("Arfan");
         $this->clientservices->showIndexpage();
     }
     public function sessionsearchengineer(Request $res){

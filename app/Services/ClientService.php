@@ -1,5 +1,5 @@
 <?php
-namespace App\Secvices;
+namespace App\Services;
 
 use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
@@ -25,6 +25,7 @@ class ClientService {
         // $eng_type = engCategory::get('engrcategory');
     //    $json_type = json_encode($eng_type);
         // return view('newpanel.newpanelview')->with(['engtype'=>$eng_type]);
+        // return view('Arfan');
         return view('newpanel.newpanelview');
         // return view('loginview.loginpageview');
     }
