@@ -24,6 +24,7 @@ class index extends Controller
         $this->clientservices = $clientservices;
     }
     public function showindex(){
+        dd("Arfan");
         $this->clientservices->showIndexpage();
     }
     public function sessionsearchengineer(Request $res){
