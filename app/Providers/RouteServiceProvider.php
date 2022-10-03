@@ -17,7 +17,8 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/user/clientprofile';
+    public const HOME = '/indexpage';
+    // public const HOME = '/user/clientprofile';
     public const PROCEED = '/proceed';
     public const ADMIN = '/admin/adminportal';
     public const ENGE = '/engineer/newengineerpanel';

@@ -142,13 +142,7 @@
 			<!-- /Breadcrumb -->
 			
 			{{-- ==========================chat box ========================	 --}}
-			@php
-			if(url()->previous() != 'http://127.0.0.1:8000/user/viewprofileeng'){
-				if(session()->has('cmt_engrid')){
-				session()->forget('cmt_engrid');
-			  }
-		    }
-			@endphp
+			
 		
 			<div class="container customchatbox" >
 				<div class="chat_box">
@@ -913,14 +907,7 @@
 		</div>
 		<!-- /Main Wrapper -->
 		
-		                        @php
-									
-									if(Auth::check()){
-										session()->forget('viewprofileeng');
-									}else{
-										session()->put('viewprofileeng',$engr->id);
-									}
-								@endphp
+		                     
 		
 	
 				@push('childscript')

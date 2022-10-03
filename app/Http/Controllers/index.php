@@ -83,7 +83,7 @@ class index extends Controller
         $value = Auth::user()->id;
         $engr = User::with([ 'comment' => function($q) use($value){
             $q->where('clientid', '=',$value); // '=' is optional
-           
+        
         }])->where('id', $engr_id)->get()->toArray(); 
         
         // dd(json_encode()); 

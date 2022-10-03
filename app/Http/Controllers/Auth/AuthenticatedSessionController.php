@@ -58,29 +58,29 @@ class AuthenticatedSessionController extends Controller
             }
                           
       }else{
-      
+        return redirect(RouteServiceProvider::HOME);
         
-        if(session()->has('path')){
-            $path = session()->get('path');
-            $back_slash = strpos($path,'/');
-            $new_path = substr($path,0,$back_slash); 
+        // if(session()->has('path')){
+        //     $path = session()->get('path');
+        //     $back_slash = strpos($path,'/');
+        //     $new_path = substr($path,0,$back_slash); 
             
-                return redirect(RouteServiceProvider::PROCEED);
+        //         return redirect(RouteServiceProvider::PROCEED);
             
-        }else if(session()->has('sessionsearchengineer')){
+        // }else if(session()->has('sessionsearchengineer')){
             
-            return redirect()->route(session()->get('sessionsearchengineer'),['id'=>session()->get('sessionsearchengineer_catid'),'']);
-        }
+        //     return redirect()->route(session()->get('sessionsearchengineer'),['id'=>session()->get('sessionsearchengineer_catid'),'']);
+        // }
         
-        else if(session()->has('viewprofileeng')){
+        // else if(session()->has('viewprofileeng')){
            
-            $engr = User::find(session()->get('viewprofileeng'));
-            return view('engineerprofile.engineerprofileview')->with('engr',$engr);
-        }
-        else{
+        //     $engr = User::find(session()->get('viewprofileeng'));
+        //     return view('engineerprofile.engineerprofileview')->with('engr',$engr);
+        // }
+        // else{
           
-            return redirect(RouteServiceProvider::HOME);
-        }
+        //     return redirect(RouteServiceProvider::HOME);
+        // }
       }
 
     }
