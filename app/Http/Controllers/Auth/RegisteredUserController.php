@@ -38,10 +38,10 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request,LoginService $loginService)
+    public function store(signupEngineerRequest $request,LoginService $loginService)
     {
-       dd($loginService);
-        // $loginService->storeSignupdata($request);
+      
+        dd($loginService->storeSignupdata($request));
     //    if($request->role == 'user'){
           
     //     $email_code = rand(111111,999999);
