@@ -1,5 +1,5 @@
 <?
-use App\Services;
+namespace App\Services;
 
 Class LoginService {
 public function storeSignupdata($request){

@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 
-use LoginService;
+
+use App\Services\LoginService;
 use App\Models\User;
 use App\Events\conformemail;
 use Illuminate\Http\Request;
@@ -37,10 +38,10 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request)
+    public function store(Request $request,LoginService $loginService)
     {
-        $loginService = new LoginService();
-        $loginService->storeSignupdata($request);
+       dd($loginService);
+        // $loginService->storeSignupdata($request);
     //    if($request->role == 'user'){
           
     //     $email_code = rand(111111,999999);
