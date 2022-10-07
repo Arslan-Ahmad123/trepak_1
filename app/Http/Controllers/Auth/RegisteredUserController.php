@@ -19,7 +19,7 @@ use App\Http\Requests\signupEngineerRequest;
 
 class RegisteredUserController extends Controller
 {
-   
+
     /**
      * Display the registration view.
      *
@@ -38,25 +38,33 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(signupEngineerRequest $request,LoginService $loginService)
+    public function store(signupEngineerRequest $request, LoginService $loginService)
     {
         $user = $loginService->storeSignupdata($request);
+        event(new Registered($user));
+        Auth::login($user);
         $users = Auth::user()->role;
-        $userstatus = Auth::user()->status;        
-        if($user == 'admin'){
+        $userstatus = Auth::user()->status;
+
+        if ($users == 'admin') {
             return redirect(RouteServiceProvider::ADMIN);
-        }elseif($users == 'enge'){
-            Event(new conformemail($user));
-            if(Auth::user()->emailstatus == 0){
+        }
+        if ($users == 'enge') {
+            // Event(new conformemail($user));
+            if (Auth::user()->emailstatus == 0) {
                 return redirect(RouteServiceProvider::EMAILVERIFY);
+            } else {
+                if (Auth::user()->docsstatus == 0) {
+                    return redirect(RouteServiceProvider::DOCSSTATUS);
+                } else {
+                    if ($userstatus == 0) {
+                        return redirect(RouteServiceProvider::ADMINSTATUS);
+                    } else {
+                        return redirect(RouteServiceProvider::ENGE);
+                    }
+                }
             }
-            if($userstatus == 0){
-                return redirect(RouteServiceProvider::ENGE);
-            }
-                return redirect(RouteServiceProvider::ENGE);
-                            
-      }else{
-           return redirect(RouteServiceProvider::HOME);
-      }   
+        }
+        return redirect(RouteServiceProvider::HOME);
     }
 }

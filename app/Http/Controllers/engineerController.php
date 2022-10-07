@@ -155,7 +155,7 @@ class engineerController extends Controller
        
         if($res->conformemail == Auth::user()->emailcode){
             User::where('id',Auth::user()->id)->update(['emailstatus'=>1]);
-           return redirect(RouteServiceProvider::ENGE);
+           return redirect(RouteServiceProvider::DOCSSTATUS);
         }
         else{
             return redirect()->back();

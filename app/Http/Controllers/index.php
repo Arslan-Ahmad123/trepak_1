@@ -27,13 +27,19 @@ class index extends Controller
        $redirectPageName = $this->clientservices->showIndexpage();
        if($redirectPageName == 'ADMIN'){
         return redirect(RouteServiceProvider::ADMIN);
-       }elseif($redirectPageName == 'ENGE'){
+       } 
+       
+       if($redirectPageName == 'ENGEEMAIL'){
+        return redirect(RouteServiceProvider::EMAILVERIFY);
+       }          
+       if($redirectPageName == 'ENGE'){
         return redirect(RouteServiceProvider::ENGE);
-       }elseif($redirectPageName == 'ENGEFAILED'){
-        dd('Your request go to Admin');
-       }else{
-        return redirect(RouteServiceProvider::INDEXPAGE);
        }
+       if($redirectPageName == 'ENGEFAILED'){
+        dd('Your request go to Admin');
+       }        
+       return redirect(RouteServiceProvider::INDEXPAGE);
+       
     }
     public function engineersearch(Request $res){
         $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise($res->id);

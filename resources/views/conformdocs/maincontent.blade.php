@@ -13,7 +13,7 @@
 									</div>
 									<div class="col-md-12 col-lg-6 login-right">
 										<div class="login-header">
-											<h3>Conform Email</h3>
+											<h3>Engineer Documentation</h3>
 										</div>
                                         <x-guest-layout>
                                               <!-- Session Status -->
@@ -22,7 +22,7 @@
                                     <!-- Validation Errors -->
                                     <x-auth-validation-errors class="mb-4" :errors="$errors" />
                                     <div>
-                                    <form   method="POST">
+                                    <form  action=""  method="POST">
                                         @csrf
                                                                 
                                                                         <!-- Email Address -->
@@ -56,11 +56,9 @@
                                                     {{ __('Forgot your password?') }}
                                                 </a>
                                             @endif --}}
-                                             <x-button class="ml-5" formaction="{{ route('resendemail') }}">
-                                                {{ __('Resend Email') }}
-                                            </x-button>   
+                                               
                                             <x-button class="ml-5" formaction="{{ route('conformemailenge') }}">
-                                                {{ __('Conform') }}
+                                                {{ __('Submit') }}
                                             </x-button>
                                         </div>
 										</form>

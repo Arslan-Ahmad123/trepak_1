@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Redirect;
 
 class LoginService
 {
@@ -38,11 +39,12 @@ class LoginService
             'country' => 'Pakistan',
             'email' => $request->email,
             'password' => Hash::make($request->password),
+           
+            'emailstatus' => 0,
+            'status' => 0,
+            'docsstatus' => 0,
         ]);
-        event(new Registered($user));
-        Auth::login($user);
-        // $dotpos =strpos($saveimage,'.');
-        // dd(substr($saveimage,$dotpos+1,strlen($saveimage)));
         return $user;
+       
     }
 }

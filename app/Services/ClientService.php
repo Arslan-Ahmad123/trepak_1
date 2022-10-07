@@ -21,13 +21,16 @@ class ClientService
                 return ('ADMIN');
                 // return redirect(RouteServiceProvider::ADMIN);
             } elseif ($user == 'enge') {
+                if(Auth::user()->emailstatus = 0){
+                    return ('ENGEEMAIL');
+                }
                 if ($userstatus == 0) {
                     // dd('Your request go to Admin');
                     return ('ENGEFAILED');
-                } else {
-                    return ('ENGG');
-                    // return redirect(RouteServiceProvider::ENGE);
                 }
+                    return ('ENGE');
+                    // return redirect(RouteServiceProvider::ENGE);
+                
             } else {
                 return ('INDEXPAGE');
                 //    return Redirect::to(RouteServiceProvider::INDEXPAGE);

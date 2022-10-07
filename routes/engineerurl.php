@@ -21,6 +21,7 @@ Route::middleware(['isEngineer'])->prefix('engineer')->group(function () {
     Route::get('/engerequest',[engineerController::class,'engerequest'])->name('engerequest');
     Route::get('/getcomments',[engineerController::class,'getcomments'])->name('getcomments');
     Route::get('/getchatuser',[engineerController::class,'getchatuser'])->name('getchatuser');
+  
     Route::view('engr_changepassword','engr_password.engrpasswordpage')->name('engr_changepassword');
     Route::view('engr_profilesetting','engr_password.engrpasswordpage')->name('engr_profilesetting');
     Route::view('engrchat','engineerpage.engrchat.engrchatpage')->name('engrchat');
