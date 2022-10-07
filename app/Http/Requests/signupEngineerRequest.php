@@ -14,7 +14,7 @@ class signupEngineerRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -28,7 +28,7 @@ class signupEngineerRequest extends FormRequest
             'fname' => ['required', 'string', 'max:255'],
             'lname' => ['required', 'string', 'max:255'],
             'pic' => ['image','mimes:jpeg,jpg,png'],
-            'mobile' => ['required', 'number', 'max:255'],
+            'mobile' => ['required','regex:/^[^a-z]*$/i'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed','min:8'],
         ];

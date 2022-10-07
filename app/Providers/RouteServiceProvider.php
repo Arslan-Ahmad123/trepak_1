@@ -22,6 +22,7 @@ class RouteServiceProvider extends ServiceProvider
     public const PROCEED = '/proceed';
     public const ADMIN = '/admin/adminportal';
     public const ENGE = '/engineer/newengineerpanel';
+    public const EMAILVERIFY = '/conformemail';
     public const INDEXPAGE = '/indexpage';
     
 
