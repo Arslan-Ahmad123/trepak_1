@@ -38,10 +38,42 @@
                                         </div> --}}
 
                                          <div class="my-4">
-                                            <x-label for="conformemail" :value="__('Conform Email')" />
+                                            <x-label for="engr_cv" :value="__('CV Upload')" style="color:black;font-weight: bold;"/>
 
-                                            <x-input id="conformemail" class="block mt-1 w-full" type="text" name="conformemail" :value="old('conformemail')" required autofocus />
+                                            <x-input id="engr_cv" class="block mt-1 w-full" type="file"  accept="application/pdf" name="engr_cv" :value="old('engr_cv')" required autofocus />
                                         </div>
+                                        <div class="mt-4">
+                                            <x-label for="workplace" :value="__('Job Workplace Type')"  style="color:black;font-weight: bold;"/>
+                                            <select class="block mt-1 w-full border-gray-300 rounded-md" name="workplace"
+                                                id="workplace" >
+                                                    <option value="">Job Work Place</option>
+                                                    <option value="onsite">On Site</option>
+                                                    <option value="remote">Remote</option>
+                                            </select>
+                                        </div>
+                                        <div class="mt-4">
+                                            <x-label for="jobtype" :value="__('Job  Type')"  style="color:black;font-weight: bold;"/>
+                                            <select class="block mt-1 w-full border-gray-300 rounded-md" name="jobtype"
+                                                id="jobtype" >
+                                                    <option value="">Select Job Type</option>
+                                                    <option value="full">Full Time</option>
+                                                    <option value="part">Part Time</option>
+                                                    <option value="contract">Contrat Base</option>
+                                            </select>
+                                        </div>
+                                        <div class="my-4">
+                                            <x-label for="description" :value="__('About')"  style="color:black;font-weight: bold;"/>
+                                            <textarea placeholder="Write Here About Your Self!! " class="block mt-1 w-full border-gray-300 rounded-md" name="description" id="description" cols="30" rows="4"></textarea>
+                                            {{-- <x-input id="conformemail" class="block mt-1 w-full form-controller"
+                                                            type="conformemail"
+                                                            name="conformemail"
+                                                            required autocomplete="current-password" /> --}}
+                                        </div> 
+                                        {{-- <div class="my-4">
+                                            <x-label for="engr_ed" :value="__('Education')" />
+
+                                            <x-input id="engr_ed" class="block mt-1 w-full" type="text" name="engr_ed" :value="old('engr_ed')" required autofocus />
+                                        </div> --}}
                                                                         <!-- Remember Me -->
                                         {{-- <div class="block mt-4">
                                             <label for="resen" class="inline-flex items-center">
@@ -57,7 +89,7 @@
                                                 </a>
                                             @endif --}}
                                                
-                                            <x-button class="ml-5" formaction="{{ route('conformemailenge') }}">
+                                            <x-button class="ml-5" formaction="{{ route('engrdocsmentation') }}">
                                                 {{ __('Submit') }}
                                             </x-button>
                                         </div>

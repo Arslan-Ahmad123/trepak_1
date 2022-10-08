@@ -111,7 +111,7 @@
                                         </div>
 
                                         <!-- longitude and latitude -->
-                                        {{-- <div>
+                                        <div>
                                             <x-label for="latitude" style="margin-bottom:5px;margin-top:10px"
                                                 :value="__('Latitude')" />
                                             <x-input style="margin-bottom:10px" class="block  w-full" type="number"
@@ -123,7 +123,7 @@
                                             <x-input style="margin-bottom:10px" class="block  w-full" type="number"
                                                 step="any" name="longitude" id="longitude" :value="old('longitude')"
                                                 required autofocus readonly />
-                                        </div> --}}
+                                        </div>
                                         {{-- <input type="text" name="longitude" id="longitude"  readonly> 
                                             <input type="text" name="latitude" id="latitude"  readonly> --}}
                                     </div>

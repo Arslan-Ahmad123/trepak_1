@@ -42,21 +42,33 @@ class AuthenticatedSessionController extends Controller
            return redirect(RouteServiceProvider::ADMIN);
         }elseif($users == 'enge'){
             if($user->adminengr == 1){
-                Event(new conformemail($user));
                 User::where('id',$user->id)->update(['adminengr'=>2]);
-                if($userstatus == 0){   
-                    return redirect()->route('engerequest');
-                }else{
-                    return redirect(RouteServiceProvider::ENGE);
-                } 
+                if(Auth::user()->docsstatus == 0){
+                    return redirect(RouteServiceProvider::DOCSSTATUS);
+                   }else{
+                    if(Auth::user()->status == 0){
+                        return redirect(RouteServiceProvider::ADMINSTATUS);
+                    }else{
+                        return redirect(RouteServiceProvider::ENGE);
+                    }
+                   }
             }else{
-                if($userstatus == 0){   
-                    return redirect()->route('engerequest');
+                 Event(new conformemail($user));
+                if(Auth::user()->emailstatus == 0){   
+                    return redirect(RouteServiceProvider::EMAILVERIFY);
                 }else{
-                    return redirect(RouteServiceProvider::ENGE);
+                   if(Auth::user()->docsstatus == 0){
+                    return redirect(RouteServiceProvider::DOCSSTATUS);
+                   }else{
+                    if(Auth::user()->status == 0){
+                        return redirect(RouteServiceProvider::ADMINSTATUS);
+                    }else{
+                        return redirect(RouteServiceProvider::ENGE);
+                    }
+                   }
                 } 
             }
-                          
+                      
       }else{
         return redirect(RouteServiceProvider::HOME);
         

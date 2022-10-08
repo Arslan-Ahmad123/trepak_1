@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('one_chats', function (Blueprint $table) {
             $table->id();
-            $table->integer('clientid');
+           
+            $table->unsignedBigInteger('clientid');
             $table->integer('engrid');
             $table->integer('senderid');
             $table->integer('reciverid');

@@ -1,3 +1,11 @@
+ {{-- @php
+	$current_url = url()->current();
+	if($current_url == ""){
+		$currentpagedocs = true;
+	}else{
+		$currentpagedocs = false;
+	}
+ @endphp --}}
  
 <footer id="footer" class="footer">
 	<div class="container">

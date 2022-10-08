@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\engrDocumentation;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\oneChat;
@@ -140,6 +141,9 @@ class engineerController extends Controller
     public function engrfetchmessage(Request $res){
         $chatmess = oneChat::where('engrid',$res->engrid)->where('clientid',$res->clientid)->get();
         return response()->json(['data'=>$chatmess]);
+    }
+    public function engrdocsmentation(engrDocumentation $request){
+        dd($request);
     }
     public function getchatuser(){
         $userid = oneChat::where('engrid',Auth::user()->id)->distinct()->get('clientid');

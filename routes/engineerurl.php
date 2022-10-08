@@ -26,8 +26,10 @@ Route::middleware(['isEngineer'])->prefix('engineer')->group(function () {
     Route::view('engr_profilesetting','engr_password.engrpasswordpage')->name('engr_profilesetting');
     Route::view('engrchat','engineerpage.engrchat.engrchatpage')->name('engrchat');
 });
+Route::view('engrdocs','conformdocs.conformdocs')->name('engrdocs');
 
 Route::post('/engrfetchmessage',[engineerController::class,'engrfetchmessage'])->name('engrfetchmessage')->middleware('auth');
+Route::post('/engrdocsmentation',[engineerController::class,'engrdocsmentation'])->name('engrdocsmentation')->middleware('auth');
 Route::get('/engregister',[engineerController::class,'engregister'])->name('engregister');
 Route::get('/getallgroup',[engineerController::class,'getallgroup'])->name('getallgroup')->middleware('auth');
 Route::get('/getallgroupengr',[engineerController::class,'getallgroupengr'])->name('getallgroupengr')->middleware('auth');

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [index::class,'showindex'])->name('home');
 Route::view('/indexpage', 'newpanel.newpanelview')->name('indexpage');
 // ===================email ===========================
-Route::post('/conformemail',function(){
+Route::get('/conformemail',function(){
     return view('conformemail.conformemail');
 })->name('conformemail');
 Route::post('/resendemail',function(){
