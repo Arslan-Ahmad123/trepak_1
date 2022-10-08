@@ -53,7 +53,7 @@ class AuthenticatedSessionController extends Controller
                     }
                    }
             }else{
-                 Event(new conformemail($user));
+                //  Event(new conformemail($user));
                 if(Auth::user()->emailstatus == 0){   
                     return redirect(RouteServiceProvider::EMAILVERIFY);
                 }else{

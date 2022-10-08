@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\engrDocumentation;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Comment;
 use App\Models\oneChat;
 use App\Models\groupChat;
 use App\Models\groupInfo;
 use Illuminate\Http\Request;
+use APp\Services\EngrService;
 use App\Models\appointmentInfo;
-use App\Models\Comment;
+use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
-use PhpParser\Node\Stmt\TryCatch;
+use App\Http\Requests\engrDocumentation;
 
 class engineerController extends Controller
 {
@@ -142,8 +143,13 @@ class engineerController extends Controller
         $chatmess = oneChat::where('engrid',$res->engrid)->where('clientid',$res->clientid)->get();
         return response()->json(['data'=>$chatmess]);
     }
-    public function engrdocsmentation(engrDocumentation $request){
-        dd($request);
+    public function engrdocsmentation(EngrService $storengrDocs){
+        if($storengrDocs)
+            return redirect(RouteServiceProvider::ADMINSTATUS);
+        else
+            return redirect()->back();
+        
+       
     }
     public function getchatuser(){
         $userid = oneChat::where('engrid',Auth::user()->id)->distinct()->get('clientid');

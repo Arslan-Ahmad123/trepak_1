@@ -24,7 +24,7 @@ class engrDocumentation extends FormRequest
     public function rules()
     {
         return [
-            'engr_cv'=>['required','mimes:pdf'],
+            'engr_cv'=>['required'],
             'workplace'=>'required',
             'jobtype'=>'required',
             'description'=>'required',
