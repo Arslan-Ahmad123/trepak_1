@@ -17,6 +17,7 @@ Route::middleware(['isUser'])->prefix('user')->group(function () {
     Route::get('/fetchorderinfo/{id}',[index::class,'fetchorderinfo'])->name('fetchorderinfo');
     Route::view('clientchat','client.clientchat.clientchatpage')->name('clientchat');
     Route::get('/searchengineer/{id}', [index::class,'engineersearch'])->name('searchengineer');
+    Route::post('/searchbarengineer', [index::class,'searchbarengineer'])->name('searchbarengineer');
     Route::any('/viewprofileeng',[index::class,'viewprofileeng'])->name('viewprofileeng');
     Route::post('/booking',[index::class,'booking'])->name('booking');
     Route::post('/proceed',[index::class,'proceed'])->name('proceed');

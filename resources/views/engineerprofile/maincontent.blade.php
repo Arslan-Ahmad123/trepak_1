@@ -203,7 +203,7 @@
 									<div class="doc-info-cont">
 										<h4 class="doc-name">{{ $engr->fname }}</h4>
 										<p class="doc-speciality">{{ getcategoryname($engr->engrcategoryid) }}</p>
-										<p class="doc-department"><img src="{{ asset('newpanel/assets/img/specialities/specialities-05.png') }}" class="img-fluid" alt="Speciality">{{ $engr->specialization }}</p>
+										{{-- <p class="doc-department"><img src="{{ asset('newpanel/assets/img/specialities/specialities-05.png') }}" class="img-fluid" alt="Speciality">{{ $engr->specialization }}</p> --}}
 										<div class="rating">
 											<i class="fas fa-star filled"></i>
 											<i class="fas fa-star filled"></i>
@@ -213,7 +213,7 @@
 											<span class="d-inline-block average-rating">(35)</span>
 										</div>
 										<div class="clinic-details">
-											<p class="doc-location"><i class="fas fa-map-marker-alt"></i> {{ $engr->address }} </p>
+											<p class="doc-location"><i class="fas fa-map-marker-alt"></i> {{ $engr->city.' '.$engr->state.', '.$engr->country }} </p>
 											{{-- <ul class="clinic-gallery">
 												<li>
 													<a href=" {{ asset('newpanel/assets/img/features/feature-01.jpg') }}" data-fancybox="gallery">
@@ -247,7 +247,7 @@
 									<div class="clini-infos">
 										<ul>
 											<li><i class="far fa-thumbs-up"></i> 99%</li>
-											<li><i class="far fa-money-bill-alt"></i> ${{ $engr->pricerange }} per hour </li>
+											{{-- <li><i class="far fa-money-bill-alt"></i> ${{ $engr->pricerange }} per hour </li> --}}
 											<li>
 												<a href="javascript:void(0)" onclick="clientchat_box({{ $engr->id }},{{(Auth::check())?Auth::user()->id:'' }})" >
 													<i class="far fa-comment-alt"></i> Chat
@@ -303,36 +303,55 @@
 										
 											<!-- About Details -->
 											<div class="widget about-widget">
-												<h4 class="widget-title">About Me</h4>
-												<p>{{ $engr->aboutme }}.</p>
+												<h3 class="widget-title">About Me</h3>
+												<p>{{ $engr->about }}.</p>
 											</div>
 											<!-- /About Details -->
 										
 											<!-- Education Details -->
 											<div class="widget education-widget">
-												<h4 class="widget-title">Education</h4>
+												{{-- <h3 class="widget-title">CV</h3> --}}
 												<div class="experience-box">
-													<ul class="experience-list">
+													{{-- <iframe
+														src="https://drive.google.com/viewerng/viewer?embedded=true&url=http://infolab.stanford.edu/pub/papers/{{ $engr->cv }}#toolbar=0&scrollbar=0"
+														frameBorder="0"
+														scrolling="auto"
+														height="100%"
+														width="100%"
+													></iframe> --}}
+													{{-- {{ asset('engr_cv/'.$engr->cv) }} --}}
+													{{-- @php
+														$engrcv = explode('.',$engr->cv);
+													
+													@endphp --}} 
+													{{-- <iframe src="{{ asset('engr_cv/'.$engr->cv) }}" width="100%" height="500px"></iframe> --}}
+													{{-- <object width="400px" height="400px" data="{{ asset('engr_cv/'.$engr->cv) }}"></object> --}}
+													{{-- <iframe src="{{ asset('engr_cv/'.$engr->cv) }}"
+														style="width:600px; height:500px;" frameborder="0">
+													</iframe> --}}
+													{{-- {{ asset('engr_cv/'.$engr->cv) }}
+													<embed src="{{ asset('engr_cv/AAFinal.pdf') }}" type="application/pdf" > --}}
+													{{-- <ul class="experience-list">
 														<li>
 															<div class="experience-user">
 																<div class="before-circle"></div>
 															</div>
 															<div class="experience-content">
 																<div class="timeline-content">
-																	<a href="#/" class="name">{{ $engr->university }}</a>
+																	{{-- <a href="#/" class="name">{{ $engr->university }}</a>
 																	
-																	<div>{{ $engr->education }}</div>
-																	<span class="time">{{ $engr->degreedate }}</span>
+																	<div>{{ $engr->education }}</div> --}}
+																	{{-- <span class="time">{{ $engr->degreedate }}</span> --
 																</div>
 															</div>
 														</li>
-													</ul>
+													</ul> --}}
 												</div>
 											</div>
 											<!-- /Education Details -->
 									
 											<!-- Experience Details -->
-											<div class="widget experience-widget">
+											{{-- <div class="widget experience-widget">
 												<h4 class="widget-title">Work & Experience</h4>
 												<div class="experience-box">
 													<ul class="experience-list">
@@ -342,8 +361,8 @@
 															</div>
 															<div class="experience-content">
 																<div class="timeline-content">
-																	<a href="#/" class="name">{{ $engr->company }}</a>
-																	<span class="time">{{ $engr->experience }}(years)</span>
+																	{{-- <a href="#/" class="name">{{ $engr->company }}</a> --}}
+																	{{-- <span class="time">{{ $engr->experience }}(years)</span> --
 																</div>
 															</div>
 														</li>
@@ -358,10 +377,10 @@
 																	<span class="time">2005 - 2007 (2 years)</span>
 																</div>
 															</div>
-														</li> --}}
+														</li> --
 													</ul>
 												</div>
-											</div>
+											</div> --}}
 											<!-- /Experience Details -->
 								
 											{{-- <!-- Awards Details -->

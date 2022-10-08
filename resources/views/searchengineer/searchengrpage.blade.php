@@ -10,13 +10,13 @@
         <div class="doctor-widget searchcard">
             <div class="doc-info-left">
                 <div class="doctor-img">
-                    <a href="doctor-profile.html">
+                    {{-- <a href="doctor-profile.html"> --}}
                         <img src="{{ asset('engrphoto/'.$engr->pic) }}"  alt="Engr Image" style="width: 100%;height: 100px;" >
-                    </a>
+                    {{-- </a> --}}
                 </div>
                 <div class="doc-info-cont">
                     <h4 class="doc-name"><a href="doctor-profile.html">{{ $engr->fname }}</a></h4>
-                    <p class="doc-speciality">Civil Engineer</p>
+                    <p class="doc-speciality">{{ getcategoryname($engr->engrcategoryid) }}</p>
                     <div id="specilizationfield">
                         <h5 class="doc-department" style="text-align: left"><img src="{{ asset('newpanel/assets/img/specialities/specialities-05.png') }}"  alt="Speciality">AUTO CAD</h5>
                     </div>
@@ -32,7 +32,7 @@
                         <span class="d-inline-block average-rating">(17)</span>
                     </div> --}}
                     <div class="clinic-details">
-                        <p class="doc-location"><i class="fas fa-map-marker-alt"></i> {{ $engr->address }}</p>
+                        <p class="doc-location"><i class="fas fa-map-marker-alt"></i> {{ $engr->city.' '.$engr->state.', '.$engr->country }}</p>
                         {{-- <ul class="clinic-gallery">
                             <li>
                                 <a href="{{ asset('newpanel/assets/img/features/feature-01.jpg') }}" data-fancybox="gallery">

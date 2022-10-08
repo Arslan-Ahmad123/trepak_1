@@ -35,7 +35,7 @@
                             <h3>Appointment book notausiiu Successfully!</h3>
                             <p>Appointment booked with <strong>Dr. Darren Elder</strong><br> on <strong>12 Nov 2019 5:00PM to 6:00PM</strong></p>
                             @endif
-                            <a href="invoice-view.html" class="btn btn-primary view-inv-btn">View Invoice</a>
+                            {{-- <a href="invoice-view.html" class="btn btn-primary view-inv-btn">View Invoice</a> --}}
                         </div>
                     </div>
                 </div>

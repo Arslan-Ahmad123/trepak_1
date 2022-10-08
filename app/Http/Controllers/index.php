@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\oneChat;
@@ -31,15 +32,26 @@ class index extends Controller
        
        if($redirectPageName == 'ENGEEMAIL'){
         return redirect(RouteServiceProvider::EMAILVERIFY);
-       }          
+       }  
+         
+       if($redirectPageName == 'SUBMITDOCS'){
+        return redirect(RouteServiceProvider::DOCSSTATUS);
+       }        
        if($redirectPageName == 'ENGE'){
         return redirect(RouteServiceProvider::ENGE);
        }
        if($redirectPageName == 'ENGEFAILED'){
-        dd('Your request go to Admin');
+        return redirect(RouteServiceProvider::ADMINSTATUS);
        }        
        return redirect(RouteServiceProvider::INDEXPAGE);
        
+    }
+    
+    public function searchbarengineer(Request $res){
+        
+        $categoryid = engCategory::where('engrcategory',$res->date)->get('id')->toArray();
+        $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise($categoryid[0]['id']);
+        return view('searchengineer.searchengineerview')->with($resultSearchEngineer);
     }
     public function engineersearch(Request $res){
         $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise($res->id);
@@ -122,13 +134,15 @@ class index extends Controller
         return view('client.searchengr.searchengepageview')->with('engr',$engr);
     }
     public function conformorder(Request $res){
+       
+        $dateorder = Carbon::parse($res->engrdate)->format('Y-m-d');
        $clientid = Auth::user()->id;
        $checkres = appointmentInfo::where('engrid',$res->engr_id)->where('clientid',$clientid)->where('clientstatus',0)->count();
        if($checkres > 0){
         $ress = appointmentInfo::create([
             'engrid'=>$res->engr_id,
             'clientid'=>$clientid,
-            'meetingdate'=>$res->engrdate,
+            'meetingdate'=>$dateorder,
             'bookingfee'=>$res->bookingfee,
             'consultingfee'=>$res->consultingfee,
             'tlprice'=>$res->totalfee,
@@ -143,7 +157,7 @@ class index extends Controller
         $ress = appointmentInfo::create([
             'engrid'=>$res->engr_id,
             'clientid'=>$clientid,
-            'meetingdate'=>$res->engrdate,
+            'meetingdate'=>$dateorder,
             'bookingfee'=>$res->bookingfee,
             'consultingfee'=>$res->consultingfee,
             'tlprice'=>$res->totalfee,

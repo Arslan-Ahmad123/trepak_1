@@ -3,15 +3,21 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\engrDocumentation;
+
 
 class EngrService {
 
-    public function storeEngr_documentation(engrDocumentation $request){
-      
-        $cvname = $request->engr_cv->getClientOriginalName();
-        $cv_custom_name = time() . '.' . $cvname;
-        $request->pic->move(public_path() . '/engr_cv/',  $cv_custom_name);
+    public function storeEngr_documentation($request){
+        // $request->file("file")->getClientOriginalExtension();
+        $cvnameext = $request->engr_cv->getClientOriginalExtension();
+        if($cvnameext == 'pdf'){
+            $cvname = $request->engr_cv->getClientOriginalName();
+            $cv_custom_name = time() . '.' . $cvname;
+            $request->engr_cv->move(public_path() . '/engr_cv/',  $cv_custom_name);
+        }else{
+            return 'Plase select pdf file';
+        }
+       
         $logoin_user = Auth::user()->id;
         $user = User::where('id',$logoin_user)->update([
             'cv'=>$cv_custom_name,
@@ -20,6 +26,10 @@ class EngrService {
             'about'=>$request->description,
             'docsstatus'=>1
         ]);
-        return $user?'yes':'no';
+         if($user)
+                  $returnresponse =  'yes';
+                    else
+                    $returnresponse ='no';
+        return $returnresponse;
     }
 }

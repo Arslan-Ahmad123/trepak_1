@@ -81,13 +81,13 @@
 													<span>Reviews</span>
 												</a>
 											</li>
-											<li>
+											{{-- <li>
 												<a href="{{ route('engrchat') }}">
 													<i class="fas fa-comments"></i>
 													<span>Message</span>
-													{{-- <small class="unread-msg">23</small> --}}
+													{{-- <small class="unread-msg">23</small> --
 												</a>
-											</li>
+											</li> --}}
 											<li class="active">
 												<a href="{{ route('engprofilesetting') }}">
 													<i class="fas fa-user-cog"></i>
@@ -168,13 +168,13 @@
 													<span>Reviews</span>
 												</a>
 											</li>
-											<li>
+											{{-- <li>
 												<a href="{{ route('engrchat') }}">
 													<i class="fas fa-comments"></i>
 													<span>Message</span>
-													{{-- <small class="unread-msg">23</small> --}}
+													{{-- <small class="unread-msg">23</small> --
 												</a>
-											</li>
+											</li> --}}
 											<li class="active">
 												<a href="{{ route('engprofilesetting') }}">
 													<i class="fas fa-user-cog"></i>
@@ -284,7 +284,7 @@
 								<div class="card-body">
 									<h4 class="card-title">About Me</h4>
 									<div class="form-group mb-0">
-										<label>Biography</label>
+										<label>Description</label>
 										<textarea class="form-control" rows="5">{{ AUth::user()->aboutme }}</textarea>
 									</div>
 								</div>
@@ -337,7 +337,7 @@
 										<div class="col-md-6">
 											<div class="form-group">
 												<label>Address</label>
-												<input type="text" class="form-control" value="{{ Auth::user()->address }}">
+												<input type="text" class="form-control" value="{{ Auth::user()->city.'' .Auth::user()->state.', '.Auth::user()->country }}">
 											</div>
 										</div>
 										{{-- <div class="col-md-6">
@@ -420,7 +420,7 @@
 							<!-- /Services and Specialization --> --}}
 						 
 							<!-- Education -->
-							<div class="card">
+							{{-- <div class="card">
 								<div class="card-body">
 									<h4 class="card-title">Education</h4>
 									<div class="education-info">
@@ -444,16 +444,16 @@
 															<label>Year of Completion</label>
 															<input type="text" class="form-control">
 														</div> 
-													</div> --}}
+													</div> --
 												</div>
 											</div>
 										</div>
 									</div>
 									{{-- <div class="add-more">
 										<a href="javascript:void(0);" class="add-education"><i class="fa fa-plus-circle"></i> Add More</a>
-									</div> --}}
+									</div> --
 								</div>
-							</div>
+							</div> --}}
 							<!-- /Education -->
 						
 							{{-- <!-- Experience -->

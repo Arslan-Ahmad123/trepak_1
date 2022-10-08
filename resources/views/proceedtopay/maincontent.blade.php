@@ -31,8 +31,8 @@
 									<input type="text" name="engr_id" value="{{ $engr->id }}" hidden>
 									<input type="text" name="totalfee" id="totalfee" hidden>
 									<input type="text" name="engrdate" value="{{ $meetingdate }}" hidden>
-									<input type="text" name="consultingfee" value="{{getengrprice( $engr->id)}}" hidden>
-									<input type="text" name="bookingfee" id="bookingfee" hidden>
+									<input type="text" name="consultingfee" value=20  hidden >
+									<input type="text" name="bookingfee" id="bookingfee"  hidden>
 									{{-- <input type="text" name="paymentmethod" id="paymentmethod" hidden> --}}
 										<!-- Personal Information -->
 										<div class="info-widget">

@@ -244,7 +244,7 @@
 											<div class="col-12 col-sm-6">
 												<div class="form-group">
 												<label>Address</label>
-													<input type="text" class="form-control" value="{{ $client->address }}">
+													<input type="text" readonly class="form-control" value="{{ $client->city.' '.$client->state.', '.$client->country }}">
 												</div>
 											</div>
 											<div class="col-12 col-md-6">

@@ -52,20 +52,41 @@
                                                 name="fname" :value="old('fname')" required autofocus />
                                         </div>
                                         <!-- Last Name -->
-                                        <div>
+                                        <div class="mt-4">
                                             <x-label for="lname" :value="__('Last Name')" />
                                             <x-input id="lname" class="block mt-2 w-full" type="text"
                                                 name="lname" :value="old('lname')" required autofocus />
                                         </div>
                                         <!--Pic -->
-                                        <div>
+                                        <div class="mt-4">
                                             <x-label for="pic" style="margin-bottom:5px" :value="__('Pic')" />
                                             <x-input id="pic" style="margin-bottom:10px"
                                                 class="block  w-full form-control" type="file" name="pic"
                                                 :value="old('pic')" autofocus />
                                         </div>
+                                        <!--Engr Category  -->
+                                     
+                                       @if (url()->current() == 'http://127.0.0.1:8000/user_regis')
+                                        @else 
+                                        <div class="mt-4">
+                                            <x-label for="engrcategory" style="margin-bottom:5px"
+                                                :value="__('Engineer Category')" />
+                                            <select class="block mt-1 w-full border-gray-300 rounded-md"
+                                                name="engrcategory" id="engrcategory">
+                                                <option value="">Select Engineer category</option>
+                                                @php
+                                                    $category = App\Models\engCategory::get();
+                                                @endphp
+                                                @foreach ($category as $category)
+                                                    <option value="{{ $category->id }}">
+                                                        {{ $category->engrcategory }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                       @endif 
+                                        
                                         <!--Mobile -->
-                                        <div>
+                                        <div class="mt-4">
                                             <x-label for="mobile" style="margin-bottom:5px" :value="__('Mobile')" />
                                             <x-input id="mobile" style="margin-bottom:10px" class="block  w-full"
                                                 type="text" name="mobile" :value="old('mobile')" required autofocus />
@@ -112,17 +133,17 @@
 
                                         <!-- longitude and latitude -->
                                         <div>
-                                            <x-label for="latitude" style="margin-bottom:5px;margin-top:10px"
-                                                :value="__('Latitude')" />
+                                            {{-- <x-label for="latitude" style="margin-bottom:5px;margin-top:10px"
+                                                :value="__('Latitude')" /> --}}
                                             <x-input style="margin-bottom:10px" class="block  w-full" type="number"
                                                 step="any" name="latitude" id="latitude" :value="old('latitude')"
-                                                required autofocus readonly />
+                                                required autofocus hidden />
                                         </div>
                                         <div>
-                                            <x-label for="longitude" style="margin-bottom:5px" :value="__('Longitude')" />
+                                            {{-- <x-label for="longitude" style="margin-bottom:5px" :value="__('Longitude')" /> --}}
                                             <x-input style="margin-bottom:10px" class="block  w-full" type="number"
                                                 step="any" name="longitude" id="longitude" :value="old('longitude')"
-                                                required autofocus readonly />
+                                                required autofocus hidden />
                                         </div>
                                         {{-- <input type="text" name="longitude" id="longitude"  readonly> 
                                             <input type="text" name="latitude" id="latitude"  readonly> --}}

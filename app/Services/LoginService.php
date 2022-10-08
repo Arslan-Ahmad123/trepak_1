@@ -24,6 +24,11 @@ class LoginService
         } else {
             $saveimage =  'demo.png';
         }
+        if ($request->has('engrcategory')) {
+          $engrcategoryid = $request->engrcategory;
+        } else {
+            $engrcategoryid = 0;
+        }
         $user = User::create([
             'pic' => $saveimage,
             'fname' => $request->fname,
@@ -32,6 +37,7 @@ class LoginService
             'role' => $request->role,
             'longitude' =>  $longitude,
             'latitude' => $latitude,
+            'engrcategoryid'=> $engrcategoryid,
             'emailcode' => $email_code,
             'subcity' => "Model Town",
             'city' => "Gujranwala",

@@ -9,7 +9,7 @@ use App\Models\oneChat;
 use App\Models\groupChat;
 use App\Models\groupInfo;
 use Illuminate\Http\Request;
-use APp\Services\EngrService;
+use App\Services\EngrService;
 use App\Models\appointmentInfo;
 use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Facades\Auth;
@@ -143,12 +143,16 @@ class engineerController extends Controller
         $chatmess = oneChat::where('engrid',$res->engrid)->where('clientid',$res->clientid)->get();
         return response()->json(['data'=>$chatmess]);
     }
-    public function engrdocsmentation(EngrService $storengrDocs){
-        if($storengrDocs)
+    public function engrdocsmentation(EngrService $storengrDocs,engrDocumentation $res){
+   
+       $msg = $storengrDocs->storeEngr_documentation($res);
+      
+        if($msg =='yes')
             return redirect(RouteServiceProvider::ADMINSTATUS);
+        elseif($msg == 'Plase select pdf file')
+            return redirect()->back();
         else
             return redirect()->back();
-        
        
     }
     public function getchatuser(){

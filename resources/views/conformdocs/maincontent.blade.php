@@ -22,7 +22,7 @@
                                     <!-- Validation Errors -->
                                     <x-auth-validation-errors class="mb-4" :errors="$errors" />
                                     <div>
-                                    <form  action=""  method="POST">
+                                    <form  action=""  method="POST" enctype="multipart/form-data">
                                         @csrf
                                                                 
                                                                         <!-- Email Address -->

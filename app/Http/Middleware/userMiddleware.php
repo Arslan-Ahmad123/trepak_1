@@ -26,7 +26,7 @@ class userMiddleware
                 return $next($request);
            }else{
 
-                if(Auth::user()->emailstatus == '1'){
+                if(Auth::user()->emailstatus == '0'){
                return $next($request);
                     }
                else{

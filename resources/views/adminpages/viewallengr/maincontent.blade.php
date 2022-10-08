@@ -32,9 +32,9 @@
 												<tr>
 													<th>Engineer Name</th>
 													<th>Pic</th>
-													<th>Education</th>
-													<th>Specilization</th>
-													<th>Experience</th>
+													
+													<th>Engineer Type</th>
+													
 													<th>Status</th>
 													<th>Action</th>
 												</tr>
@@ -52,22 +52,15 @@
 															{{ ucfirst($res->fname) }}
 														</h6>
 													</td>
-													<td><img class="rounded" src={{ asset('pitcher/'.$res->pic) }} width="70px" heigth="70px"></td>
+													
+													<td><img class="rounded" src={{ asset('engrphoto/'.$res->pic) }} width="70px" heigth="70px"></td>
+													
 													<td>
 														<h6 class="table-avatar">
-															{{ ucfirst($res->education) }}
+															{{ ucfirst(getcategoryname($res->engrcategoryid)) }}
 														</h6>
 													</td>
-													<td>
-														<h6 class="table-avatar">
-															{{ ucfirst($res->specialization) }}
-														</h6>
-													</td>
-													<td>
-														<h6 class="table-avatar">
-															{{ ucfirst($res->experience) }}
-														</h6>
-													</td>
+													
 													<td>
 														<h6 class="table-avatar">
 															{{ ($res->status == 1)? 'Approved':'Un Approved'  }}

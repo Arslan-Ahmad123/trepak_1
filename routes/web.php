@@ -12,6 +12,8 @@ Route::get('/conformemail',function(){
 Route::post('/resendemail',function(){
     dd("Ok");
 })->name('resendemail');
+
+
 // ===================email ===========================
 require __DIR__.'/auth.php';
 require __DIR__.'/clienturl.php';

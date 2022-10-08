@@ -21,8 +21,11 @@ class ClientService
                 return ('ADMIN');
                 // return redirect(RouteServiceProvider::ADMIN);
             } elseif ($user == 'enge') {
-                if(Auth::user()->emailstatus = 0){
+                if(Auth::user()->emailstatus == 0){
                     return ('ENGEEMAIL');
+                }
+                if(Auth::user()->docsstatus == 0){
+                    return ('SUBMITDOCS');
                 }
                 if ($userstatus == 0) {
                     // dd('Your request go to Admin');

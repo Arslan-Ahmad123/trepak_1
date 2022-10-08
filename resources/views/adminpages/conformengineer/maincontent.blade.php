@@ -158,11 +158,11 @@
 												<tr>
 													<td>
 														<h2 class="table-avatar">
-															<a href="profile.html" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="{{ asset('pitcher/'.$res->pic) }}" alt="User Image"></a>
+															<a href="profile.html" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="{{ asset('engrphoto/'.$res->pic) }}" alt="User Image"></a>
 															<a href="profile.html">{{ $res->fname  }}</a>
 														</h2>
 													</td>
-													<td>Civil Engineer</td>
+													<td>{{ ucfirst(getcategoryname($res->engrcategoryid)) }}</td>
 													<td>{{ $res->country }}</td>
 													<td>
 														<i class="fe fe-star text-warning"></i>

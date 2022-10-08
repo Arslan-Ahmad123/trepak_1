@@ -17,7 +17,7 @@
 								 
 								<!-- Search -->
 								<div class="search-box d-none d-sm-block">
-									<form method="post" action="#">
+									<form method="post" action="{{ route('searchbarengineer') }}">
 										@csrf
 										<div class="form-group search-location">
 											<input type="text" class="form-control" id="search"  name="cityname" placeholder="What are you looking for?">
@@ -114,16 +114,16 @@
 							<!-- Doctor Widget -->
 								<div class="profile-widget">
 									<div class="doc-img">
-										<a href="doctor-profile.html">
+										{{-- <a href="doctor-profile.html"> --}}
 											<img class="img-fluid" alt="User Image" src="{{asset('engrphoto/'.$res->pic)}}" style="max-height:130px">
-										</a>
-										<a href="javascript:void(0)" class="fav-btn">
+										{{-- </a> --}}
+										{{-- <a href="javascript:void(0)" class="fav-btn"> --}}
 											<i class="far fa-bookmark"></i>
-										</a>
+										{{-- </a> --}}
 									</div>
 									<div class="pro-content">
 										<h3 class="title">
-											<a href="doctor-profile.html">{{ $res->fname }}</a> 
+											<a href="javascript:void(0)">{{ $res->fname }}</a> 
 											<i class="fas fa-check-circle verified"></i>
 										</h3>
 										{{-- @php
@@ -375,7 +375,7 @@
 									</div>
 									<div class="pro-content">
 										<h3 class="title">
-											<a href="doctor-profile.html">Marvin Campbell</a> 
+											<a href="javascript:void(0)">Marvin Campbell</a> 
 											<i class="fas fa-check-circle verified"></i>
 										</h3>
 										<p class="speciality">Civil Engineer</p>
