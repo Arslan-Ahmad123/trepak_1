@@ -288,9 +288,9 @@ left:30%;
 			<div class="doc-info-cont">
 				<h4 class="doc-name"><a href="doctor-profile.html">{{ $engrs->fname }}</a></h4>
 				<p class="doc-speciality">{{ getcategoryname($engrs->engrcategoryid) }}</p>
-				<div id="specilizationfield">
+				{{-- <div id="specilizationfield">
 					<h5 class="doc-department" style="text-align: left;color: #757575;"><img src="{{ asset('newpanel/assets/img/specialities/specialities-05.png') }}"  alt="Speciality">AUTO CAD</h5>
-				</div>
+				</div> --}}
 				<div id="client_engr_chat_box">
 					<h5 class="doc-department" style="text-align: left;"><a href="javascript:void(0)" style="font-size: 14px;color: #757575;" onclick="clientchat_box({{ $engrs->id }},{{ Auth::user()->id }})"><i class="far fa-comment"></i> Chat</a></h5>
 				</div>
@@ -303,7 +303,7 @@ left:30%;
 					<span class="d-inline-block average-rating">(17)</span>
 				</div> --}}
 				<div class="clinic-details">
-					<p class="doc-location"><i class="fas fa-map-marker-alt"></i> {{ $engrs->address }}</p>
+					<p class="doc-location"><i class="fas fa-map-marker-alt"></i> {{ $engrs->city.' '.$engrs->state.', '.$engrs->country }}</p>
 					{{-- <ul class="clinic-gallery">
 						<li>
 							<a href="{{ asset('newpanel/assets/img/features/feature-01.jpg') }}" data-fancybox="gallery">

@@ -28,6 +28,11 @@
 									<div class="col-md-12 col-lg-6 login-right">
 										<div class="login-header">
 											<h3>Login Form</h3>
+                                            @php
+                                               
+                                            @endphp  
+                                            {{-- {{ url()->previous() }} --}}
+                                           
 										</div>
                                         <x-guest-layout>
                                               <!-- Session Status -->
@@ -38,7 +43,7 @@
                                     <div>
                                     <form  action="{{ route('login') }}"  method="POST">
                                         @csrf
-                                         @php
+                                         {{-- @php
                                            
                                             $previousroute =  url()->previous();
                                             if($previousroute == 'http://127.0.0.1:8000/booking'){
@@ -51,7 +56,7 @@
                                                     session()->forget('date');
                                                 }
                                             }
-                                         @endphp
+                                         @endphp --}}
                                               {{-- @if(session()->has('viewprofileeng'))
                                               {{'session value'. session()->get('viewprofileeng') }}
                                               @else
@@ -82,13 +87,13 @@
                                         </div>
 
                                         <div class="flex items-center justify-end ">
-                                            @if (Route::has('password.request'))
+                                            {{-- @if (Route::has('password.request'))
                                                 <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
                                                     {{ __('Forgot your password?') }}
                                                 </a>
-                                            @endif
-                                            <a class=" ml-3 py-1 px-2 btn btn-dark" style="font-size:14px" href="{{ route('user_regis') }}">
-                                                {{ __('Sign Up') }}
+                                            @endif --}}
+                                            <a class=" ml-3  btn-dark" style="font-size:14px;border-radius:6px;padding: 6px 21px;background-color:rgb(55, 65, 81)" href="{{ route('user_regis') }}">
+                                                {{ __('SIGN UP') }}
                                             </a>
                                             <x-button class="ml-5" formaction="{{ route('login') }}">
                                                 {{ __('Sign in') }}

@@ -10,7 +10,7 @@ Route::get('/conformemail',function(){
     return view('conformemail.conformemail');
 })->name('conformemail');
 Route::post('/resendemail',function(){
-    dd("Ok");
+   return redirect()->back();
 })->name('resendemail');
 
 

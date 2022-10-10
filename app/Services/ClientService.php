@@ -65,7 +65,10 @@ class ClientService
     {
         if (session()->has('cmt_engrid')) {
             $engr_id = session()->get('cmt_engrid');
-        } else {
+        }elseif(session()->has('indexroute')){
+             $engr_id = session()->get('indexengrid');
+        }
+        else {
             $engr_id = $res->userid;
         }
         // dd(User::where('id',$res->userid)->get());

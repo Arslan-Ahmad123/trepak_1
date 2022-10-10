@@ -53,9 +53,28 @@ class index extends Controller
         $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise($categoryid[0]['id']);
         return view('searchengineer.searchengineerview')->with($resultSearchEngineer);
     }
+    public function search_engr(){
+        if(session()->has('indexengrid')){
+            $categoryid = engCategory::where('engrcategory',session()->get('indexengrid'))->get('id')->toArray();
+            $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise($categoryid[0]['id']);
+            return view('searchengineer.searchengineerview')->with($resultSearchEngineer);
+        }else{
+            return redirect()->route('indexpage');
+        }
+       
+    }
+    
     public function engineersearch(Request $res){
         $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise($res->id);
         return view('searchengineer.searchengineerview')->with($resultSearchEngineer);
+    }
+    public function search_engr_card(){
+        if(session()->has('indexengrid')){
+        $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise(session()->get('indexengrid'));
+        return view('searchengineer.searchengineerview')->with($resultSearchEngineer);
+        }else{
+            return redirect()->route('indexpage');
+        }
     }
     public function registerformshow(Request $res){
         return view('auth.register')->with(['city_name'=>$res->city_name,'eng_type' =>$res->eng_type]);
@@ -76,6 +95,14 @@ class index extends Controller
         $engineerComment =  $this->clientservices->viewEngineerComment($res);
         return view('engineerprofile.engineerprofileview')->with(['engr'=>$engineerComment]);
     }
+    public function viewp_rofileeng(){
+        if(session()->has('indexengrid')){
+        $engineerComment =  $this->clientservices->viewEngineerComment('test');
+        return view('engineerprofile.engineerprofileview')->with(['engr'=>$engineerComment]);
+        }else{
+            return redirect()->route('indexpage');
+        }
+    }
     public function register_show(){
         return view('registerpage.registerpageview');
     }
@@ -85,6 +112,14 @@ class index extends Controller
     public function booking(Request $res){
         $engr = User::find($res->bookingid);
         return view('booking.bookingpageview')->with('engr',$engr);
+    }
+    public function book_ing(){
+        if(session()->has('indexengrid')){
+        $engr = User::find(session()->get('indexengrid'));
+        return view('booking.bookingpageview')->with('engr',$engr);
+        }else{
+            return redirect()->route('indexpage');
+        }
     }
      public function proceed(Request $res){
         $engineerFind = User::find($res->engr_id);

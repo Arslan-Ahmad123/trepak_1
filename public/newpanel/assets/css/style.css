@@ -2861,7 +2861,7 @@ html.menu-opened body {
 }
 .page-breadcrumb .breadcrumb-item + .breadcrumb-item:before {
     color: #fff;
-    font-size: 10px;
+    font-size: 14px;
 }
 .sort-by {
     float: right;
@@ -6860,6 +6860,10 @@ display:none;
     .doc-info-left {
         -ms-flex-direction: row;
         flex-direction: row;
+       
+    }
+    .doc-info-cont{
+        margin-left: 10px;
     }
     .navbrand_logo {
         position: relative;
@@ -6869,13 +6873,17 @@ display:none;
         height: 25%;
     }
     .civilhover p{
-        font-size:12px;
+        font-weight: bold;
+        font-size: 13px;
+        margin-top: -5px;
+    
     }
     
     .civilhover h6 {
         margin: 3px 0px 0px 0px;
         padding: 0px;
-        font-size: 13px;
+        font-size: 14px;
+        font-weight: bold;
         color: white;
     }
     .civil:hover > .civilhover h6 {
@@ -7001,7 +7009,7 @@ display:none;
     .footer-title {
         font-size: 1.125rem;
     }
-    /* .booking-schedule.schedule-widget {
+    .booking-schedule.schedule-widget {
         overflow-x: auto;
     }
     .booking-schedule.schedule-widget > div {
@@ -7039,7 +7047,7 @@ display:none;
     .booking-doc-info .booking-doc-img img {
         height: 70px;
         width: 70px;
-    } */
+    }
     
     .voice-call-avatar .call-avatar {
         height: 80px;

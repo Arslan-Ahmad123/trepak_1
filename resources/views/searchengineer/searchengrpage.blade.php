@@ -15,7 +15,7 @@
                     {{-- </a> --}}
                 </div>
                 <div class="doc-info-cont">
-                    <h4 class="doc-name"><a href="doctor-profile.html">{{ $engr->fname }}</a></h4>
+                    <h4 class="doc-name"><a href="javascript:void(0)">{{ $engr->fname }}</a></h4>
                     <p class="doc-speciality">{{ getcategoryname($engr->engrcategoryid) }}</p>
                     <div id="specilizationfield">
                         <h5 class="doc-department" style="text-align: left"><img src="{{ asset('newpanel/assets/img/specialities/specialities-05.png') }}"  alt="Speciality">AUTO CAD</h5>

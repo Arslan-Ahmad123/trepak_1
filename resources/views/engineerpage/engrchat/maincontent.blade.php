@@ -209,6 +209,7 @@
             
         });
         function addcontent(){
+            
             $('#show_engr_group').html("");
             $.ajax({
                 url:'getchatuser',
@@ -235,7 +236,7 @@
                                         "</div>"+
                                     "</div>"+
                                 "</a>";
-                              
+                                console.log("Arfan: "+item);
                                 $('#show_engr_group').append(item);
                     }else{
                         var item = ` <a href='javascript:void(0);'  onclick='showchatdiv(${value.id},"solo")' class='media'>`+
@@ -255,7 +256,7 @@
                                         "</div>"+
                                     "</div>"+
                                 "</a>";
-                              
+                              console.log("Arfan: "+item);
                                 $('#show_engr_group').append(item);
                     }
                         

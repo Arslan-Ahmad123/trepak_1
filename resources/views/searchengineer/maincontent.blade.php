@@ -209,7 +209,12 @@
  </div>
  </div>
  <!-- /Breadcrumb -->
-
+@php
+    if(session()->has('indexengrid')){
+        session()->forget('indexengrid');
+        session()->forget('indexroute');
+    }
+@endphp
  <!-- Page Content -->
  <div class="content">
  <div class="container-fluid">

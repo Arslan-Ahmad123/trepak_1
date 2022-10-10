@@ -140,7 +140,12 @@
 				</div>
 			</div>
 			<!-- /Breadcrumb -->
-			
+			@php
+				if(session()->has('indexengrid')){
+					session()->forget('indexengrid');
+					session()->forget('indexroute');
+				}
+			@endphp
 			{{-- ==========================chat box ========================	 --}}
 			
 		
@@ -236,6 +241,14 @@
 													</a>
 												</li>
 											</ul> --}}
+										</div>
+										<div  id="showhideactionbtn" class="mt-2">
+											<form action="{{ route('booking')}}" method="post">
+												@csrf
+												<input type="hidden" name="bookingid" value="{{ $engr->id }}">
+												<button type="submit" class="btn btn-primary">Book Appointment</button>
+											</form>
+											{{-- <a class="apt-btn" href="{{ route('booking',['id'=>$engr->id]) }}">Book Appointment</a> --}}
 										</div>
 										{{-- <div class="clinic-services">
 											<span>AUTO CAD</span>
