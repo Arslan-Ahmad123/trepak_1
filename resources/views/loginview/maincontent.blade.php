@@ -4,7 +4,41 @@
         position: relative;
         left: 25%;
     }
-    }    
+    }
+    #or {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 20px;
+    margin: 2px 0;
+}
+#or, .fb-hint {
+    color: #6d6e70;
+}
+#or:before {
+    position: absolute;
+    width: 42%;
+    height: 2px;
+    top: 24px;
+    background-color: #e1e4e6;
+    content: "";
+    left:0;
+}
+#or:after {
+    position: absolute;
+    width: 42%;
+    height: 2px;
+    top: 24px;
+    background-color: #e1e4e6;
+    content: "";
+    right:0;
+}
+.btn-primary{
+    border:none!important;
+}
+
     </style>
 <!-- Main Wrapper -->
 <div class="main-wrapper">
@@ -22,12 +56,14 @@
                                @endisset --}}
                                {{-- {{ session()->get('path') }} --}}
 								<div class="row align-items-center justify-content-center">
-									<div class="col-md-7 col-lg-6 login-left">
-										<img src="{{ asset('newpanel/assets/img/login-banner.jpg') }}" class="img-fluid" alt="Doccure Login">	
-									</div>
-									<div class="col-md-12 col-lg-6 login-right">
-										<div class="login-header">
-											<h3>Login Form</h3>
+								  
+									<!--<div class="col-md-7 col-lg-6 login-left">-->
+									<!--	<img src="{{ asset('newpanel/assets/img/login-banner.jpg') }}" class="img-fluid" alt="Doccure Login">	-->
+									<!--</div>-->
+									<div class="col-md-12 col-lg-6 login-right" style="box-shadow: 0px 0px 15px 0px rgb(0 0 0 / 50%); margin-bottom: 100px;margin-top: 40px;
+">
+										<div class="login-header" style="text-align:center;font-size:25px;font-weight:500">
+											<h2>Login Form</h2>
                                             @php
                                                
                                             @endphp  
@@ -92,22 +128,36 @@
                                                     {{ __('Forgot your password?') }}
                                                 </a>
                                             @endif --}}
-                                            <a class=" ml-3  btn-dark" style="font-size:14px;border-radius:6px;padding: 6px 21px;background-color:rgb(55, 65, 81)" href="{{ route('user_regis') }}">
-                                                {{ __('SIGN UP') }}
-                                            </a>
-                                            <x-button class="ml-5" formaction="{{ route('login') }}">
-                                                {{ __('Sign in') }}
-                                            </x-button>
+                                            <!--<a class=" ml-3  btn-dark" style="font-size:14px;border-radius:6px;padding: 6px 21px;background-color: #252728;" href="{{ route('user_regis') }}">-->
+                                            <!--    {{ __('SIGN UP') }}-->
+                                            <!--</a>-->
+                                            <!--<x-button style="background-color: #252728;font-size:14px !important;margin-left:20px !important;padding: 8px 18px !important;border-radius: 6px !important;" class="ml-5" formaction="{{ route('login') }}">-->
+                                                
+                                            <!--    {{ __('Sign in') }}-->
+                                            <!--</x-button>-->
+                                            <button style="background-color: #15558d !important;color:white;" type="submit" formaction="{{ route('login') }}" class="btn bg-success btn-block  mt-2" >Login</button>
                                         </div>
 										</form>
                                        
 
                                         </x-guest-layout>
 									</div>
+									  <div id="or">
+								       
+								        or
+								       
+								    </div>
+								    <div class="fb-hint center" style="text-align:center;color: #000000;">Login with Facebook & Google</div>
+								    <div class="fb-hint center" style="text-align:center;padding:25px">
+								    <a class="btn btn-primary" style="background-color: rgba(24, 119, 242);" href="{{ url('/loginfacebook') }}" role="button"><i class="fab fa-facebook me-4"></i>&nbsp;&nbsp;Facebook</a>
+							  <!--<a class="btn btn-primary" style="background-color: #55acee;" href="#!" role="button"><i class="fab fa-twitter me-2"></i>Twitter</a>-->
+							  <a class="btn btn-primary" style="background-color: #dd4b39;" href="{{ url('/logingoogle') }}" role="button"><i class="fab fa-google"></i>&nbsp;&nbsp;Google</a>
+							  </div>
+
 								</div>
 							</div>
 							<!-- /Login Tab Content -->
-								
+				
 						</div>
 					</div>
 

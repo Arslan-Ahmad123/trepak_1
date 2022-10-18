@@ -68,6 +68,9 @@ class User extends Authenticatable
     public function comment(){
         return $this->hasMany(Comment::class,'engrid');
     }
+    public function category(){
+        return $this->belongsTo(engCategory::class,'engrcategoryid');
+    }
  
     
 }

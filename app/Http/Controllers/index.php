@@ -46,6 +46,24 @@ class index extends Controller
        return redirect(RouteServiceProvider::INDEXPAGE);
        
     }
+    public function showindex_page(){
+       
+       
+        if(Auth::check()){
+            if(Auth::user()->role ==  'admin'){
+                return redirect()->back();
+            }elseif(Auth::user()->role ==  'engr'){
+                return redirect()->back();
+            }else{
+                
+                return view('newpanel.newpanelview');
+            }
+
+        }else{
+          
+            return view('newpanel.newpanelview');
+        }
+    }
     
     public function searchbarengineer(Request $res){
         
@@ -122,8 +140,9 @@ class index extends Controller
         }
     }
      public function proceed(Request $res){
+        $times = Carbon::now();
         $engineerFind = User::find($res->engr_id);
-        return view('proceedtopay.proceedpageview')->with(['engr'=>$engineerFind,'meetingdate'=>$res->engr_date,'meetingtime'=>$res->engr_time]);
+        return view('proceedtopay.proceedpageview')->with(['engr'=>$engineerFind,'meetingdate'=>$res->engr_date,'meetingtime'=>$times]);
     }
     public function loginproceed(){
         if(session()->has('path')){

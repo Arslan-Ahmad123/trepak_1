@@ -22,6 +22,7 @@
 		<link rel="stylesheet" href="{{ asset('newpanel/assets/css/style.css') }}">
 		<link rel="stylesheet" href="{{ asset('newpanel/assets/css/footer.css') }}">
         <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+        		
 		@yield('customstyles')
 		
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -31,7 +32,8 @@
 		<![endif]-->
 	
 	</head>
-	<body>
-
+	<body >
+	   
+           
 		<!-- Main Wrapper -->
 		<div class="main-wrapper">
