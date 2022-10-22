@@ -147,12 +147,18 @@
 		<!-- Bootstrap Core JS -->
 		<script src="{{ asset('newpanel/assets/js/popper.min.js') }}"></script>
 		<script src="{{ asset('newpanel/assets/js/bootstrap.min.js') }}"></script>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 		
 		<!-- Slick JS -->
 		<script src="{{ asset('newpanel/assets/js/slick.js') }}"></script>
 		
 		<!-- Custom JS -->
 		<script src="{{ asset('newpanel/assets/js/script.js') }}"></script>
+		<script>
+			$(document).ready(function(){
+				swal("Hello world!");
+			});
+		</script>
 	
 		
 	</body>

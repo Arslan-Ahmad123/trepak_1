@@ -20,49 +20,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create()
     {
-       
-        if(Auth::check()){
-            $user = Auth::user();
-            $users = Auth::user()->role;
-            if($users == 'admin'){
-                return redirect(RouteServiceProvider::ADMIN);
-            } 
-            elseif ($users == 'enge'){
-                if ($user->adminengr == 1) {
-                    User::where('id', $user->id)->update(['adminengr' => 2]);
-                    if (Auth::user()->docsstatus == 0) {
-                        return redirect(RouteServiceProvider::DOCSSTATUS);
-                    } else {
-                        if (Auth::user()->status == 0) {
-                            return redirect(RouteServiceProvider::ADMINSTATUS);
-                        } else {
-                            return redirect(RouteServiceProvider::ENGE);
-                        }
-                    }
-                } else {
-                    //  Event(new conformemail($user));
-                    if (Auth::user()->emailstatus == 0) {
-                        return redirect(RouteServiceProvider::EMAILVERIFY);
-                    } else {
-                        if (Auth::user()->docsstatus == 0) {
-                            return redirect(RouteServiceProvider::DOCSSTATUS);
-                        } else {
-                            if (Auth::user()->status == 0) {
-                                return redirect(RouteServiceProvider::ADMINSTATUS);
-                            } else {
-                                return redirect(RouteServiceProvider::ENGE);
-                            }
-                        }
-                    }
-                }
-            }else{
-                return redirect()->route('userfrontpageview');
-            }
-
-        }else{
-            return view('loginview.loginpageview');
-        }
-        
+            return view('loginview.loginpageview');   
     }
 
     /**
@@ -73,7 +31,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
-       
+      
         $request->authenticate();
 
         $request->session()->regenerate();

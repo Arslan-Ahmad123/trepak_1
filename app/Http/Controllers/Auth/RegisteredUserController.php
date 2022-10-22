@@ -65,6 +65,6 @@ class RegisteredUserController extends Controller
                 }
             }
         }
-        return redirect()->route('userfrontpageview');
+        return redirect()->route('indexpage');
     }
 }

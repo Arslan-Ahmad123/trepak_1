@@ -52,10 +52,10 @@ class index extends Controller
         if(Auth::check()){
             if(Auth::user()->role ==  'admin'){
                 return redirect()->back();
-            }elseif(Auth::user()->role ==  'engr'){
+            }elseif(Auth::user()->role ==  'enge'){
                 return redirect()->back();
             }else{
-                
+              
                 return view('newpanel.newpanelview');
             }
 

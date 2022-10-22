@@ -152,6 +152,7 @@ target="_blank"><img src="{{asset('newpanel/assets/img/app-store-button.png') }}
 
 <!-- jQuery -->
 <script src="{{ asset('newpanel/assets/js/jquery.min.js') }}"></script>
+
 {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> --}}
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
@@ -166,6 +167,7 @@ target="_blank"><img src="{{asset('newpanel/assets/img/app-store-button.png') }}
 <script src="{{ asset('newpanel/assets/js/script.js') }}"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry,places"
 async></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 @stack('customjscode')
 <script>
 

@@ -45,6 +45,8 @@ class User extends Authenticatable
         'city',
         'state',
         'country',
+        'signupoption',
+        'salary',
     ];
 
     /**

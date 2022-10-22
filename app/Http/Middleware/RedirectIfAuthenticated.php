@@ -34,7 +34,7 @@ class RedirectIfAuthenticated
                             return redirect(RouteServiceProvider::ENGE);
                         }                
                 }else{
-                         return view(RouteServiceProvider::HOME);
+                         return redirect(RouteServiceProvider::INDEXPAGE);
                 } 
                            
                         }
