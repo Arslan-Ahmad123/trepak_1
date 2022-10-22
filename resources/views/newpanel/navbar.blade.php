@@ -343,9 +343,11 @@ a {
 				@elseif(Auth::user()->role == 'admin')
 				
 				<button class="btn   my-1 form-control" formaction="{{ route('adminlogout') }}" style="border:none;text-align:initial;font-size:15px;color:white">Logout</button>
-				@else
-				
+				@elseif(Auth::user()->role == 'enge')
 				<button class="btn   my-1 form-control" formaction="{{ route('engineerlogout') }}" style="border:none;text-align:initial;font-size:15px;color:white">Logout</button>
+				@else
+				<button class="btn   my-1 form-control" formaction="{{ route('logout') }}" style="border:none;text-align:initial;font-size:15px;color:white">Logout</button>
+				
 				@endif
 		   </form>
 				@else
@@ -434,9 +436,12 @@ a {
 				@elseif(Auth::user()->role == 'admin')
 				@csrf
 				<button class="btn btn-primary header-login" formaction="{{ route('adminlogout') }}">LOGOUT</button>
-				@else
+				@elseif(Auth::user()->role == 'enge')
 				@csrf
 				<button class="btn btn-primary header-login" formaction="{{ route('engineerlogout') }}">LOGOUT</button>
+				@else
+				@csrf
+				<button class="btn btn-primary header-login" formaction="{{ route('logout') }}">LOGOUT</button>
 				@endif
 		   </form>
 			@else

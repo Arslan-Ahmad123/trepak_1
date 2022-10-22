@@ -33,8 +33,11 @@ class RedirectIfAuthenticated
                         }else{
                             return redirect(RouteServiceProvider::ENGE);
                         }                
-                }else{
-                         return redirect(RouteServiceProvider::INDEXPAGE);
+                }elseif($user == 'enge'){
+                    return redirect(RouteServiceProvider::INDEXPAGE);
+                }
+                else{
+                         return redirect()->back();
                 } 
                            
                         }

@@ -479,6 +479,8 @@ foreach (App\Models\User::where('role', 'engr') as $val) {
 @endphp
 <!--==================================google  map here =====-->
 @push('customjscode')
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry,places"
+async></script>
     <script>
 		var custom_lat;
 		var custom_lon;

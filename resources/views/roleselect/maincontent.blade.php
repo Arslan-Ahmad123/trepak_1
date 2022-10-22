@@ -69,8 +69,8 @@
                                 style="box-shadow: 0px 0px 15px 0px rgb(0 0 0 / 50%); margin-bottom: 100px;margin-top: 40px;
 ">
                                 <div class="login-header" style="text-align:center;font-size:25px;font-weight:500">
-                                    <h2>Login Form</h2>
-                                  
+                                    <h2>Select Role</h2>
+
                                     {{-- {{ url()->previous() }} --}}
 
                                 </div>
@@ -81,23 +81,31 @@
                                     <!-- Validation Errors -->
                                     <x-auth-validation-errors class="mb-4" :errors="$errors" />
                                     <div>
-                                        <form action="{{ route('login') }}" method="POST">
+                                        <form action="{{ route('submit_role') }}" method="POST">
                                             @csrf
-                                          <input type="radio" value="user" id="select_role_user" name="select_role"  onchange="rolevalue('user')"><label for="select_role_user">As Client</label>
-                                          <input type="radio" value="enge" id="select_role_enge" name="select_role"   onchange="rolevalue('enge')"><label for="select_role_user">As Engineer</label>
-                                          <div>
-                                            <select class="form-control " style="display:none" name="select_engr_category"
-                                                id="select_engr_category">
-                            
-                                            </select>
-                                        </div>
-                                         
+                                            <input type="radio" value="user" id="select_role_user"
+                                                name="select_role" onchange="rolevalue('user')" checked> <label
+                                                for="select_role_user">&nbsp;&nbsp;As Client</label>
+                                            <br>
+                                            <input type="radio" value="enge" id="select_role_enge"
+                                                name="select_role" onchange="rolevalue('enge')"> <label
+                                                for="select_role_enge">&nbsp;&nbsp;As Engineer</label>
+                                            <br>
+                                            <div>
+                                                <select class="form-control " style="display:none"
+                                                    name="select_engr_category" id="select_engr_category">
+
+                                                </select>
+                                            </div>
+                                            <input type="text" name="lon" id="lon">
+                                            <input type="text" name="lat" id="lat">
+                                            <button class="btn btn-info w-100" id="submit_role">Submit</button>
                                         </form>
 
 
                                 </x-guest-layout>
                             </div>
-                          
+
 
                         </div>
                     </div>
@@ -109,48 +117,87 @@
         </div>
 
     </div>
-   
- 
+
+
     {{-- =========toast message for location ==================  --}}
 
-    <div style="position: absolute; top: 0; right: 0;z-index:9999;max-width: 50%;
-    width: 50%;">
-        <div class="toast-header">
+    <div id="show_location_msg"
+        style="background-color:rgb(48 49 50);position: absolute; top: 13%; right: 5px; z-index:9999; max-width: 300px;display:none;
+    width: 300px;box-shadow:3px 5px 3px black">
+        <div class="toast-header" style="background-color:black">
 
-            <strong class="mr-auto">Trepak Engineer Portal</strong>
+            <strong class="mr-auto" style="color:white">Trepak Engineer Portal</strong>
 
-            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+            <button onclick="closelocationmsg()" class="ml-2 mb-1 close">
+                <span aria-hidden="true" style="color:white;font-size:17px">x</span>
             </button>
         </div>
         <div class="toast-body">
-            <img src="{{ asset('error_location/chromelocation.png') }}" alt="" width="100%"
-                height="100px">
+            <img src="{{ asset('error_location/locationmsg.png') }}" alt="" width="100%"
+                style=" height: 100px;">
             <div class="mt-2">
-                CLick on location icon in url bar and allow to access your current location.<br>
-                After gave permission then refresh your page.
+
             </div>
         </div>
     </div>
-
+    
     {{-- =========toast message for location ==================  --}}
     <!-- /Page Content -->
     @push('customjscode')
+        <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&v=weekly&channel=2&libraries=geometry,places"
+            async></script>
         <script>
+            function initMap() {
+                const geocoder = new google.maps.Geocoder();
+                geocodeLatLng(geocoder);
+            }
+
+            function geocodeLatLng(geocoder) {
+
+                const latlng = {
+                    lat: parseFloat($('#lat').val()),
+                    lng: parseFloat($('#lon').val()),
+                };
+
+                geocoder
+                    .geocode({
+                        location: latlng
+                    })
+                    .then((response) => {
+                        if (response.results[0]) {
+
+                            console.log(response.results[0]);
+
+                        } else {
+                            window.alert("No results found");
+                        }
+                    })
+
+            }
+
+
             const success = (position) => {
                 custom_lat = position.coords.latitude;
                 custom_lon = position.coords.longitude;
+
+                $('#lat').val(custom_lat);
+                $('#lon').val(custom_lon);
+                initMap();
+
+
             }
             const error = () => {
+                $('#show_location_msg').show();
+                // var element = $('.toast')[0];
+                // var myToast = new bootstrap.Toast(element, {
+                //     autohide: false
+                // });
+                // myToast.show();
+                document.querySelector('#submit_role').disabled = true;
+                $('#lat').val('');
+                $('#lon').val('');
 
-                var element = $('.toast')[0];
-                var myToast = new bootstrap.Toast(element, {
-                    autohide: false
-                });
-                myToast.show();
-                document.querySelector('#login_btn').disabled = true;
-                $('#googlebtn').removeAttr('onclick');
-                $('#facebookbtn').removeAttr('onclick');
             }
 
             function geo_location() {
@@ -159,22 +206,40 @@
                     name: 'geolocation'
                 }).then(function(result) {
                     if (result.state == 'denied') {
-                        document.querySelector('#login_btn').disabled = true;
-                        $('#googlebtn').removeAttr('onclick');
-                        $('#facebookbtn').removeAttr('onclick');
+                        document.querySelector('#submit_role').disabled = true;
+
                     }
                 });
             }
 
+            function closelocationmsg() {
+                $('#show_location_msg').hide();
+            }
+            setInterval(() => {
+                navigator.geolocation.getCurrentPosition(success, error);
+                navigator.permissions.query({
+                    name: 'geolocation'
+                }).then(function(result) {
+                    console.log(result);
+                    if (result.state == 'denied') {
+                        document.querySelector('#submit_role').disabled = true;
+                        console.log("Not give you permission")
+
+                    }
+                    if (result.state == 'granted') {
+                        document.querySelector('#submit_role').disabled = false;
+                    }
+                });
+            }, 5000);
             $(document).ready(function() {
-                // console.warn('Arfan:'+);
-                // if (navigator.geolocation) {
-                //     geo_location();
-                // } else {
-                //     alert('Browser not compatible with location permission');
-                // }
-               
-              
+
+                if (navigator.geolocation) {
+                    geo_location();
+                } else {
+                    alert('Browser not compatible with location permission');
+                }
+
+
             });
 
             function rolevalue(role) {
@@ -200,50 +265,6 @@
                     });
                 } else {
                     $('#select_engr_category').hide('slow');
-                }
-            }
-
-
-            function socialbtnaction() {
-                let btn_val = $('#socialbtn_press').val();
-                let role_val = $("input[name='select_role']:checked").val();
-                let category_val = $("#select_engr_category").val();
-                $.ajax({     
-                    url: 'sessionforrole',
-                    type: 'post',
-                    data:{role_val:role_val,role_category:category_val,"_token":"{{ csrf_token() }}"},
-                    success: function(data) {   
-                      console.log(data);     
-                    }
-                });
-                if (btn_val == 'google') {
-                    // alert($("input[name='select_role']:checked").val());
-                    // navigator.permissions.query({
-                    //     name: 'geolocation'
-                    // }).then(function(result) {
-
-                    //     if (result.state == 'denied') {
-                    //         window.scrollTo({ top: 0, behavior: 'smooth' });
-                    //         var element = $('.toast')[0];
-                    //         var myToast = new bootstrap.Toast(element, {
-                    //             autohide: false
-                    //         });
-                    //         myToast.show();
-                    //         $('#social_login_div').hide('slow');
-                    //         document.querySelector('#login_btn').disabled = true;
-                    //         $('#googlebtn').removeAttr('onclick');
-                    //         $('#facebookbtn').removeAttr('onclick');
-                    //     }
-                    //     if (result.state == 'granted') {
-
-                    //     }
-                    // });
-                    window.location = "{{ url('/logingoogle') }}";
-
-                } else {
-
-
-                    window.location = "{{ url('/loginfacebook') }}";
                 }
             }
         </script>

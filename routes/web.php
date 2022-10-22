@@ -3,6 +3,7 @@
 use App\Models\User;
 use App\Models\engCategory;
 use Illuminate\Support\Str;
+use App\Events\conformemail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\index;
 use Illuminate\Support\Facades\Auth;
@@ -22,6 +23,34 @@ Route::get('/conformemail', function () {
 Route::post('/resendemail', function () {
     return redirect()->back();
 })->name('resendemail');
+Route::post('submit_role',function(Request $res){
+if($res->select_role == 'enge'){
+    User::where('email',Auth::user()->email)->update([
+        'role'=>$res->select_role,
+        'engrcategoryid'=>$res->select_engr_category,
+    ]);
+    $user =  User::where('email',Auth::user()->email)->get();
+      Event(new conformemail($user[0]));
+      if (Auth::user()->emailstatus == 0) {
+        return redirect(RouteServiceProvider::EMAILVERIFY);
+    } else {
+        if (Auth::user()->docsstatus == 0) {
+            return redirect(RouteServiceProvider::DOCSSTATUS);
+        } else {
+            if (Auth::user()->status == 0) {
+                return redirect(RouteServiceProvider::ADMINSTATUS);
+            } else {
+                return redirect(RouteServiceProvider::ENGE);
+            }
+        }
+    }
+}else{
+    User::where('email',Auth::user()->email)->update([
+        'role'=>$res->select_role,
+    ]);
+    return redirect(RouteServiceProvider::INDEXPAGE);
+}
+})->name('submit_role');
 Route::get('/fetchallrangeengr', function () {
     $getuser = User::with('category')->where('role', 'enge')
         ->get()->toArray();
@@ -75,7 +104,7 @@ Route::get('/google/callback', function () {
         } elseif(Auth::user()->role == 'user') {
             return redirect()->route('indexpage');
         }else{
-            dd('Please select your role first');
+            return redirect()->route('role_view');
         }
      
     } else {
@@ -90,7 +119,7 @@ Route::get('/google/callback', function () {
 
         ]);
         Auth::login($users);
-        dd("please select your role first");
+        return redirect()->route('role_view');
     }
 
     
@@ -151,7 +180,7 @@ Route::get('/facebook/callback', function () {
         } elseif(Auth::user()->role == 'user') {
             return redirect()->route('indexpage');
         }else{
-            dd('Please select your role first');
+            return redirect()->route('role_view');
         }
     } else {
        
@@ -164,12 +193,33 @@ Route::get('/facebook/callback', function () {
             'signupoption' => 1,
         ]);
         Auth::login($users);
-        dd('Pleae Select Your Role first');
+        return redirect()->route('role_view');
     }
 
 });
 Route::get('role_view',function(){
-return view('roleselect.select_role');
+    if(Auth::user()->role == 'enge'){
+        if (Auth::user()->emailstatus == 0) {
+            return redirect(RouteServiceProvider::EMAILVERIFY);
+        } else {
+            if (Auth::user()->docsstatus == 0) {
+                return redirect(RouteServiceProvider::DOCSSTATUS);
+            } else {
+                if (Auth::user()->status == 0) {
+                    return redirect(RouteServiceProvider::ADMINSTATUS);
+                } else {
+                    return redirect()->back();
+                }
+            }
+        }
+    }elseif(Auth::user()->role == 'admin'){
+        return redirect()->back();
+    }elseif(Auth::user()->role == 'user'){
+        return redirect()->back();
+    }else{
+        return view('roleselect.select_role');
+    }
+
 })->name('role_view');
 
 // ===================email ===========================

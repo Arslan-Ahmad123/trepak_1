@@ -54,13 +54,20 @@ class index extends Controller
                 return redirect()->back();
             }elseif(Auth::user()->role ==  'enge'){
                 return redirect()->back();
-            }else{
-              
+            }elseif(Auth::user()->role ==  'user'){
                 return view('newpanel.newpanelview');
             }
-
+            else{
+               
+                if(url()->previous() == 'http://127.0.0.8000'){
+                    return redirect()->back();
+                }
+                else{
+                    return redirect()->route('role_view');
+                }
+                
+            }
         }else{
-          
             return view('newpanel.newpanelview');
         }
     }

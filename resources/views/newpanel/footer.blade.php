@@ -165,8 +165,7 @@ target="_blank"><img src="{{asset('newpanel/assets/img/app-store-button.png') }}
 
 <!-- Custom JS -->
 <script src="{{ asset('newpanel/assets/js/script.js') }}"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry,places"
-async></script>
+
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 @stack('customjscode')
 <script>
