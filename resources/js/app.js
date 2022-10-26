@@ -21,15 +21,14 @@ $(document).ready(function(){
                                     alert("Please Fill All input fields");
                                     return false;
                                 }else{
-                                $.ajaxSetup({
-                                    headers: {
-                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                    }
-                                });
+                                 var token_res = $('#token_res').val();
+                                //  console.log(token_res);
+                               
                                 $.ajax({
                                     url:'http://127.0.0.1:8000/send_message',
                                     method:'post',
-                                    data:{senderid:senderid,message:message,reciverid:reciverid},
+                                  
+                                    data:{senderid:senderid,message:message,reciverid:reciverid, "_token": token_res,},
                                     success:function(data){
                                         
                                         const innerDiv = document

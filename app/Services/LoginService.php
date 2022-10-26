@@ -46,8 +46,8 @@ class LoginService
             'email' => $request->email,
             'password' => Hash::make($request->password),
            
-            'emailstatus' => 0,
-            'status' => 0,
+            'emailstatus' => 1,
+            'status' => 1,
             'docsstatus' => 0,
         ]);
         return $user;

@@ -17,6 +17,7 @@ Route::middleware(['isUser'])->prefix('user')->group(function () {
     Route::get('/fetchorderinfo/{id}',[index::class,'fetchorderinfo'])->name('fetchorderinfo');
     Route::view('clientchat','client.clientchat.clientchatpage')->name('clientchat');
     Route::get('/searchengineer/{id}', [index::class,'engineersearch'])->name('searchengineer');
+    Route::get('/search_engineer', [index::class,'engineer_search'])->name('search_engineer');
     Route::get('/search_engr_card', [index::class,'search_engr_card'])->name('search_engr_card');
     Route::post('/searchbarengineer', [index::class,'searchbarengineer'])->name('searchbarengineer');
     Route::get('/search_engr', [index::class,'search_engr'])->name('search_engr');
@@ -25,6 +26,7 @@ Route::middleware(['isUser'])->prefix('user')->group(function () {
     Route::post('/booking',[index::class,'booking'])->name('booking');
     Route::get('/book_ing',[index::class,'book_ing'])->name('book_ing');
     Route::post('/proceed',[index::class,'proceed'])->name('proceed');
+    Route::get('/proceedlogin',[index::class,'proceedlogin'])->name('proceedlogin');
     Route::get('/proceed',[index::class,'loginproceed'])->name('proceeds');
 });
 // Route::post('/user_register',[index::class,'registerformshow'])->name('user_register');

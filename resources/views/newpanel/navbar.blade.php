@@ -171,7 +171,7 @@ a {
 				<span></span>
 			</span>
 		</a>
-		<a href="index-2.html" class="navbar-brand logo">
+		<a href="{{ route('indexpage') }}" class="navbar-brand logo">
 			<img src="{{ asset('newpanel/assets/img/logo.png') }}" class="navbrand_logo" alt="Logo" >
 		</a>
 	</div>
@@ -184,7 +184,7 @@ a {
 				<i class="fas fa-times"></i>
 			</a>
 		</div>
-		<ul class="main-nav">
+		<ul class="main-nav" style="margin-top:0px">
 			@if(Auth::check())
 			@if(Auth::user()->role == 'user')
 			<li>

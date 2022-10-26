@@ -31,13 +31,18 @@
 						<div class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar">
 							@php
 								$client = Auth::user();
+								if($client->signupoption == 1){
+									$img = $client->pic;
+								}else{
+									$img = asset('engrphoto/'.$client->pic);
+								}
 							@endphp
 							<div class="p-2 mb-3" id="filter_eng" style="cursor:pointer">Sidebar Nav<i  class="fa fa-angle-down filtericon_cpro" aria-hidden="true"></i></div>
 							<div class="profile-sidebar" id="profilenav">
 								<div class="widget-profile pro-widget-content">
 									<div class="profile-info-widget">
 										<a href="#" class="booking-doc-img">
-											<img src="{{ asset('engrphoto/'.$client->pic) }}" alt="User Image">
+											<img src="{{ $img }}" alt="User Image">
 										</a>
 										<div class="profile-det-info">
 											<h3>{{ $client->fname }}</h3>
@@ -102,7 +107,7 @@
 								<div class="widget-profile pro-widget-content">
 									<div class="profile-info-widget">
 										<a href="#" class="booking-doc-img">
-											<img src="{{ asset('engrphoto/'.$client->pic) }}" alt="User Image">
+											<img src="{{ $img }}" alt="User Image">
 										</a>
 										<div class="profile-det-info">
 											<h3>{{ $client->fname }}</h3>
@@ -206,11 +211,21 @@
 															</thead>
 															<tbody>
 																@foreach ($order as $orders)
+																
 																<tr>
+																	@php
+																		$engrinfo = getuser($orders->engrid);
+																		if($engrinfo->signupoption == 1){
+																			$engrimg = $engrinfo->pic;
+																		}else{
+																			$engrimg = asset('engrphoto/'.$engrinfo->pic);
+																		}
+																	@endphp
 																	<td>
 																		<h2 class="table-avatar">
 																			<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
-																				<img class="avatar-img rounded-circle" src="{{ asset('newpanel/assets/img/doctors/doctor-thumb-01.jpg') }}" alt="User Image">
+
+																				<img class="avatar-img rounded-circle" src="{{ $engrimg }}" alt="User Image">
 																			</a>
 
 
@@ -271,7 +286,7 @@
 																	<td>
 																		<h2 class="table-avatar">
 																			<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
-																				<img class="avatar-img rounded-circle" src="{{ asset('newpanel/assets/img/doctors/doctor-thumb-01.jpg') }}" alt="User Image">
+																				<img class="avatar-img rounded-circle" src="{{$engrimg }}" alt="User Image">
 																			</a>
 
 
@@ -328,7 +343,7 @@
 																	<td>
 																		<h2 class="table-avatar">
 																			<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
-																				<img class="avatar-img rounded-circle" src="{{ asset('newpanel/assets/img/doctors/doctor-thumb-01.jpg') }}" alt="User Image">
+																				<img class="avatar-img rounded-circle" src="{{ $engrimg }}" alt="User Image">
 																			</a>
 
 

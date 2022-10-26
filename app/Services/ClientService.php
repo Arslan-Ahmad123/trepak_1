@@ -52,8 +52,48 @@ class ClientService
     {
         $categoryname = engCategory::find($id);
         $engr = User::where('role', 'enge')->where('engrcategoryid', $id)->paginate(10);
-        $totalengr = User::where('role', 'enge')->where('engrcategoryid', $id)->count();
-        return ['engr' => $engr, 'tlengr' => $totalengr, 'cate_name' => $categoryname, 'category_id' => $id];
+      $allengr = User::where('role', 'enge')->where('engrcategoryid', $id)->get();
+        $totalengr = User::where('role', 'enge')->count();
+        $new_longitude =  Auth::user()->longitude / 1000000;
+        $new_latitude = Auth::user()->latitude / 1000000;
+        $engr_array = [];
+        $user = User::where('role', 'enge')->where('engrcategoryid', $id)->get()->toArray();
+    
+        foreach ($user as $users) {
+    
+            $old_longitude = $users['longitude'] / 1000000;
+            $old_latitude = $users['latitude'] / 1000000;
+            $dLat = deg2rad($new_latitude - $old_latitude);
+            $dLon = deg2rad($new_longitude - $old_longitude);
+            $radius = 6371;
+            $a = sin($dLat / 2) * sin($dLat / 2) +
+                cos(deg2rad($old_latitude)) * cos(deg2rad($new_latitude)) *
+                sin($dLon / 2) * sin($dLon / 2);
+            $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+            $d = $radius * $c; // Distance in km
+            if ($d <= 100) {
+                // array_push($users, $d);
+                // array_push($users,$categoryname->engrcategory);
+                $users['distance'] = $d;
+                $users['categoryname'] = $categoryname->engrcategory;
+                $users['user_id'] = Auth::user()->id;
+                if($users['signupoption'] == 1){
+                    $users['imagepath'] = $users['pic'];
+                }else{
+                    $users['user_id'] = asset('engrphoto/'.$users['pic']);
+                }
+                $engr_array[] = $users;
+              
+            }
+        }
+        
+        if(session()->has('all_engrs')){
+            session()->forget('all_engrs');
+            session()->push('all_engrs', $engr_array);
+        }else{
+            session()->push('all_engrs', $engr_array);
+        }
+       return ['engr' => $engr, 'tlengr' => $totalengr, 'cate_name' => $categoryname, 'category_id' => $id,'allengr'=>json_encode($allengr)];
     }
     public function logoutClient()
     {

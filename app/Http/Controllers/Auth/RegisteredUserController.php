@@ -50,7 +50,7 @@ class RegisteredUserController extends Controller
             return redirect(RouteServiceProvider::ADMIN);
         }
         if ($users == 'enge') {
-            Event(new conformemail($user));
+            // Event(new conformemail($user));
             if (Auth::user()->emailstatus == 0) {
                 return redirect(RouteServiceProvider::EMAILVERIFY);
             } else {

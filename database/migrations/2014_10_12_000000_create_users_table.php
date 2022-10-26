@@ -40,6 +40,7 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->string('state')->nullable();
             $table->string('country')->nullable();
+            $table->string('short_country')->nullable();
             $table->integer('signupoption')->default(0);
             $table->string('salary')->nullable();
             $table->rememberToken();

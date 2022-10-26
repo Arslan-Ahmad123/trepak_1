@@ -309,7 +309,7 @@
   </div>
  -->
         <input type="checkbox" id="seeagainguideline" name="seeagainguideline" />
-        <label class="modal__text2" for="vehicle1">
+        <label class="modal__text2" for="seeagainguideline">
             Don't you want to see this again?</label>
         <br>
         <button class="modal__btn" id="next_btn" onclick="nextdiv()">Next &rarr;</button>
@@ -320,11 +320,10 @@
     </div>
 </div>
 {{-- ======================guideline====================== --}}
-<div class="top-header">
-    <h2>Find and Book the Best Engineers</h2>
-
+<div class="top-header mt-5 pt-5 text-center">
+    <h4>Find and Book the Best Engineers</h4>
 </div>
-<section class="section ">
+{{-- <section class="section ">
     <div class="container topsection category_container">
         <div class="banner-wrapper">
             <div class="row">
@@ -382,7 +381,7 @@
 
         </div>
     </div>
-</section>
+</section> --}}
 <!-- /Home Banner -->
 <!--	  <div class="top-header1">-->
 <!--						<h2>Find Engineers By Categories</h2>-->
@@ -456,6 +455,9 @@
                 <div id="result"></div>
 
                 <div id="mapid"></div>
+                <input type="text" id="lat_cur" hidden>
+                <input type="text" id="lon_cur" hidden>
+
             </div>
 
 
@@ -464,53 +466,39 @@
     </div>
 </section>
 @php
-$engarray = [];
-// $egn_type = $engtype;
-// $egn_type = app;
-foreach (App\Models\engCategory::get('engrcategory') as $val) {
-    $engarray[] = $val['engrcategory'];
-}
-$get_all_engr = [];
-// $egn_type = $engtype;
-// $egn_type = app;
-foreach (App\Models\User::where('role', 'engr') as $val) {
-    $engarray[] = $val['engrcategory'];
-}
+    $engarray = [];
+    // $egn_type = $engtype;
+    // $egn_type = app;
+    foreach (App\Models\engCategory::get('engrcategory') as $val) {
+        $engarray[] = $val['engrcategory'];
+    }
+    $get_all_engr = [];
+    // $egn_type = $engtype;
+    // $egn_type = app;
+    foreach (App\Models\User::where('role', 'engr') as $val) {
+        $engarray[] = $val['engrcategory'];
+    }
 @endphp
 <!--==================================google  map here =====-->
 @push('customjscode')
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry,places"
-async></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry,places"
+        async></script>
     <script>
-		var custom_lat;
-		var custom_lon;
-       const success = (position) => {
-		custom_lat = position.coords.latitude;
-		custom_lon = position.coords.longitude;	
-        }
-        const error = () => {
-            console.log("error");
-        }
-       function geo_location(){
-		navigator.geolocation.getCurrentPosition(success,error);
-	   }
+        var custom_lat;
+        var custom_lon;
+
         var indexdiv = 1;
         $(document).ready(function() {
             $('#previous_btn').hide();
-			if(getCookie('status')){
+            if (getCookie('status')) {
 
-			}else{
-				$('#modal-opened').show('slow');
-			}
-			geo_location();
-			
-        navigator.permissions.query({
-            name: 'geolocation'
-        }).then(function(result) {
-            if (result.state == 'denied') {
-                alert("Please manaully allow your location");
+            } else {
+                $('#modal-opened').show('slow');
             }
-        });
+
+
+
         });
 
         function previousdiv() {
@@ -552,33 +540,62 @@ async></script>
                 $('#previous_btn').show();
             }
         }
-		function getCookie(name) {
-				let cookie = {};
-				document.cookie.split(';').forEach(function(el) {
-					let [k,v] = el.split('=');
-					cookie[k.trim()] = v;
-				})
-				return cookie[name];
-				}
+
+        function getCookie(name) {
+            let cookie = {};
+            document.cookie.split(';').forEach(function(el) {
+                let [k, v] = el.split('=');
+                cookie[k.trim()] = v;
+            })
+            return cookie[name];
+        }
+
         function closeguidelinediv() {
-			if($('#seeagainguideline').is(':checked')){
-				document.cookie = "status=yes";
-				$('#modal-opened').hide('slow');
-				
-			}else{
-				$('#modal-opened').hide('slow');
-			}
+            if ($('#seeagainguideline').is(':checked')) {
+                document.cookie = "status=yes";
+                $('#modal-opened').hide('slow');
+
+            } else {
+                $('#modal-opened').hide('slow');
+            }
+
+        }
+        async function make_cord(callbackfun) {
+            const success = (position) => {
+                $('#lat_cur').val(position.coords.latitude);
+                $('#lon_cur').val(position.coords.longitude);
+                callbackfun();
+                console.log('1st');
+            }
+            const error = () => {
+                console.log("error");
+                callbackfun();
+            }
+
+            navigator.geolocation.getCurrentPosition(success, error);
+            navigator.permissions.query({
+                name: 'geolocation'
+            }).then(function(result) {
+                console.log(result);
+                if (result.state == 'denied' || result.state == 'gratned') {
+
+                }
+            });
+            // setTimeout(()=>{
+
+            // },1000)
 
         }
 
-        function initMap() {
+        function make_map() {
             var allengr = [];
             $.ajax({
                 url: 'fetchallrangeengr',
                 type: 'get',
                 async: false,
                 success: function(data) {
-                    console.log(data[0].category.engrcategory);
+                    console.log('fetch all user :' + data.length)
+
                     $.each(data, function(index, value) {
                         allengr[index] = value;
                     });
@@ -598,66 +615,202 @@ async></script>
 
                 types: ["establishment"],
             };
+            var latitude_cur = $('#lat_cur').val() != "" ? parseFloat($('#lat_cur').val()) : 32.1877;
+            var longitude_cur = $('#lon_cur').val() != "" ? parseFloat($('#lon_cur').val()) : 74.1945;
+
             var autocomplete = new google.maps.places.Autocomplete(input, options);
             map = new google.maps.Map(document.getElementById("mapid"), {
                 center: {
-                    'lat': 32.1877,
-                    'lng': 74.1945
+                    'lat': latitude_cur,
+                    'lng': longitude_cur,
                 },
                 mapTypeControl: false,
-                zoom: 13,
+                zoom: 8,
+                gestureHandling: 'greedy',
+                draggable: true,
             });
-            var style_s = [{
-                    featureType: "poi.business",
-                    stylers: [{
-                        visibility: "off"
-                    }],
-                },
-                {
-                    featureType: "transit",
-                    elementType: "labels.icon",
-                    stylers: [{
-                        visibility: "off"
-                    }],
-                },
-            ];
-            //  new google.maps.StyledMapType(styles,{name: "Styled Map"});
-            map.setOptions({
-                styles: style_s
-            });
-            //   map.setOptions({ styles: styles["hide"] });
-
             const shape = {
                 coords: [1, 1, 1, 20, 18, 20, 18, 1],
                 type: "poly",
             };
-            $.each(allengr, function(i, m) {
-                //  var latLngA = {'lat':32.1877,'lng':74.1945};
-                //  var latLngB = {'lat':m.lan,'lng':m.lng};
-                var latitude1 = 32.1877;
-                var longitude1 = 74.1945;
-                var latitude2 = m.latitude / 1000000;
-                var longitude2 = m.longitude / 1000000;
-                new google.maps.Marker({
-                    position: new google.maps.LatLng(latitude1, longitude1),
-                    shape: shape,
-                    title: 'Current location',
-                    label: {
-                        text: 'U',
-                        color: "black",
-                        fontSize: "15px",
-                        fontWeight: "bold"
-                    },
-                    map: map,
+            var checkuserlogin = {{ Auth::user() ? '1' : '0' }};
+            console.warn(checkuserlogin);
+            if (checkuserlogin == 1 || $('#lat_cur').val() != "") {
+               
 
+
+                var style_s = [{
+                        featureType: "poi.business",
+                        stylers: [{
+                            visibility: "off"
+                        }],
+                    },
+                    {
+                        featureType: "transit",
+                        elementType: "labels.icon",
+                        stylers: [{
+                            visibility: "off"
+                        }],
+                    },
+                ];
+                //  new google.maps.StyledMapType(styles,{name: "Styled Map"});
+                map.setOptions({
+                    styles: style_s
                 });
-                var distance = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(
-                    latitude1, longitude1), new google.maps.LatLng(latitude2, longitude2));
-                var distance_km = distance / 1000;
-                
-                if (distance_km < 100) {
-					// var idfetch =  m.id;
-					// var url = '{{ route("fetchcategorynamemap", ":id") }}';
+                //   map.setOptions({ styles: styles["hide"] });
+
+                var infoWindow = new google.maps.InfoWindow();
+                var lon_s = [];
+                var lat_s = [];
+                var distance_boolean = [];
+                $.each(allengr, function(i, m) {
+
+                    if (lon_s.includes(m.longitude) && lat_s.includes(m.latitude)) {
+                        function randomInRange(min, max) {
+                            return Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math
+                                .random() * (max - min) + min);
+                        }
+                        let variation = randomInRange(0.1, 5) / 500;
+
+                        var latitude2 = (m.latitude / 1000000) + variation;
+                        var longitude2 = (m.longitude / 1000000) + variation;
+                    } else {
+                        var latitude2 = (m.latitude / 1000000);
+                        var longitude2 = (m.longitude / 1000000);
+                    }
+                    lon_s.push(m.longitude);
+                    lat_s.push(m.latitude);
+
+                    var latitude1 = latitude_cur;
+                    var longitude1 = longitude_cur;
+                    var distance = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(
+                        latitude1, longitude1), new google.maps.LatLng(latitude2, longitude2));
+                    var distance_km = distance / 1000;
+                    if (distance_km < 1) {
+                        distance_boolean.push('no');
+                    } else {
+                        distance_boolean.push('yes');
+                    }
+
+                    // var latitude2 = m.latitude / 1000000;
+                    // var longitude2 = m.longitude / 1000000;
+
+
+
+                    if (distance_km < 100) {
+                        // var idfetch =  m.id;
+                        // var url = '{{ route('fetchcategorynamemap', ':id') }}';
+                        // url = url.replace(':id', idfetch );
+                        // let message;
+                        // $.ajax({
+                        //     url:url,
+                        //     type:'get',
+                        //     success:function(data){
+                        //         console.log("Arfan ahmad is a:"+data);
+                        //         message = 
+                        //     }
+                        // });
+                        // console.log(m.category.engrcategory);
+                        const message =
+                            `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`;
+
+                        const infowindow = new google.maps.InfoWindow({
+                            content: message,
+                        });
+                        const svgMarker = {
+                            path: "M10.453 14.016l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+                            fillColor: "red",
+                            fillOpacity: 1,
+                            strokeWeight: 0,
+                            rotation: 0,
+                            scale: 2,
+                            anchor: new google.maps.Point(15, 30),
+                        };
+                        var image = {
+                            url: "{{ asset('engrphoto/demo.png') }}",
+                            size: new google.maps.Size(71, 71),
+                            origin: new google.maps.Point(0, 0),
+                            anchor: new google.maps.Point(17, 34),
+                            scaledSize: new google.maps.Size(25, 25)
+                        };
+
+
+                        let marker_s = new google.maps.Marker({
+                            position: new google.maps.LatLng(latitude2, longitude2),
+                            shape: shape,
+                            title: m.fname,
+                            label: {
+                                text: parseFloat(distance_km).toFixed(1) + 'KM',
+                                color: "red",
+                                fontSize: "15px",
+                                fontWeight: "bold"
+                            },
+                            map: map,
+                            icon: image
+                        });
+                        // google.maps.event.addListener(marker_s, 'mouseover', function() {
+                        //     infowindow.open({
+                        //         anchor: marker_s,
+                        //         map,
+                        //         shouldFocus: false,
+                        //     });
+                        // });
+
+                        (function(marker, m) {
+                            google.maps.event.addListener(marker_s, "click", function(e) {
+                                //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
+                                infoWindow.setContent(
+                                    `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`
+                                );
+                                infoWindow.open(map, marker);
+                            });
+                        })(marker_s, m);
+                        // google.maps.event.addListener(marker_s, 'click', function() {
+                        //     infowindow.open({
+                        //         anchor: marker_s,
+                        //         map,
+                        //         shouldFocus: false,
+                        //     });
+                        // });
+                        // google.maps.event.addListener(marker_s, 'mouseout', function() {
+                        //     infowindow.close(
+
+                        //     );
+                        // });
+                    }
+                });
+                if (distance_boolean.includes('no')) {
+                    console.log(distance_boolean);
+                    console.log('no permission to add your marker');
+                    markercurrentlocation.setMap(null);
+                } else {
+                   
+                    var markercurrentlocation =  new google.maps.Marker({
+                        position: new google.maps.LatLng(latitude1, longitude1),
+                        shape: shape,
+                        title: 'Current location',
+                        label: {
+                            text: 'U',
+                            color: "black",
+                            fontSize: "15px",
+                            fontWeight: "bold"
+                        },
+                        map: map,
+
+                    });
+
+                }
+            } else {
+                var infoWindow = new google.maps.InfoWindow();
+                $.each(allengr, function(i, m) {
+                    //  var latLngA = {'lat':32.1877,'lng':74.1945};
+                    //  var latLngB = {'lat':m.lan,'lng':m.lng};
+                    let variation = Math.random();
+                    var latitude2 = (m.latitude / 1000000) + variation;
+                    var longitude2 = (m.longitude / 1000000) + variation;
+
+                    // var idfetch =  m.id;
+                    // var url = '{{ route('fetchcategorynamemap', ':id') }}';
                     // url = url.replace(':id', idfetch );
                     // let message;
                     // $.ajax({
@@ -670,8 +823,8 @@ async></script>
                     // });
                     // console.log(m.category.engrcategory);
                     const message =
-                        `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6>Date:   <input type='date' name="engr_date" value='{{ date("Y-m-d") }}' min='{{ date("Y-m-d") }}'><br><br><input type="text" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`;
-                   
+                        `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6>   <span style="font-weight:bold">Date:</span>   <input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`;
+
                     const infowindow = new google.maps.InfoWindow({
                         content: message,
                     });
@@ -697,26 +850,35 @@ async></script>
                         position: new google.maps.LatLng(latitude2, longitude2),
                         shape: shape,
                         title: m.fname,
-                        label: {
-                            text: parseFloat(distance_km).toFixed(1) + 'KM',
-                            color: "red",
-                            fontSize: "15px",
-                            fontWeight: "bold"
-                        },
+
                         map: map,
                         icon: image
                     });
-                    google.maps.event.addListener(marker_s, 'click', function() {
-                        infowindow.open({
-                            anchor: marker_s,
-                            map,
-                            shouldFocus: false,
+                    (function(marker, m) {
+                        google.maps.event.addListener(marker_s, "click", function(e) {
+                            //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
+                            infoWindow.setContent(
+                                `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`
+                            );
+                            infoWindow.open(map, marker);
                         });
-                    });
-                }
-            });
+                    })(marker_s, m);
+                    // google.maps.event.addListener(marker_s, 'click', function() {
+                    //     infowindow.open({
+                    //         anchor: marker_s,
+                    //         map,
+                    //         shouldFocus: false,
+                    //     });
+                    // });
+
+                });
+            }
+        }
+
+        function initMap() {
 
 
+            make_cord(make_map);
         }
         // 		 ==========geolocation script====================
 

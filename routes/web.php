@@ -6,12 +6,15 @@ use Illuminate\Support\Str;
 use App\Events\conformemail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\index;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
+
 
 Route::get('/', [index::class, 'showindex'])->name('home');
 Route::get('/indexpage', [index::class, 'showindex_page'])->name('indexpage');
@@ -23,33 +26,49 @@ Route::get('/conformemail', function () {
 Route::post('/resendemail', function () {
     return redirect()->back();
 })->name('resendemail');
-Route::post('submit_role',function(Request $res){
-if($res->select_role == 'enge'){
-    User::where('email',Auth::user()->email)->update([
-        'role'=>$res->select_role,
-        'engrcategoryid'=>$res->select_engr_category,
-    ]);
-    $user =  User::where('email',Auth::user()->email)->get();
-      Event(new conformemail($user[0]));
-      if (Auth::user()->emailstatus == 0) {
-        return redirect(RouteServiceProvider::EMAILVERIFY);
-    } else {
-        if (Auth::user()->docsstatus == 0) {
-            return redirect(RouteServiceProvider::DOCSSTATUS);
+Route::post('submit_role', function (Request $res) {
+    if ($res->select_role == 'enge') {
+        User::where('email', Auth::user()->email)->update([
+            'role' => $res->select_role,
+            'engrcategoryid' => $res->select_engr_category,
+            'latitude' => $res->lat * 1E6,
+            'longitude' => $res->lon * 1E6,
+            'city' => $res->city,
+            'subcity' => $res->locality,
+            'state' => $res->state,
+            'country' => $res->country,
+            'short_country' => $res->shortcountry,
+            'address' => $res->address,
+        ]);
+        $user =  User::where('email', Auth::user()->email)->get();
+        //   Event(new conformemail($user[0]));
+        if (Auth::user()->emailstatus == 0) {
+            return redirect(RouteServiceProvider::EMAILVERIFY);
         } else {
-            if (Auth::user()->status == 0) {
-                return redirect(RouteServiceProvider::ADMINSTATUS);
+            if (Auth::user()->docsstatus == 0) {
+                return redirect(RouteServiceProvider::DOCSSTATUS);
             } else {
-                return redirect(RouteServiceProvider::ENGE);
+                if (Auth::user()->status == 0) {
+                    return redirect(RouteServiceProvider::ADMINSTATUS);
+                } else {
+                    return redirect(RouteServiceProvider::ENGE);
+                }
             }
         }
+    } else {
+        User::where('email', Auth::user()->email)->update([
+            'role' => $res->select_role,
+            'latitude' => $res->lat,
+            'longitude' => $res->lon,
+            'city' => $res->city,
+            'subcity' => $res->locality,
+            'state' => $res->state,
+            'country' => $res->country,
+            'short_country' => $res->shortcountry,
+            'address' => $res->address,
+        ]);
+        return redirect(RouteServiceProvider::INDEXPAGE);
     }
-}else{
-    User::where('email',Auth::user()->email)->update([
-        'role'=>$res->select_role,
-    ]);
-    return redirect(RouteServiceProvider::INDEXPAGE);
-}
 })->name('submit_role');
 Route::get('/fetchallrangeengr', function () {
     $getuser = User::with('category')->where('role', 'enge')
@@ -64,15 +83,15 @@ Route::get('/fetchcategorynamemap/{id?}', function (engCategory $id) {
 })->name('fetchcategorynamemap');
 
 Route::get('/google/callback', function () {
-   
-  
+
+
     $user = Socialite::driver('google')->stateless()->user();
-   
+
     $users       =   User::where(['email' => $user->email])->first();
-   
+
     if ($users) {
         Auth::login($users);
-       
+
         if (Auth::user()->role == 'enge') {
             if ($users->adminengr == 1) {
                 User::where('id', $users->id)->update(['adminengr' => 2]);
@@ -101,28 +120,27 @@ Route::get('/google/callback', function () {
                     }
                 }
             }
-        } elseif(Auth::user()->role == 'user') {
+        } elseif (Auth::user()->role == 'user') {
             return redirect()->route('indexpage');
-        }else{
+        } else {
             return redirect()->route('role_view');
         }
-     
     } else {
-        
+
         $users = User::create([
             'pic' => $user->avatar,
             'fname' => $user->name,
-            'emailcode' => rand(111111,999999),
+            'emailcode' => rand(111111, 999999),
             'email' => $user->email,
             'password' => Hash::make('null12345'),
+            'emailstatus' => 1,
             'signupoption' => 1,
+            'status' => 1,
 
         ]);
         Auth::login($users);
         return redirect()->route('role_view');
     }
-
-    
 });
 Route::get('/loginfacebook', function () {
 
@@ -137,7 +155,7 @@ Route::post('sessionforrole', function (Request $res) {
     return response()->json('ok');
 });
 Route::get('/facebook/callback', function () {
-   
+
     // if(session()->has('state')){
     //     session()->forget('state');
     //     Session::put('state',Str::random(40));
@@ -145,7 +163,7 @@ Route::get('/facebook/callback', function () {
     //     Session::put('state',Str::random(40));
     // }
     $user = Socialite::driver('facebook')->stateless()->user();
-   
+
     $users       =   User::where(['email' => $user->email])->first();
     if ($users) {
         Auth::login($users);
@@ -177,28 +195,29 @@ Route::get('/facebook/callback', function () {
                     }
                 }
             }
-        } elseif(Auth::user()->role == 'user') {
+        } elseif (Auth::user()->role == 'user') {
             return redirect()->route('indexpage');
-        }else{
+        } else {
             return redirect()->route('role_view');
         }
     } else {
-       
+
         $users = User::create([
             'pic' => $user->avatar,
             'fname' => $user->name,
-            'emailcode' => rand(111111,999999),
+            'emailcode' => rand(111111, 999999),
             'email' => $user->email,
             'password' => Hash::make('null12345'),
+            'emailstatus' => 1,
             'signupoption' => 1,
+            'status' => 1,
         ]);
         Auth::login($users);
         return redirect()->route('role_view');
     }
-
 });
-Route::get('role_view',function(){
-    if(Auth::user()->role == 'enge'){
+Route::get('role_view', function () {
+    if (Auth::user()->role == 'enge') {
         if (Auth::user()->emailstatus == 0) {
             return redirect(RouteServiceProvider::EMAILVERIFY);
         } else {
@@ -212,15 +231,83 @@ Route::get('role_view',function(){
                 }
             }
         }
-    }elseif(Auth::user()->role == 'admin'){
+    } elseif (Auth::user()->role == 'admin') {
         return redirect()->back();
-    }elseif(Auth::user()->role == 'user'){
+    } elseif (Auth::user()->role == 'user') {
         return redirect()->back();
-    }else{
+    } else {
         return view('roleselect.select_role');
     }
-
 })->name('role_view');
+Route::get('getdistance', function () {
+
+    $new_longitude =  Auth::user()->longitude / 1000000;
+    $new_latitude = Auth::user()->latitude / 1000000;
+    $engr_array = [];
+    $user = User::where('role', 'enge')->get()->toArray();
+
+    foreach ($user as $user) {
+
+        $old_longitude = $user['longitude'] / 1000000;
+        $old_latitude = $user['latitude'] / 1000000;
+        $dLat = deg2rad($new_latitude - $old_latitude);
+        $dLon = deg2rad($new_longitude - $old_longitude);
+        $radius = 6371;
+        $a = sin($dLat / 2) * sin($dLat / 2) +
+            cos(deg2rad($old_latitude)) * cos(deg2rad($new_latitude)) *
+            sin($dLon / 2) * sin($dLon / 2);
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+        $d = $radius * $c; // Distance in km
+        if ($d <= 100) {
+           
+          
+            array_push($user, $d);
+           
+            $engr_array[] = $user;
+        }
+    }
+
+    session()->push('all_engrs', $engr_array);
+
+
+
+    //          $lat =  Auth::user()->longitude / 1000000; 
+    //     $lon = Auth::user()->latitude / 1000000;
+
+    //        $user =  DB::table("users")
+
+    // ->select("users.id"
+
+    //     ,DB::raw("2 * 6371 * atan2(sqrt(sin((".$lat." - users.latitude) / 2) *sin((".$lon." - users.longitude)) + cos(deg2rad(users.latitude)) * cos(deg2rad(".$lat.")) *sin((".$lat." - users.latitude) / 2) *sin((".$lon." - users.longitude)/2)    ),sqrt(1- sin((".$lat." - users.latitude) / 2) *sin((".$lon." - users.longitude)) + cos(deg2rad(users.latitude)) * cos(deg2rad(".$lat.")) *sin((".$lat." - users.latitude) / 2) *sin((".$lon." - users.longitude)/2)    ))    AS distance"))
+
+    //     ->where('role','enge')
+
+    //     ->paginate(5);
+    //                dd($user);
+    // $lat =  Auth::user()->longitude / 1000000; 
+    // $lon = Auth::user()->latitude / 1000000;
+    // $user =  User::select("users.id"
+    //         ,DB::raw("6371 * acos(cos(radians(" . $lat . ")) 
+    //         * cos(radians(users.latitude / 1000000)) 
+    //         * cos(radians(users.longitude / 1000000) - radians(" . $lon . ")) 
+    //         + sin(radians(" .$lat. ")) 
+    //         * sin(radians(users.latitude / 1000000))) AS distance"))->where('role','enge')
+    //         ->get();
+    //         dd($user);
+
+    //     $query = new User();
+    //     $from_latitude =  Auth::user()->longitude / 1000000;
+    //     $from_longitude = Auth::user()->latitude / 1000000;
+    //     $distance = 100;
+    //     $raw = DB::raw('ROUND ( ( 6371 * acos( cos( radians('.$from_latitude.') ) * cos( radians( latitude /1000000) ) * cos( radians( longitude /1000000) - radians('.$from_longitude.') ) + sin( radians('.$from_latitude.') ) * sin( radians( latitude /1000000) ) ) ) ) AS distance');
+    //    $res =  $query->select('*')->addSelect($raw)->orderBy( 'distance', 'ASC' )->groupBy('distance')->having('distance', '<=', $distance);
+    //    dd($res );
+});
+Route::get('returnsession',function(){
+    $res = session()->get('all_engrs');
+    return response()->json($res[0]);
+})->name('returnsession') ;
+
 
 // ===================email ===========================
 require __DIR__ . '/auth.php';

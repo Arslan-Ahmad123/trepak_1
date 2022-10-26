@@ -30,7 +30,7 @@ class userMiddleware
                 return $next($request);
            }else{
 
-                if(Auth::user()->emailstatus == '0'){
+                if(Auth::user()->emailstatus == '0' || Auth::user()->emailstatus == '1'){
                return $next($request);
                     }
                else{
@@ -47,27 +47,51 @@ class userMiddleware
             return redirect()->back();
         }
        }else{
-     //     dd($request->id);
-          // if($routename == 'viewprofileeng'){
+        
+          //    searchbarengineer
+          // proceed
+          if($routename == 'searchengineer'){
+               if(session()->has('routename')){
+                    session()->forget('routename');
+                    session()->forget('search_id');
+                    session()->put('routename',$routename);
+                    session()->put('search_id',$request->id);
+               }else{
+                    session()->put('routename',$routename);
+                    session()->put('search_id',$request->id);
+               }
+          }elseif($routename == 'searchbarengineer'){
+               if(session()->has('routename')){
+                    session()->forget('routename');
+                    session()->forget('city_name');
+                    session()->forget('category_id');
+                    session()->put('routename',$routename);
+                    session()->put('city_name',$request->cityname);
+                    session()->put('category_id',$request->date);
+                    
+               }else{
+                    session()->put('routename',$routename);
+                    session()->put('city_name',$request->cityname);
+                    session()->put('category_id',$request->date);
+               }
+          }elseif($routename == 'proceed'){
+            
+               if(session()->has('routename')){
+                    session()->forget('routename');
+                    session()->forget('engr_id');
+                    session()->forget('select_date');
+                    session()->put('routename',$routename);
+                    session()->put('engr_id',$request->engr_id);
+                    session()->put('select_date',$request->engr_date);
+                    
+               }else{
+                    session()->put('routename',$routename);
+                    session()->put('engr_id',$request->engr_id);
+                    session()->put('select_date',$request->engr_date);
+               }
+          }else{
                
-          //      session()->put('indexengrid',$request->userid);
-          //      session()->put('indexroute',$routename);
-             
-          // }elseif($routename == 'booking'){
-               
-          //      session()->put('indexengrid',$request->userid);
-          //      session()->put('indexroute',$routename);
-          // }elseif($request->has('cityname')){
-               
-          //      session()->put('indexengrid',$request->date);
-          //      session()->put('indexroute',$routename);
-          // }elseif(!$request->has('id')){
-             
-          //       session()->put('indexengrid',$request->id);
-          //       session()->put('indexroute',$routename);
-          // }else{
-          //      dd('no');
-          // }
+          }
          
             return redirect('login');
        }

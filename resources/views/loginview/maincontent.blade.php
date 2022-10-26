@@ -70,7 +70,7 @@
 ">
                                 <div class="login-header" style="text-align:center;font-size:25px;font-weight:500">
                                     <h2>Login Form</h2>
-                                  
+                              
                                     {{-- {{ url()->previous() }} --}}
 
                                 </div>

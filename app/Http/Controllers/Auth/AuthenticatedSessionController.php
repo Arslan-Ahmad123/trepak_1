@@ -71,20 +71,17 @@ class AuthenticatedSessionController extends Controller
             }
         } else {
            
-            if (session()->has('indexengrid')) {
-                if (session()->get('indexroute') == 'viewprofileeng') {
-                    return redirect()->route('view_profileeng');
-                } elseif (session()->get('indexroute') == 'booking') {
-                    return redirect()->route('book_ing');
-                } elseif (is_numeric(session()->get('indexengrid'))) {
-                    return redirect()->route('search_engr_card');
-                } else {
-                    return redirect()->route('search_engr');
-                }
-            } else {
+          
+                 if(session()->has('search_id')){
+                    return redirect()->route('search_engineer');
+                  }
+                  if(session()->has('select_date')){
+                    
+                    return redirect()->route('proceedlogin');
+                  }
                 // return redirect()->route('userfrontpageview');
                 return redirect(RouteServiceProvider::INDEXPAGE);
-            }
+            
 
             // if(session()->has('path')){
             //     $path = session()->get('path');

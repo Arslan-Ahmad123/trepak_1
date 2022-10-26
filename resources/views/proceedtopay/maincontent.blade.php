@@ -21,6 +21,83 @@
 				<div class="container">
 
 					<div class="row">
+						<div class="col-md-5 col-lg-4 theiaStickySidebar">
+						
+							<!-- Booking Summary -->
+							<div class="card booking-card">
+								<div class="card-header">
+									<h4 class="card-title">Booking Summary</h4>
+								</div>
+								<div class="card-body">
+									
+									
+							
+									<!-- Booking Doctor Info -->
+									<div class="booking-doc-info">
+										@php
+											if($engr->signupoption == 1){
+												$engrimg = $engr->pic; 
+											}else{
+												$engrimg = asset('engrphoto/'.$engr->pic);
+											}
+										@endphp
+										<a href="#" class="booking-doc-img">
+											<img src="{{ $engrimg }}" alt="User Image">
+										</a>
+										<div class="booking-info">
+											<h4><a href="#">{{ $engr->fname }}</a></h4>
+											<div class="rating">
+												<i class="fas fa-star filled"></i>
+												<i class="fas fa-star filled"></i>
+												<i class="fas fa-star filled"></i>
+												<i class="fas fa-star filled"></i>
+												<i class="fas fa-star"></i>
+												<span class="d-inline-block average-rating">35</span>
+											</div>
+											<div class="clinic-details">
+												<p class="doc-location"><i class="fas fa-map-marker-alt"></i> {{ $engr->city .', '.$engr->country }}</p>
+											</div>
+										</div>
+									</div>
+									<!-- Booking Doctor Info -->
+									
+									<div class="booking-summary">
+										<div class="booking-item-wrap">
+											<ul class="booking-date">
+												
+												<li>Date <span>{{ $meetingdate }}</span></li>
+												<li>Time <span>{{ $meetingtime }}</span></li>
+												
+											</ul>
+											<ul class="booking-fee">
+												
+												
+												<li >Consulting Fee <span class="amount">$20</span></li>
+												<li >Booking Fee <span class="amount">$10</span></li>
+												
+											</ul>
+											<div class="booking-total">
+												<ul class="booking-total-list">
+													<li>
+														<span>Total</span>
+														
+														<span><span class="total-cost"></span></span>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</form>
+								</div>
+							</div>
+							@php
+								
+								
+							@endphp
+							
+							<!-- /Booking Summary -->
+							
+						</div>
 						<div class="col-md-7 col-lg-8">
 							<div class="card">
 								<div class="card-body">
@@ -158,83 +235,18 @@
 							
 						</div>
 						
-						<div class="col-md-5 col-lg-4 theiaStickySidebar">
 						
-							<!-- Booking Summary -->
-							<div class="card booking-card">
-								<div class="card-header">
-									<h4 class="card-title">Booking Summary</h4>
-								</div>
-								<div class="card-body">
-									
-									
-							
-									<!-- Booking Doctor Info -->
-									<div class="booking-doc-info">
-										<a href="doctor-profile.html" class="booking-doc-img">
-											<img src="{{ asset('engrphoto/'.$engr->pic) }}" alt="User Image">
-										</a>
-										<div class="booking-info">
-											<h4><a href="doctor-profile.html">{{ $engr->fname }}</a></h4>
-											<div class="rating">
-												<i class="fas fa-star filled"></i>
-												<i class="fas fa-star filled"></i>
-												<i class="fas fa-star filled"></i>
-												<i class="fas fa-star filled"></i>
-												<i class="fas fa-star"></i>
-												<span class="d-inline-block average-rating">35</span>
-											</div>
-											<div class="clinic-details">
-												<p class="doc-location"><i class="fas fa-map-marker-alt"></i> {{ $engr->city .', '.$engr->country }}</p>
-											</div>
-										</div>
-									</div>
-									<!-- Booking Doctor Info -->
-									
-									<div class="booking-summary">
-										<div class="booking-item-wrap">
-											<ul class="booking-date">
-												
-												<li>Date <span>{{ $meetingdate }}</span></li>
-												<li>Time <span>{{ $meetingtime }}</span></li>
-												
-											</ul>
-											<ul class="booking-fee">
-												
-												
-												<li >Consulting Fee <span class="amount">$20</span></li>
-												<li >Booking Fee <span class="amount">$10</span></li>
-												
-											</ul>
-											<div class="booking-total">
-												<ul class="booking-total-list">
-													<li>
-														<span>Total</span>
-														
-														<span><span class="total-cost"></span></span>
-													</li>
-												</ul>
-											</div>
-										</div>
-									</div>
-								</form>
-								</div>
-							</div>
-							@php
-								session()->forget('path');
-								session()->forget('engrid');
-								session()->forget('date');
-								
-							@endphp
-							
-							<!-- /Booking Summary -->
-							
-						</div>
 					</div>
 
 				</div>
 
-			</div>		
+			</div>	
+			@php
+				if(session()->has('select_date')){
+					session()->forget('select_date');
+					session()->forget('engr_id');
+				}
+			@endphp	
 			<!-- /Page Content -->
 			@push('childscript')
 			<script>

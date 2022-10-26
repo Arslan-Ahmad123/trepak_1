@@ -75,7 +75,12 @@ class engineerController extends Controller
         }
     }
       public function engregister(){
-        return view('registerpage.registerpageview');
+        if(Auth::check()){
+            return redirect()->route('home');
+        }else{
+            return view('registerpage.registerpageview');
+        }
+        
     }
     public function getallgroup(){
         $group = groupInfo::get();

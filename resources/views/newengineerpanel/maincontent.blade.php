@@ -29,7 +29,14 @@
 								<div class="widget-profile pro-widget-content">
 									<div class="profile-info-widget">
 										<a href="#" class="booking-doc-img">
-											<img src="{{ asset('engrphoto/'.Auth::user()->pic) }}" alt="User Image">
+											@php
+												if(Auth::user()->signupoption == 1){
+												$engrimg = Auth::user()->pic; 
+											}else{
+												$engrimg = asset('engrphoto/'.Auth::user()->pic);
+											}
+											@endphp
+											<img src="{{ $engrimg }}" alt="User Image">
 										</a>
 										<div class="profile-det-info">
 											<h3>{{ Auth::user()->fname }}</h3>
@@ -120,7 +127,7 @@
 								<div class="widget-profile pro-widget-content">
 									<div class="profile-info-widget">
 										<a href="#" class="booking-doc-img">
-											<img src="{{ asset('engrphoto/'.Auth::user()->pic) }}" alt="User Image">
+											<img src="{{ $engrimg }}" alt="User Image">
 										</a>
 										<div class="profile-det-info">
 											<h3>{{ Auth::user()->fname }}</h3>
@@ -304,11 +311,20 @@
 																<tbody>
 																	@if(count($upcomclient) > 0)
 																	@foreach ($upcomclient as $up_client)
+																	@php
+																	$clientup  = getuser($up_client->clientid);
+																		if($clientup->signupoption == 1){
+																			$upclientimg = $clientup->pic;
+																		}else{
+																			$upclientimg = asset('engrphoto/'.$clientup->pic);
+																		}
+																	@endphp
+																	
 																	<tr>
 																		<td>
 																			<h2 class="table-avatar">
-																				<a href="patient-profile.html" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="{{ asset('engrphoto/'.getuser($up_client->clientid)->pic) }}" alt="User Image"></a>
-																				<a href="patient-profile.html">{{ getuser($up_client->clientid)->fname }} <span>#PT0006</span></a>
+																				<a href="#" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="{{$upclientimg }}" alt="User Image"></a>
+																				<a href="#">{{ getuser($up_client->clientid)->fname }} <span>#PT0006</span></a>
 																			</h2>
 																		</td>
 																		<td>{{ $up_client->meetingdate }}</td>
@@ -363,11 +379,19 @@
 																</thead>
 																<tbody>
 																	@foreach($todayclient as $t_client)
+																	@php
+																	$clientt  = getuser($t_client->clientid);
+																		if($clientt->signupoption == 1){
+																			$tclientimg = $clientt->pic;
+																		}else{
+																			$tclientimg = asset('engrphoto/'.$clientt->pic);
+																		}
+																	@endphp
 																	<tr>
 																		<td>
 																			<h2 class="table-avatar">
-																				<a href="patient-profile.html" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="{{ asset('engrphoto/'.getuser($t_client->clientid)->pic) }}" alt="User Image"></a>
-																				<a href="patient-profile.html">{{ getuser($t_client->clientid)->fname }} <span>#PT0006</span></a>
+																				<a href="#" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="{{ $tclientimg }}" alt="User Image"></a>
+																				<a href="#">{{ getuser($t_client->clientid)->fname }} <span>#PT0006</span></a>
 																			</h2>
 																		</td>
 																		<td>{{ $t_client->meetingdate }}</td>

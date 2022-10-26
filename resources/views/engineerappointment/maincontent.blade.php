@@ -30,7 +30,14 @@
 								<div class="widget-profile pro-widget-content">
 									<div class="profile-info-widget">
 										<a href="#" class="booking-doc-img">
-											<img src="{{ asset('engrphoto/'.Auth::user()->pic) }}" alt="User Image">
+											@php
+												if(Auth::user()->signupoption == 1){
+												$engrimg = Auth::user()->pic; 
+											}else{
+												$engrimg = asset('engrphoto/'.Auth::user()->pic);
+											}
+											@endphp
+											<img src="{{ $engrimg }}" alt="User Image">
 										</a>
 										<div class="profile-det-info">
 											<h3>{{ Auth::user()->fname }}</h3>
@@ -117,7 +124,7 @@
 								<div class="widget-profile pro-widget-content">
 									<div class="profile-info-widget">
 										<a href="#" class="booking-doc-img">
-											<img src="{{ asset('engrphoto/'.Auth::user()->pic) }}" alt="User Image">
+											<img src="{{ $engrimg }}" alt="User Image">
 										</a>
 										<div class="profile-det-info">
 											<h3>{{ Auth::user()->fname }}</h3>
@@ -207,11 +214,20 @@
 							<div class="appointments">
 							@if(count($data) > 0)
 							@foreach ($data as $datas)
+							@php
+							$clientdata = getuser($datas->clientid);
+								if($clientdata->signupoption == 1)
+								{
+									$clientimg = $clientdata->pic;
+								}else{
+									$clientimg = asset('engrphoto/'.$clientdata->pic);
+								}
+							@endphp
 								<!-- Appointment List -->
 								<div class="appointment-list">
 									<div class="profile-info-widget">
 										<a href="patient-profile.html" class="booking-doc-img">
-											<img src="{{ asset('engrphoto/'.getuser($datas->clientid)->pic) }}" alt="User Image">
+											<img src="{{ $clientimg }}" alt="User Image">
 										</a>
 										<div class="profile-det-info">
 											<h3><a href="patient-profile.html">{{ getuser($datas->clientid)->fname }}</a></h3>

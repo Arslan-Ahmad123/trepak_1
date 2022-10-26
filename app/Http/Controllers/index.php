@@ -93,6 +93,15 @@ class index extends Controller
         $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise($res->id);
         return view('searchengineer.searchengineerview')->with($resultSearchEngineer);
     }
+    public function engineer_search(){
+        if(session()->has('search_id')){
+            $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise(session()->get('search_id'));
+        return view('searchengineer.searchengineerview')->with($resultSearchEngineer);
+        }else{
+            return redirect(RouteServiceProvider::INDEXPAGE);
+        }
+        
+    }
     public function search_engr_card(){
         if(session()->has('indexengrid')){
         $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise(session()->get('indexengrid'));
@@ -150,6 +159,16 @@ class index extends Controller
         $times = Carbon::now();
         $engineerFind = User::find($res->engr_id);
         return view('proceedtopay.proceedpageview')->with(['engr'=>$engineerFind,'meetingdate'=>$res->engr_date,'meetingtime'=>$times]);
+    }
+    public function proceedlogin(){
+        if(session()->has('engr_id')){
+            $times = Carbon::now();
+            $engineerFind = User::find(session()->get('engr_id'));
+            return view('proceedtopay.proceedpageview')->with(['engr'=>$engineerFind,'meetingdate'=>session()->get('select_date'),'meetingtime'=>$times]);
+        }else{
+            return redirect()->route('indexpage');
+        }
+       
     }
     public function loginproceed(){
         if(session()->has('path')){

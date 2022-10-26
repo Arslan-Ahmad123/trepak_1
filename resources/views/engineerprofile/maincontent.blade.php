@@ -149,12 +149,19 @@
 			{{-- ==========================chat box ========================	 --}}
 			
 		
-			<div class="container customchatbox" >
+			<div class="container customchatbox" style="display:none">
 				<div class="chat_box">
 				  <div class="head">
 					<div class="user">
 					  <div class="avatar">
-						<img src="{{ asset('engrphoto/'.Auth::user()->pic) }}" />
+						@php
+							if(Auth::user()->signupoption == 1){
+								$img = Auth::user()->pic;
+							}else{
+								$img = asset('engrphoto/'.Auth::user()->pic);
+							}
+						@endphp
+						<img src="{{ $img }}" />
 					  </div>
 					  <div class="name">{{ Auth::user()->fname }}</div>
 					</div>
@@ -202,8 +209,15 @@
 						<div class="card-body">
 							<div class="doctor-widget">
 								<div class="doc-info-left">
+									@php
+							if($engr->signupoption == 1){
+								$engrimg = $engr->pic;
+							}else{
+								$engrimg = asset('engrphoto/'.$engr->pic);
+							}
+						@endphp
 									<div class="doctor-img">
-										<img src="{{ asset('engrphoto/'.$engr->pic) }}" class="img-fluid" alt="User Image">
+										<img src="{{ $engrimg }}" class="img-fluid" alt="User Image">
 									</div>
 									<div class="doc-info-cont">
 										<h4 class="doc-name">{{ $engr->fname }}</h4>
@@ -262,7 +276,7 @@
 											<li><i class="far fa-thumbs-up"></i> 99%</li>
 											{{-- <li><i class="far fa-money-bill-alt"></i> ${{ $engr->pricerange }} per hour </li> --}}
 											<li>
-												<a href="javascript:void(0)" onclick="clientchat_box({{ $engr->id }},{{(Auth::check())?Auth::user()->id:'' }})" >
+												<a href="javascript:void(0)"  >
 													<i class="far fa-comment-alt"></i> Chat
 												</a>
 											</li>

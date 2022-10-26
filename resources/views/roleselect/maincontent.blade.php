@@ -97,8 +97,14 @@
 
                                                 </select>
                                             </div>
-                                            <input type="text" name="lon" id="lon">
-                                            <input type="text" name="lat" id="lat">
+                                            <input type="hidden" name="lon" id="lon">
+                                            <input type="hidden" name="lat" id="lat">
+                                            <input type="hidden" name="city" id="city">
+                                            <input type="hidden" name="state" id="state">
+                                            <input type="hidden" name="country" id="country">
+                                            <input type="hidden" name="shortcountry" id="shortcountry">
+                                            <input type="hidden" name="address" id="address">
+                                            <input type="hidden" name="locality" id="locality">
                                             <button class="btn btn-info w-100" id="submit_role">Submit</button>
                                         </form>
 
@@ -140,7 +146,7 @@
             </div>
         </div>
     </div>
-    
+
     {{-- =========toast message for location ==================  --}}
     <!-- /Page Content -->
     @push('customjscode')
@@ -167,7 +173,37 @@
                     .then((response) => {
                         if (response.results[0]) {
 
-                            console.log(response.results[0]);
+
+
+
+                            $('#address').val(response.results[0].formatted_address)
+                            for (var i = 0; i < response.results[0].address_components.length; i++) {
+                                if (response.results[0].address_components[i].types[0] == "locality") {
+                                    //this is the object you are looking for City
+                                    city = response.results[0].address_components[i];
+
+                                    $('#locality').val(city.long_name)
+                                }
+                                if (response.results[0].address_components[i].types[0] == "administrative_area_level_1") {
+                                    //this is the object you are looking for State
+                                    region = response.results[0].address_components[i];
+
+                                    $('#state').val(region.long_name);
+                                }
+                                if (response.results[0].address_components[i].types[0] == "administrative_area_level_2") {
+                                    //this is the object you are looking for State
+                                    region2 = response.results[0].address_components[i];
+
+                                    $('#city').val(region2.long_name);
+                                }
+                                if (response.results[0].address_components[i].types[0] == "country") {
+                                    //this is the object you are looking for
+                                    country = response.results[0].address_components[i];
+
+                                    $('#country').val(country.long_name);
+                                    $('#shortcountry').val(country.short_name.toLowerCase());
+                                }
+                            }
 
                         } else {
                             window.alert("No results found");
@@ -220,7 +256,7 @@
                 navigator.permissions.query({
                     name: 'geolocation'
                 }).then(function(result) {
-                    console.log(result);
+
                     if (result.state == 'denied') {
                         document.querySelector('#submit_role').disabled = true;
                         console.log("Not give you permission")
@@ -255,7 +291,7 @@
                                 $.each(data, function(i, v) {
                                     option += `<option value='${v.id}'>${v.engrcategory}</option>`;
                                 });
-                                console.log(option);
+
                                 $('#select_engr_category').html(option);
                                 $('#select_engr_category').show('slow');
                             }

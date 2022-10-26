@@ -277,22 +277,28 @@ left:30%;
 						@foreach ($engr as $engrs)
 						<!-- Doctor Widget -->
 <div class="card">
-    
+    @php
+		if($engrs->signupoption == 1){
+		$img = $engrs->pic;
+		}else{
+		$img = asset('engrphoto/'.$engrs->pic);
+		}
+	@endphp
 	<div class="doctor-widget searchcard">
 		<div class="doc-info-left">
 			<div class="doctor-img">
-				<a href="doctor-profile.html">
-					<img src="{{ asset('engrphoto/'.$engrs->pic) }}"  alt="Engr Image" style="width: 100%;height: 100px;" >
+				<a href="#">
+					<img src="{{$img }}"  alt="Engr Image" style="width: 100%;height: 100px;" >
 				</a>
 			</div>
 			<div class="doc-info-cont">
-				<h4 class="doc-name"><a href="doctor-profile.html">{{ $engrs->fname }}</a></h4>
+				<h4 class="doc-name"><a href="#">{{ $engrs->fname }}</a></h4>
 				<p class="doc-speciality">{{ getcategoryname($engrs->engrcategoryid) }}</p>
 				{{-- <div id="specilizationfield">
 					<h5 class="doc-department" style="text-align: left;color: #757575;"><img src="{{ asset('newpanel/assets/img/specialities/specialities-05.png') }}"  alt="Speciality">AUTO CAD</h5>
 				</div> --}}
 				<div id="client_engr_chat_box">
-					<h5 class="doc-department" style="text-align: left;"><a href="javascript:void(0)" style="font-size: 14px;color: #757575;" onclick="clientchat_box({{ $engrs->id }},{{ Auth::user()->id }})"><i class="far fa-comment"></i> Chat</a></h5>
+					<h5 class="doc-department" style="text-align: left;"><a href="javascript:void(0)" style="font-size: 14px;color: #757575;" ><i class="far fa-comment"></i> Chat</a></h5>
 				</div>
 				{{-- <div class="rating">
 					<i class="fas fa-star filled"></i>
@@ -350,7 +356,7 @@ left:30%;
 			<div class="clini-infos">
 				<ul>
 					<li><i class="far fa-thumbs-up"></i> 98%</li>
-					<li><a href="javascript:void(0)" onclick="clientchat_box({{ $engrs->id }},{{ Auth::user()->id }})"><i class="far fa-comment"></i> Chat</a></li>
+					<li><a href="javascript:void(0)" ><i class="far fa-comment"></i> Chat</a></li>
 					{{-- <li><i class="fas fa-map-marker-alt"></i> Florida, USA</li> --}}
 					{{-- <li><i class="far fa-money-bill-alt"></i> $300 - $1000 <i class="fas fa-info-circle" data-toggle="tooltip" title="Lorem Ipsum"></i> </li> --}}
 				</ul>
@@ -460,7 +466,7 @@ left:30%;
 
 			</div>	
 			{{-- ==========================chat box ========================	 --}}
-			<div class="container customchatbox" >
+			<div class="container customchatbox" style="display:none">
 				<div class="chat_box">
 				  <div class="head">
 					<div class="user">

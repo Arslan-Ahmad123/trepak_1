@@ -35,6 +35,7 @@
 		<link rel="stylesheet" href="{{ asset('newpanel/assets/plugins/pgcalender/css/pignose.calendar.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('newpanel/assets/plugins/pgcalender/css/calenderstyle.css') }}">
 	<link rel="stylesheet" href="{{ asset('newpanel/assets/plugins/pgcalender/css/calenderui.css') }}">
+	
 		@yield('custome_css')
 		
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->

@@ -65,8 +65,15 @@
 							<div class="profile-sidebar" id="profilenav">
 								<div class="widget-profile pro-widget-content">
 									<div class="profile-info-widget">
+										@php
+												if(Auth::user()->signupoption == 1){
+												$engrimg = Auth::user()->pic; 
+											}else{
+												$engrimg = asset('engrphoto/'.Auth::user()->pic);
+											}
+											@endphp
 										<a href="#" class="booking-doc-img">
-											<img src="{{ asset('engrphoto/'.Auth::user()->pic) }}" alt="User Image">
+											<img src="{{ $engrimg }}" alt="User Image">
 										</a>
 										<div class="profile-det-info">
 											<h3>{{ Auth::user()->fname }}</h3>
@@ -151,7 +158,7 @@
 								<div class="widget-profile pro-widget-content">
 									<div class="profile-info-widget">
 										<a href="#" class="booking-doc-img">
-											<img src="{{ asset('engrphoto/'.Auth::user()->pic) }}" alt="User Image">
+											<img src="{{ $engrimg }}" alt="User Image">
 										</a>
 										<div class="profile-det-info">
 											<h3>{{ Auth::user()->fname }}</h3>
@@ -243,11 +250,16 @@
 									@foreach ($engrcmt as $engrcmts)
 									@php
 										$client = getuser($engrcmts->clientid);
+										if($client->signupoption == 1){
+											$clientimg = $client->pic; 
+										}else{
+											$clientimg = asset('engrphoto/'.$client->pic);
+										}
 									@endphp
 										<!-- Comment List -->
 									<li>
 										<div class="comment">
-											<img class="avatar rounded-circle" alt="User Image" src="{{ asset('engrphoto/'.$client->pic) }}">
+											<img class="avatar rounded-circle" alt="User Image" src="{{ $clientimg }}">
 											<div class="comment-body"  style="width:90%;">
 												<div class="meta-data">
 													<span class="comment-author">{{ $client->fname }}</span>

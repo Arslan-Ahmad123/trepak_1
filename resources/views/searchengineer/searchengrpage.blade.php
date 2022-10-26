@@ -11,7 +11,14 @@
             <div class="doc-info-left">
                 <div class="doctor-img">
                     {{-- <a href="doctor-profile.html"> --}}
-                        <img src="{{ asset('engrphoto/'.$engr->pic) }}"  alt="Engr Image" style="width: 100%;height: 100px;" >
+                        @php
+                            if($engr->signupoption == 1){
+                                $image = $engr->pic;
+                            }else{
+                                $image = asset('engrphoto/'.$engr->pic);
+                            }
+                        @endphp
+                        <img src="{{ $image }}"  alt="Engr Image" style="width: 100%;height: 100px;" >
                     {{-- </a> --}}
                 </div>
                 <div class="doc-info-cont">

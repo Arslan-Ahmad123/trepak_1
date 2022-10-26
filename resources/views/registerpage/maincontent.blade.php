@@ -65,8 +65,8 @@
                                                 :value="old('pic')" autofocus />
                                         </div>
                                         <!--Engr Category  -->
-                                     
-                                       @if (url()->current() == 'http://127.0.0.1:8000/user_regis')
+                                    
+                                       @if (url()->current() == 'http://localhost:8000/user_regis')
                                         @else 
                                         <div class="mt-4">
                                             <x-label for="engrcategory" style="margin-bottom:5px"
