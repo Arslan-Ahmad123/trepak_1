@@ -307,7 +307,9 @@ Route::get('returnsession',function(){
     $res = session()->get('all_engrs');
     return response()->json($res[0]);
 })->name('returnsession') ;
-
+Route::get('testdemo',function(){
+  dd('test');
+});
 
 // ===================email ===========================
 require __DIR__ . '/auth.php';

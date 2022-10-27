@@ -42,8 +42,9 @@ class index extends Controller
        }
        if($redirectPageName == 'ENGEFAILED'){
         return redirect(RouteServiceProvider::ADMINSTATUS);
-       }        
-       return redirect(RouteServiceProvider::INDEXPAGE);
+       }
+       return view('newpanel.newpanelview');        
+    //    return redirect(RouteServiceProvider::INDEXPAGE);
        
     }
     public function showindex_page(){
