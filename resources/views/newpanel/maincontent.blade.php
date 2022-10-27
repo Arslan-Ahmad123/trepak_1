@@ -323,7 +323,7 @@
 <div class="top-header mt-5 pt-5 text-center">
     <h4>Find and Book the Best Engineers</h4>
 </div>
-{{-- <section class="section ">
+<section class="section mt-0 pt-0">
     <div class="container topsection category_container">
         <div class="banner-wrapper">
             <div class="row">
@@ -381,7 +381,7 @@
 
         </div>
     </div>
-</section> --}}
+</section>
 <!-- /Home Banner -->
 <!--	  <div class="top-header1">-->
 <!--						<h2>Find Engineers By Categories</h2>-->
@@ -443,10 +443,14 @@
 <!--==================================google  map here =====-->
 
 <section class=" section-category mt-2 pt-2">
+
     <div class="container category_container">
         <div class="row  ml-0 mr-0">
 
             <div class="col-12 mx-auto mx-md-0 p-0">
+                <div id="btn_location_type">
+                   
+                </div>
                 <!--<div id="floating-panel">-->
                 <!--     <input id="latlng" type="text" value="31.4504,73.1350" />-->
                 <!--     <input id="submit" type="button" value="Reverse Geocode" />-->
@@ -487,7 +491,8 @@
     <script>
         var custom_lat;
         var custom_lon;
-
+        var giveaccesslocation = 'no';
+       
         var indexdiv = 1;
         $(document).ready(function() {
             $('#previous_btn').hide();
@@ -564,11 +569,14 @@
             const success = (position) => {
                 $('#lat_cur').val(position.coords.latitude);
                 $('#lon_cur').val(position.coords.longitude);
+               
                 callbackfun();
-                console.log('1st');
+
             }
             const error = () => {
                 console.log("error");
+                giveaccesslocation = 'no';
+              
                 callbackfun();
             }
 
@@ -607,13 +615,14 @@
             var map;
             var input = document.getElementById('search');
             const options = {
+                types: ['(cities)'],
                 componentRestrictions: {
                     country: "pk"
                 },
                 fields: ["address_components", "geometry", "icon", "name"],
                 strictBounds: false,
 
-                types: ["establishment"],
+
             };
             var latitude_cur = $('#lat_cur').val() != "" ? parseFloat($('#lat_cur').val()) : 32.1877;
             var longitude_cur = $('#lon_cur').val() != "" ? parseFloat($('#lon_cur').val()) : 74.1945;
@@ -636,7 +645,7 @@
             var checkuserlogin = {{ Auth::user() ? '1' : '0' }};
             console.warn(checkuserlogin);
             if (checkuserlogin == 1 || $('#lat_cur').val() != "") {
-               
+
 
 
                 var style_s = [{
@@ -784,8 +793,8 @@
                     console.log('no permission to add your marker');
                     markercurrentlocation.setMap(null);
                 } else {
-                   
-                    var markercurrentlocation =  new google.maps.Marker({
+
+                    var markercurrentlocation = new google.maps.Marker({
                         position: new google.maps.LatLng(latitude1, longitude1),
                         shape: shape,
                         title: 'Current location',
@@ -894,4 +903,5 @@
             });
         });
     </script>
+   
 @endpush
