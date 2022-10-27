@@ -42,9 +42,8 @@ class index extends Controller
        }
        if($redirectPageName == 'ENGEFAILED'){
         return redirect(RouteServiceProvider::ADMINSTATUS);
-       }
-       return view('newpanel.newpanelview');        
-    //    return redirect(RouteServiceProvider::INDEXPAGE);
+       }        
+       return redirect(RouteServiceProvider::INDEXPAGE);
        
     }
     public function showindex_page(){
@@ -59,14 +58,12 @@ class index extends Controller
                 return view('newpanel.newpanelview');
             }
             else{
-               
                 if(url()->previous() == 'http://127.0.0.8000'){
                     return redirect()->back();
                 }
                 else{
                     return redirect()->route('role_view');
-                }
-                
+                }  
             }
         }else{
             return view('newpanel.newpanelview');

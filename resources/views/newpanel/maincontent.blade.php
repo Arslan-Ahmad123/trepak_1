@@ -323,7 +323,7 @@
 <div class="top-header mt-5 pt-5 text-center">
     <h4>Find and Book the Best Engineers</h4>
 </div>
-{{-- <section class="section mt-0 pt-0">
+<section class="section mt-0 pt-0">
     <div class="container topsection category_container">
         <div class="banner-wrapper">
             <div class="row">
@@ -381,7 +381,7 @@
 
         </div>
     </div>
-</section> --}}
+</section>
 <!-- /Home Banner -->
 <!--	  <div class="top-header1">-->
 <!--						<h2>Find Engineers By Categories</h2>-->
@@ -449,7 +449,31 @@
 
             <div class="col-12 mx-auto mx-md-0 p-0">
                 <div id="btn_location_type">
-                   
+                    @if (Auth::check())
+                        <div id="authuser">
+                            <input id="current_location_btn_db" type="radio" name="select_type"
+                                value="databaseloc" onchan><label>&nbsp;&nbsp;Database Location</label>
+
+                            <input id="current_location_btn" style="display:none" type="radio" name="select_type"
+                                value="currentloc"><label>&nbsp;&nbsp;Current
+                                Location</label>
+
+                        </div>
+                    @else
+                        <div>
+                            <input id="withoutauth" style="display:none" type="radio" name="select_type" checked
+                                value="currentloc"><label>&nbsp;&nbsp;Current
+                                Location</label>
+                    @endif
+                    @php
+                        if (Auth::check()) {
+                            $userloginstatus = 'yes';
+                        } else {
+                            $userloginstatus = 'no';
+                        }
+                        
+                    @endphp
+                  
                 </div>
                 <!--<div id="floating-panel">-->
                 <!--     <input id="latlng" type="text" value="31.4504,73.1350" />-->
@@ -461,6 +485,7 @@
                 <div id="mapid"></div>
                 <input type="text" id="lat_cur" hidden>
                 <input type="text" id="lon_cur" hidden>
+                <input type="text" id="countryshortname" hidden>
 
             </div>
 
@@ -492,7 +517,7 @@
         var custom_lat;
         var custom_lon;
         var giveaccesslocation = 'no';
-       
+        var userloginstatus = '{{ $userloginstatus }}';
         var indexdiv = 1;
         $(document).ready(function() {
             $('#previous_btn').hide();
@@ -565,19 +590,73 @@
             }
 
         }
-        async function make_cord(callbackfun) {
+
+        const geocodeLatLng = async (geocoder, lat, lon) => {
+
+            const latlng = {
+                lat: parseFloat(lat),
+                lng: parseFloat(lon),
+            };
+
+            await geocoder
+                .geocode({
+                    location: latlng
+                })
+                .then((response) => {
+                    if (response.results[0]) {
+
+                        for (var i = 0; i < response.results[0].address_components.length; i++) {
+                            if (response.results[0].address_components[i].types[0] == "country") {
+                                country = response.results[0].address_components[i];
+                                // console.log('short name ioof dipaosj dansdkl a:'+country.short_name);
+                                $('#countryshortname').val(country.short_name);
+
+                            }
+                        }
+
+                    } else {
+                        return 'no';
+                        window.alert("No results found");
+                    }
+                })
+
+        }
+
+
+        async function make_cord(check_select_btn) {
             const success = (position) => {
                 $('#lat_cur').val(position.coords.latitude);
                 $('#lon_cur').val(position.coords.longitude);
-               
-                callbackfun();
+                giveaccesslocation = 'yes';
+                if (userloginstatus == 'yes') {
+                    $('#current_location_btn').show();
+                    document.getElementById('current_location_btn').checked = true;
+                    document.getElementById('current_location_btn_db').checked = false;
+
+                } else {
+                    $('#withoutauth').show();
+                    document.getElementById('withoutauth').checked = true;
+                }
+
+                check_select_btn();
+
 
             }
             const error = () => {
                 console.log("error");
                 giveaccesslocation = 'no';
-              
-                callbackfun();
+                if (userloginstatus == 'yes') {
+                    $('#current_location_btn').hide();
+                    $('#current_location_btn + label').hide();
+                    document.getElementById('current_location_btn').checked = false;
+                    document.getElementById('current_location_btn_db').checked = true;
+                } else {
+                    $('#withoutauth').hide();
+                    $('#withoutauth + label').hide();
+                    document.getElementById('withoutauth').checked = false;
+                }
+
+                check_select_btn();
             }
 
             navigator.geolocation.getCurrentPosition(success, error);
@@ -595,56 +674,190 @@
 
         }
 
-        function make_map() {
-            var allengr = [];
-            $.ajax({
-                url: 'fetchallrangeengr',
-                type: 'get',
-                async: false,
-                success: function(data) {
-                    console.log('fetch all user :' + data.length)
+        function make_map(snc, lat_client, lon_client) {
+            if (lat_client == "" && lon_client == "") {
+                var allengr = [];
+                $.ajax({
+                    url: 'fetchallrangeengr',
+                    type: 'get',
+                    async: false,
+                    success: function(data) {
+                        console.log('fetch all user :' + data.length)
 
-                    $.each(data, function(index, value) {
-                        allengr[index] = value;
+                        $.each(data, function(index, value) {
+                            allengr[index] = value;
+                        });
+
+                    }
+                });
+                var map;
+                map = new google.maps.Map(document.getElementById("mapid"), {
+                    center: {
+                        'lat': 32.174792,
+                        'lng': 74.181595,
+                    },
+                    mapTypeControl: false,
+                    zoom: 8,
+                    gestureHandling: 'greedy',
+                    draggable: true,
+                });
+                var input = document.getElementById('search');
+                const options = {
+                    types: ['(cities)'],
+                    componentRestrictions: {
+                        country: "pak"
+                    },
+                    fields: ["address_components", "geometry", "icon", "name"],
+                    strictBounds: false,
+
+
+                };
+                var autocomplete = new google.maps.places.Autocomplete(input, options);
+                const shape = {
+                    coords: [1, 1, 1, 20, 18, 20, 18, 1],
+                    type: "poly",
+                };
+
+
+
+
+
+                var style_s = [{
+                        featureType: "poi.business",
+                        stylers: [{
+                            visibility: "off"
+                        }],
+                    },
+                    {
+                        featureType: "transit",
+                        elementType: "labels.icon",
+                        stylers: [{
+                            visibility: "off"
+                        }],
+                    },
+                ];
+                //  new google.maps.StyledMapType(styles,{name: "Styled Map"});
+              
+                var infoWindow = new google.maps.InfoWindow();
+                $.each(allengr, function(i, m) {
+                    console.log(m);
+                    //  var latLngA = {'lat':32.1877,'lng':74.1945};
+                    //  var latLngB = {'lat':m.lan,'lng':m.lng};
+                    let variation = Math.random();
+                    var latitude2 = (m.latitude / 1000000) + variation;
+                    var longitude2 = (m.longitude / 1000000) + variation;
+                    // var idfetch =  m.id;
+                    // var url = '{{ route('fetchcategorynamemap', ':id') }}';
+                    // url = url.replace(':id', idfetch );
+                    // let message;
+                    // $.ajax({
+                    //     url:url,
+                    //     type:'get',
+                    //     success:function(data){
+                    //         console.log("Arfan ahmad is a:"+data);
+                    //         message = 
+                    //     }
+                    // });
+                    // console.log(m.category.engrcategory);
+                    const message =
+                        `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6>   <span style="font-weight:bold">Date:</span>   <input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`;
+                    const infowindow = new google.maps.InfoWindow({
+                        content: message,
                     });
+                    const svgMarker = {
+                        path: "M10.453 14.016l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+                        fillColor: "red",
+                        fillOpacity: 1,
+                        strokeWeight: 0,
+                        rotation: 0,
+                        scale: 2,
+                        anchor: new google.maps.Point(15, 30),
+                    };
+                    var image = {
+                        url: "{{ asset('engrphoto/demo.png') }}",
+                        size: new google.maps.Size(71, 71),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(17, 34),
+                        scaledSize: new google.maps.Size(25, 25)
+                    };
+                    let marker_s = new google.maps.Marker({
+                        position: new google.maps.LatLng(latitude2, longitude2),
+                        shape: shape,
+                        title: m.fname,
+                        map: map,
+                        icon: image
+                    });
+                    (function(marker, m) {
+                        google.maps.event.addListener(marker_s, "click", function(e) {
+                            //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
+                            infoWindow.setContent(
+                                `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`
+                            );
+                            infoWindow.open(map, marker);
+                        });
+                    })(marker_s, m);
+                    // google.maps.event.addListener(marker_s, 'click', function() {
+                    //     infowindow.open({
+                    //         anchor: marker_s,
+                    //         map,
+                    //         shouldFocus: false,
+                    //     });
+                    // });
+                });
 
-                }
-            });
+            } else {
+                var allengr = [];
+                $.ajax({
+                    url: 'fetchallrangeengr',
+                    type: 'get',
+                    async: false,
+                    success: function(data) {
+                        console.log('fetch all user :' + data.length)
+
+                        $.each(data, function(index, value) {
+                            allengr[index] = value;
+                        });
+
+                    }
+                });
 
 
-            var map;
-            var input = document.getElementById('search');
-            const options = {
-                types: ['(cities)'],
-                componentRestrictions: {
-                    country: "pk"
-                },
-                fields: ["address_components", "geometry", "icon", "name"],
-                strictBounds: false,
+                var map;
+                var input = document.getElementById('search');
+                const options = {
+                    types: ['(cities)'],
+                    componentRestrictions: {
+                        country: snc
+                    },
+                    fields: ["address_components", "geometry", "icon", "name"],
+                    strictBounds: false,
 
 
-            };
-            var latitude_cur = $('#lat_cur').val() != "" ? parseFloat($('#lat_cur').val()) : 32.1877;
-            var longitude_cur = $('#lon_cur').val() != "" ? parseFloat($('#lon_cur').val()) : 74.1945;
+                };
+                var latitude_cur = parseFloat(lat_client);
+                var longitude_cur = parseFloat(lon_client);
 
-            var autocomplete = new google.maps.places.Autocomplete(input, options);
-            map = new google.maps.Map(document.getElementById("mapid"), {
-                center: {
-                    'lat': latitude_cur,
-                    'lng': longitude_cur,
-                },
-                mapTypeControl: false,
-                zoom: 8,
-                gestureHandling: 'greedy',
-                draggable: true,
-            });
-            const shape = {
-                coords: [1, 1, 1, 20, 18, 20, 18, 1],
-                type: "poly",
-            };
-            var checkuserlogin = {{ Auth::user() ? '1' : '0' }};
-            console.warn(checkuserlogin);
-            if (checkuserlogin == 1 || $('#lat_cur').val() != "") {
+                // test code to fetch country name
+
+                // test code to fetch country name
+
+                var autocomplete = new google.maps.places.Autocomplete(input, options);
+                map = new google.maps.Map(document.getElementById("mapid"), {
+                    center: {
+                        'lat': latitude_cur,
+                        'lng': longitude_cur,
+                    },
+                    mapTypeControl: false,
+                    zoom: 8,
+                    gestureHandling: 'greedy',
+                    draggable: true,
+                });
+                const shape = {
+                    coords: [1, 1, 1, 20, 18, 20, 18, 1],
+                    type: "poly",
+                };
+
+
 
 
 
@@ -692,9 +905,11 @@
 
                     var latitude1 = latitude_cur;
                     var longitude1 = longitude_cur;
+
                     var distance = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(
                         latitude1, longitude1), new google.maps.LatLng(latitude2, longitude2));
                     var distance_km = distance / 1000;
+                    console.log(distance_km);
                     if (distance_km < 1) {
                         distance_boolean.push('no');
                     } else {
@@ -788,11 +1003,28 @@
                         // });
                     }
                 });
+
                 if (distance_boolean.includes('no')) {
-                    console.log(distance_boolean);
-                    console.log('no permission to add your marker');
-                    markercurrentlocation.setMap(null);
+                    var latitude1 = latitude_cur;
+                    var longitude1 = longitude_cur;
+
+                    var markercurrentlocation = new google.maps.Marker({
+                        position: new google.maps.LatLng(latitude1, longitude1),
+                        shape: shape,
+                        title: 'Current location',
+                        label: {
+                            text: 'U',
+                            color: "black",
+                            fontSize: "15px",
+                            fontWeight: "bold"
+                        },
+                        map: map,
+
+                    });
+
                 } else {
+                    var latitude1 = latitude_cur;
+                    var longitude1 = longitude_cur;
 
                     var markercurrentlocation = new google.maps.Marker({
                         position: new google.maps.LatLng(latitude1, longitude1),
@@ -809,85 +1041,11 @@
                     });
 
                 }
-            } else {
-                var infoWindow = new google.maps.InfoWindow();
-                $.each(allengr, function(i, m) {
-                    //  var latLngA = {'lat':32.1877,'lng':74.1945};
-                    //  var latLngB = {'lat':m.lan,'lng':m.lng};
-                    let variation = Math.random();
-                    var latitude2 = (m.latitude / 1000000) + variation;
-                    var longitude2 = (m.longitude / 1000000) + variation;
-
-                    // var idfetch =  m.id;
-                    // var url = '{{ route('fetchcategorynamemap', ':id') }}';
-                    // url = url.replace(':id', idfetch );
-                    // let message;
-                    // $.ajax({
-                    //     url:url,
-                    //     type:'get',
-                    //     success:function(data){
-                    //         console.log("Arfan ahmad is a:"+data);
-                    //         message = 
-                    //     }
-                    // });
-                    // console.log(m.category.engrcategory);
-                    const message =
-                        `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6>   <span style="font-weight:bold">Date:</span>   <input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`;
-
-                    const infowindow = new google.maps.InfoWindow({
-                        content: message,
-                    });
-                    const svgMarker = {
-                        path: "M10.453 14.016l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
-                        fillColor: "red",
-                        fillOpacity: 1,
-                        strokeWeight: 0,
-                        rotation: 0,
-                        scale: 2,
-                        anchor: new google.maps.Point(15, 30),
-                    };
-                    var image = {
-                        url: "{{ asset('engrphoto/demo.png') }}",
-                        size: new google.maps.Size(71, 71),
-                        origin: new google.maps.Point(0, 0),
-                        anchor: new google.maps.Point(17, 34),
-                        scaledSize: new google.maps.Size(25, 25)
-                    };
-
-
-                    let marker_s = new google.maps.Marker({
-                        position: new google.maps.LatLng(latitude2, longitude2),
-                        shape: shape,
-                        title: m.fname,
-
-                        map: map,
-                        icon: image
-                    });
-                    (function(marker, m) {
-                        google.maps.event.addListener(marker_s, "click", function(e) {
-                            //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
-                            infoWindow.setContent(
-                                `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`
-                            );
-                            infoWindow.open(map, marker);
-                        });
-                    })(marker_s, m);
-                    // google.maps.event.addListener(marker_s, 'click', function() {
-                    //     infowindow.open({
-                    //         anchor: marker_s,
-                    //         map,
-                    //         shouldFocus: false,
-                    //     });
-                    // });
-
-                });
             }
         }
 
         function initMap() {
-
-
-            make_cord(make_map);
+            make_cord(check_select_btn);
         }
         // 		 ==========geolocation script====================
 
@@ -903,5 +1061,66 @@
             });
         });
     </script>
-   
+    <script>
+        function check_select_btn() {
+
+            if (userloginstatus == 'yes') {
+                var val_login_status = $('input[name="select_type"]:checked').val();
+                if (val_login_status == 'databaseloc') {
+                    console.log('userlogin and select access db');
+                    var longitudeclient = '{{ Auth::check() ? Auth::user()->longitude / 1000000 : '' }}';
+                    var latitudeclient = '{{ Auth::check() ? Auth::user()->longitude / 1000000 : '' }}';
+                    const geocoder = new google.maps.Geocoder();
+                    $res = geocodeLatLng(geocoder, latitudeclient, longitudeclient);
+                    setTimeout(() => {
+                        let sn_con = $('#countryshortname').val();
+
+                        make_map(sn_con, latitudeclient, longitudeclient);
+                    }, 1500);
+
+                } else {
+                    console.log('userlogin and select access currentlocation');
+                    var longitudeclient = $('#lon_cur').val();
+                    var latitudeclient = $('#lat_cur').val();
+                    const geocoder = new google.maps.Geocoder();
+                    $res = geocodeLatLng(geocoder, latitudeclient, longitudeclient);
+                    setTimeout(() => {
+                        let sn_con = $('#countryshortname').val();
+
+                        make_map(sn_con, latitudeclient, longitudeclient);
+                    }, 1500);
+
+                }
+            } else {
+                console.log('user not login');
+                console.log('value is :' + $('input[name="select_type"]:checked').val());
+                var val_login_status = $('input[name="select_type"]:checked').val();
+                if (val_login_status == 'currentloc') {
+                    var longitudeclient = $('#lon_cur').val();
+                    var latitudeclient = $('#lat_cur').val();
+                    const geocoder = new google.maps.Geocoder();
+                    $res = geocodeLatLng(geocoder, latitudeclient, longitudeclient);
+                    setTimeout(() => {
+                        let sn_con = $('#countryshortname').val();
+
+                        make_map(sn_con, latitudeclient, longitudeclient);
+                    }, 1500);
+                } else {
+                    console.log('no access you');
+                    var longitudeclient = "";
+                    var latitudeclient = '';
+                    make_map("", latitudeclient, longitudeclient);
+
+
+                }
+
+
+            }
+        }
+
+        function select_val_radio() {
+            var val_login_status = $('input[name="select_type"]:checked').val();
+            console.log('login user: ' + val_login_status);
+        }
+    </script>
 @endpush
