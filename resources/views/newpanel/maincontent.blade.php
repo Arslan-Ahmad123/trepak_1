@@ -323,7 +323,7 @@
 <div class="top-header mt-5 pt-5 text-center">
     <h4>Find and Book the Best Engineers</h4>
 </div>
-<section class="section mt-0 pt-0">
+{{-- <section class="section mt-0 pt-0">
     <div class="container topsection category_container">
         <div class="banner-wrapper">
             <div class="row">
@@ -381,7 +381,7 @@
 
         </div>
     </div>
-</section>
+</section> --}}
 <!-- /Home Banner -->
 <!--	  <div class="top-header1">-->
 <!--						<h2>Find Engineers By Categories</h2>-->
