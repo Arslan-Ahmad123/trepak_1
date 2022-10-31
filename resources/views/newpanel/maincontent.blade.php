@@ -345,7 +345,8 @@
                             @csrf
                             <div class="form-group search-location">
                                 <input type="text" class="form-control" id="search" name="cityname"
-                                    placeholder="What are you looking for?">
+                                    placeholder="What are you looking for?"
+                                    onblur="getcordinataddress()">
                                 @error('cityname')
                                     <div class="alert alert-danger" id="cityname_div">This Field is Required.</div>
                                     <script>
@@ -355,10 +356,12 @@
                                     </script>
                                 @enderror
                                 <!-- <span class="form-text">Based on your Location</span> -->
+                                <input type="text" id="addresslat" name="addresslat" hidden>
+                                <input type="text" id="addresslon" name="addresslon" hidden>
                             </div>
                             <div class="form-group search-info">
                                 <input type="text" class="form-control" id="eng_type" name="date"
-                                    placeholder="Select Engineer">
+                                    value="{{ old('date') }}" placeholder="Select Engineer">
                                 @error('date')
                                     <div class="alert alert-danger" id="datediv_hide">This Field is Required.</div>
                                     <script>
@@ -369,7 +372,8 @@
                                 @enderror
                                 <!-- <span class="form-text">Ex : Dental or Sugar Check up etc</span> -->
                             </div>
-                            <button type="submit" class="btn btn-primary search-btn"><i class="fas fa-search"></i>
+                            <button type="submit" class="btn btn-primary search-btn" id="search_btn" disabled><i
+                                    class="fas fa-search"></i>
                                 <span id="searchtext">Search</span></button>
                         </form>
 
@@ -386,6 +390,7 @@
 <!--	  <div class="top-header1">-->
 <!--						<h2>Find Engineers By Categories</h2>-->
 
+ 
 <!--</div>-->
 
 <section class=" section-category mt-2 pt-2">
@@ -452,10 +457,11 @@
                     @if (Auth::check())
                         <div id="authuser">
                             <input id="current_location_btn_db" type="radio" name="select_type"
-                                value="databaseloc" onchan><label>&nbsp;&nbsp;Database Location</label>
+                                value="databaseloc" onchange="select_val_radio()"><label>&nbsp;&nbsp;Database
+                                Location</label>
 
                             <input id="current_location_btn" style="display:none" type="radio" name="select_type"
-                                value="currentloc"><label>&nbsp;&nbsp;Current
+                                value="currentloc" onchange="select_val_radio()"><label>&nbsp;&nbsp;Current
                                 Location</label>
 
                         </div>
@@ -473,7 +479,7 @@
                         }
                         
                     @endphp
-                  
+
                 </div>
                 <!--<div id="floating-panel">-->
                 <!--     <input id="latlng" type="text" value="31.4504,73.1350" />-->
@@ -494,6 +500,7 @@
         </div>
     </div>
 </section>
+
 @php
     $engarray = [];
     // $egn_type = $engtype;
@@ -510,9 +517,6 @@
 @endphp
 <!--==================================google  map here =====-->
 @push('customjscode')
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry,places"
-        async></script>
     <script>
         var custom_lat;
         var custom_lon;
@@ -622,6 +626,44 @@
 
         }
 
+        function getcordinataddress() {
+            setTimeout(() => {
+                var value_city = $('#search').val();
+                if (value_city != "") {
+                    var geocoder = new google.maps.Geocoder();
+                    geocoder.geocode({
+                        'address': value_city
+                    }, function(results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            var Lat = results[0].geometry.location.lat();
+                            var Lng = results[0].geometry.location.lng();
+                            $('#addresslat').val(Lat);
+                            $('#addresslon').val(Lng);
+                            document.getElementById('search_btn').disabled = false;
+                            
+                        } else {
+                            alert("Something got wrong " + status);
+                        }
+                    });
+                } else {
+                    alert('please fill this field');
+                }
+            }, 500);
+
+        }
+
+        function checklocationpermission() {
+            const success = (position) => {
+                $('#lat_cur').val(position.coords.latitude);
+                $('#lon_cur').val(position.coords.longitude);
+                return 'yes';
+            }
+            const error = () => {
+                return 'no';
+            }
+            navigator.geolocation.getCurrentPosition(success, error);
+        }
+
 
         async function make_cord(check_select_btn) {
             const success = (position) => {
@@ -644,6 +686,8 @@
             }
             const error = () => {
                 console.log("error");
+                $('#lat_cur').val('');
+                $('#lon_cur').val('');
                 giveaccesslocation = 'no';
                 if (userloginstatus == 'yes') {
                     $('#current_location_btn').hide();
@@ -674,8 +718,9 @@
 
         }
 
-        function make_map(snc, lat_client, lon_client) {
+        function make_map(snc, lat_client, lon_client,currentlocationfetch = 'no') {
             if (lat_client == "" && lon_client == "") {
+                console.log('yes yor are offline and you only see the people of pakistan');
                 var allengr = [];
                 $.ajax({
                     url: 'fetchallrangeengr',
@@ -703,7 +748,7 @@
                 });
                 var input = document.getElementById('search');
                 const options = {
-                    types: ['(cities)'],
+                    types: ['administrative_area_level_2'],
                     componentRestrictions: {
                         country: "pak"
                     },
@@ -737,13 +782,16 @@
                     },
                 ];
                 //  new google.maps.StyledMapType(styles,{name: "Styled Map"});
-              
+
                 var infoWindow = new google.maps.InfoWindow();
                 $.each(allengr, function(i, m) {
                     console.log(m);
                     //  var latLngA = {'lat':32.1877,'lng':74.1945};
                     //  var latLngB = {'lat':m.lan,'lng':m.lng};
-                    let variation = Math.random();
+                    function randomInRange(min, max) {
+                        return Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math.random() * (max - min) + min);
+                        }
+                    let variation = randomInRange(0.1, 5) / 500;
                     var latitude2 = (m.latitude / 1000000) + variation;
                     var longitude2 = (m.longitude / 1000000) + variation;
                     // var idfetch =  m.id;
@@ -788,7 +836,7 @@
                         icon: image
                     });
                     (function(marker, m) {
-                        google.maps.event.addListener(marker_s, "click", function(e) {
+                        google.maps.event.addListener(marker_s, "mouseover", function(e) {
                             //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
                             infoWindow.setContent(
                                 `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`
@@ -807,25 +855,40 @@
 
             } else {
                 var allengr = [];
-                $.ajax({
+                if(currentlocationfetch ==  'yes'){
+                    $.ajax({
+                    url: 'getuserlanlog',
+                    type: 'post',
+                    async: false,
+                    data:{lat:lat_client,lon:lon_client,"_token":"{{ csrf_token() }}"},
+                    success: function(data) {   
+                        $.each(data, function(index, value) {
+                            allengr[index] = value;
+                        });
+                    }
+                });
+                }else{
+                    $.ajax({
                     url: 'fetchallrangeengr',
                     type: 'get',
                     async: false,
                     success: function(data) {
                         console.log('fetch all user :' + data.length)
-
+                        console.log(data);
                         $.each(data, function(index, value) {
                             allengr[index] = value;
                         });
 
                     }
                 });
+                }
+               
 
-
+                
                 var map;
                 var input = document.getElementById('search');
                 const options = {
-                    types: ['(cities)'],
+                    types: ['administrative_area_level_2'],
                     componentRestrictions: {
                         country: snc
                     },
@@ -886,7 +949,6 @@
                 var lat_s = [];
                 var distance_boolean = [];
                 $.each(allengr, function(i, m) {
-
                     if (lon_s.includes(m.longitude) && lat_s.includes(m.latitude)) {
                         function randomInRange(min, max) {
                             return Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math
@@ -934,10 +996,10 @@
                         //         message = 
                         //     }
                         // });
-                        // console.log(m.category.engrcategory);
+                       
                         const message =
                             `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`;
-
+                       
                         const infowindow = new google.maps.InfoWindow({
                             content: message,
                         });
@@ -981,7 +1043,7 @@
                         // });
 
                         (function(marker, m) {
-                            google.maps.event.addListener(marker_s, "click", function(e) {
+                            google.maps.event.addListener(marker_s, "mouseover", function(e) {
                                 //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
                                 infoWindow.setContent(
                                     `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`
@@ -1005,23 +1067,7 @@
                 });
 
                 if (distance_boolean.includes('no')) {
-                    var latitude1 = latitude_cur;
-                    var longitude1 = longitude_cur;
-
-                    var markercurrentlocation = new google.maps.Marker({
-                        position: new google.maps.LatLng(latitude1, longitude1),
-                        shape: shape,
-                        title: 'Current location',
-                        label: {
-                            text: 'U',
-                            color: "black",
-                            fontSize: "15px",
-                            fontWeight: "bold"
-                        },
-                        map: map,
-
-                    });
-
+                   
                 } else {
                     var latitude1 = latitude_cur;
                     var longitude1 = longitude_cur;
@@ -1079,7 +1125,7 @@
                     }, 1500);
 
                 } else {
-                    console.log('userlogin and select access currentlocation');
+                    console.log('value is the one and only :' + $('input[name="select_type"]:checked').val());
                     var longitudeclient = $('#lon_cur').val();
                     var latitudeclient = $('#lat_cur').val();
                     const geocoder = new google.maps.Geocoder();
@@ -1087,13 +1133,13 @@
                     setTimeout(() => {
                         let sn_con = $('#countryshortname').val();
 
-                        make_map(sn_con, latitudeclient, longitudeclient);
+                        make_map(sn_con, latitudeclient, longitudeclient,'yes');
                     }, 1500);
 
                 }
             } else {
-                console.log('user not login');
-                console.log('value is :' + $('input[name="select_type"]:checked').val());
+
+                // console.log('value is the one and only :' + $('input[name="select_type"]:checked').val());
                 var val_login_status = $('input[name="select_type"]:checked').val();
                 if (val_login_status == 'currentloc') {
                     var longitudeclient = $('#lon_cur').val();
@@ -1103,7 +1149,7 @@
                     setTimeout(() => {
                         let sn_con = $('#countryshortname').val();
 
-                        make_map(sn_con, latitudeclient, longitudeclient);
+                        make_map(sn_con, latitudeclient, longitudeclient,'yes');
                     }, 1500);
                 } else {
                     console.log('no access you');
@@ -1120,7 +1166,42 @@
 
         function select_val_radio() {
             var val_login_status = $('input[name="select_type"]:checked').val();
-            console.log('login user: ' + val_login_status);
+            if (val_login_status == 'databaseloc') {
+
+                var longitudeclient = '{{ Auth::check() ? Auth::user()->longitude / 1000000 : '' }}';
+                var latitudeclient = '{{ Auth::check() ? Auth::user()->latitude / 1000000 : '' }}';
+                console.log(longitudeclient + ' , lat :' + latitudeclient);
+                const geocoder = new google.maps.Geocoder();
+                $res = geocodeLatLng(geocoder, latitudeclient, longitudeclient);
+                setTimeout(() => {
+                    let sn_con = $('#countryshortname').val();
+
+                    make_map(sn_con, latitudeclient, longitudeclient);
+                }, 1500);
+
+            } else {
+                navigator.permissions.query({
+                    name: 'geolocation'
+                }).then(function(result) {
+                    console.log(result);
+                    if (result.state == 'granted') {
+                        var longitudeclient = $('#lon_cur').val();
+                        var latitudeclient = $('#lat_cur').val();
+                        const geocoder = new google.maps.Geocoder();
+                        $res = geocodeLatLng(geocoder, latitudeclient, longitudeclient);
+                        setTimeout(() => {
+                            let sn_con = $('#countryshortname').val();
+
+                            make_map(sn_con, latitudeclient, longitudeclient,'yes');
+                        }, 1500);
+                    } else {
+                        alert('Please Allow Your Current Location');
+                    }
+                });
+            }
         }
     </script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry,places"
+        async></script>
 @endpush

@@ -70,9 +70,6 @@
 ">
                                 <div class="login-header" style="text-align:center;font-size:25px;font-weight:500">
                                     <h2>Login Form</h2>
-                              
-                                    {{-- {{ url()->previous() }} --}}
-
                                 </div>
                                 <x-guest-layout>
                                     <!-- Session Status -->
@@ -83,6 +80,9 @@
                                     <div>
                                         <form action="{{ route('login') }}" method="POST">
                                             @csrf
+                                            @php
+                                                print_r(session()->all());
+                                            @endphp
                                             {{-- @php
                                            
                                             $previousroute =  url()->previous();

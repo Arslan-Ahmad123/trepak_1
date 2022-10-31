@@ -75,7 +75,7 @@ Route::get('/fetchallrangeengr', function () {
         ->get()->toArray();
     return response()->json($getuser);
 });
-Route::get('/logingoogle', function () {
+Route::get('/logingoogle', function (Request $request) {
     return Socialite::driver('google')->redirect();
 })->name('logingoogle');
 Route::get('/fetchcategorynamemap/{id?}', function (engCategory $id) {
@@ -121,7 +121,17 @@ Route::get('/google/callback', function () {
                 }
             }
         } elseif (Auth::user()->role == 'user') {
-            return redirect()->route('indexpage');
+            if(session()->has('search_id')){
+                return redirect()->route('search_engineer');
+              }
+              if(session()->has('select_date')){  
+                return redirect()->route('proceedlogin');
+              }
+              if(session()->has('city_name')){  
+                return redirect()->route('getsearchbarengineer');
+              }
+            // return redirect()->route('userfrontpageview');
+            return redirect(RouteServiceProvider::INDEXPAGE);
         } else {
             return redirect()->route('role_view');
         }
@@ -196,7 +206,17 @@ Route::get('/facebook/callback', function () {
                 }
             }
         } elseif (Auth::user()->role == 'user') {
-            return redirect()->route('indexpage');
+            if(session()->has('search_id')){
+                return redirect()->route('search_engineer');
+              }
+              if(session()->has('select_date')){  
+                return redirect()->route('proceedlogin');
+              }
+              if(session()->has('city_name')){  
+                return redirect()->route('getsearchbarengineer');
+              }
+            // return redirect()->route('userfrontpageview');
+            return redirect(RouteServiceProvider::INDEXPAGE);
         } else {
             return redirect()->route('role_view');
         }
@@ -234,6 +254,17 @@ Route::get('role_view', function () {
     } elseif (Auth::user()->role == 'admin') {
         return redirect()->back();
     } elseif (Auth::user()->role == 'user') {
+        if(session()->has('search_id')){
+            return redirect()->route('search_engineer');
+          }
+          if(session()->has('select_date')){  
+            return redirect()->route('proceedlogin');
+          }
+          if(session()->has('city_name')){  
+            return redirect()->route('getsearchbarengineer');
+          }
+        // return redirect()->route('userfrontpageview');
+        // return redirect(RouteServiceProvider::INDEXPAGE);
         return redirect()->back();
     } else {
         return view('roleselect.select_role');
@@ -243,6 +274,7 @@ Route::get('getdistance', function () {
 
     $new_longitude =  Auth::user()->longitude / 1000000;
     $new_latitude = Auth::user()->latitude / 1000000;
+
     $engr_array = [];
     $user = User::where('role', 'enge')->get()->toArray();
 
@@ -258,15 +290,15 @@ Route::get('getdistance', function () {
             sin($dLon / 2) * sin($dLon / 2);
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
         $d = $radius * $c; // Distance in km
+
         if ($d <= 100) {
-           
-          
+
             array_push($user, $d);
-           
+
             $engr_array[] = $user;
         }
     }
-
+    dd($engr_array);
     session()->push('all_engrs', $engr_array);
 
 
@@ -303,12 +335,44 @@ Route::get('getdistance', function () {
     //    $res =  $query->select('*')->addSelect($raw)->orderBy( 'distance', 'ASC' )->groupBy('distance')->having('distance', '<=', $distance);
     //    dd($res );
 });
-Route::get('returnsession',function(){
+Route::get('returnsession', function () {
     $res = session()->get('all_engrs');
     return response()->json($res[0]);
-})->name('returnsession') ;
-Route::get('testdemo',function(){
-  dd('test');
+})->name('returnsession');
+Route::post('getuserlanlog', function (Request $res) {
+    $new_longitude =  $res->lon;
+    $new_latitude = $res->lat;
+    $engr_array = [];
+    $user = User::where('role', 'enge')->get()->toArray();
+
+    foreach ($user as $users) {
+        $category = engCategory::find($users['engrcategoryid']);
+        $old_longitude = $users['longitude'] / 1000000;
+        $old_latitude = $users['latitude'] / 1000000;
+        $dLat = deg2rad($new_latitude - $old_latitude);
+        $dLon = deg2rad($new_longitude - $old_longitude);
+        $radius = 6371;
+        $a = sin($dLat / 2) * sin($dLat / 2) +
+            cos(deg2rad($old_latitude)) * cos(deg2rad($new_latitude)) *
+            sin($dLon / 2) * sin($dLon / 2);
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+        $d = $radius * $c; // Distance in km
+        if ($d <= 100) {
+
+            // array_push($users, $d);
+            // array_push($users,$categoryname->engrcategory);
+            $users['distance'] = $d;
+            $users['category'] = $category;
+            $engr_array[] = $users;
+        }
+    }
+    return response()->json($engr_array);
+    // if (session()->has('all_engrs')) {
+    //     session()->forget('all_engrs');
+    //     session()->push('all_engrs', $engr_array);
+    // } else {
+    //     session()->push('all_engrs', $engr_array);
+    // }
 });
 
 // ===================email ===========================

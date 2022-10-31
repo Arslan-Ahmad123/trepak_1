@@ -20,6 +20,7 @@ Route::middleware(['isUser'])->prefix('user')->group(function () {
     Route::get('/search_engineer', [index::class,'engineer_search'])->name('search_engineer');
     Route::get('/search_engr_card', [index::class,'search_engr_card'])->name('search_engr_card');
     Route::post('/searchbarengineer', [index::class,'searchbarengineer'])->name('searchbarengineer');
+    Route::get('/getsearchbarengineer', [index::class,'getsearchbarengineer'])->name('getsearchbarengineer');
     Route::get('/search_engr', [index::class,'search_engr'])->name('search_engr');
     Route::any('/viewprofileeng',[index::class,'viewprofileeng'])->name('viewprofileeng');
     Route::any('/view_profileeng',[index::class,'viewp_rofileeng'])->name('view_profileeng');

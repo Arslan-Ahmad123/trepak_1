@@ -71,12 +71,46 @@ class index extends Controller
     }
     
     public function searchbarengineer(Request $res){
-        
+        $res->validate([
+            'cityname' => 'required',
+            'date' => 'required',
+            'addresslat' => 'required',
+            'addresslon' => 'required',
+        ]);
+        $address_ex =  explode(',',$res->cityname);
+       
         $categoryid = engCategory::where('engrcategory',$res->date)->get('id')->toArray();
-        $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise($categoryid[0]['id']);
-        return view('searchengineer.searchengineerview')->with($resultSearchEngineer);
+        $resultSearchEngineer = $this->clientservices->searchEngineraddressWise($categoryid[0]['id'], $address_ex[0],$res->addresslat,$res->addresslon);
+        // dd($resultSearchEngineer);
+        return view('searchengineerbar.searchengineerview')->with($resultSearchEngineer);
+        // $categoryid = engCategory::where('engrcategory',$res->date)->get('id')->toArray();
+        // $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise($categoryid[0]['id']);
+        // return view('searchengineer.searchengineerview')->with($resultSearchEngineer);
     }
+    public function getsearchbarengineer(){
+        if(session()->has('search_client_lat')){
+            $address_ex =  explode(',',session()->get('city_name'));
+       
+            $categoryid = engCategory::where('engrcategory',session()->get('category_id'))->get('id')->toArray();
+            $resultSearchEngineer = $this->clientservices->searchEngineraddressWise($categoryid[0]['id'], $address_ex[0],session()->get('search_client_lat'),session()->get('search_client_lon'));
+            // dd($resultSearchEngineer);
+            session()->forget('search_client_lat');
+            session()->forget('search_client_lon');
+            session()->forget('category_id');
+            session()->forget('city_name');
+            return view('searchengineerbar.searchengineerview')->with($resultSearchEngineer);
+            // $categoryid = engCategory::where('engrcategory',$res->date)->get('id')->toArray();
+            // $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise($categoryid[0]['id']);
+            // return view('searchengineer.searchengineerview')->with($resultSearchEngineer);
+        }else{
+            return redirect(RouteServiceProvider::INDEXPAGE);
+        }
+       
+
+    }
+    
     public function search_engr(){
+        // session()->has('indexengrid')
         if(session()->has('indexengrid')){
             $categoryid = engCategory::where('engrcategory',session()->get('indexengrid'))->get('id')->toArray();
             $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise($categoryid[0]['id']);
@@ -85,8 +119,7 @@ class index extends Controller
             return redirect()->route('indexpage');
         }
        
-    }
-    
+    } 
     public function engineersearch(Request $res){
         $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise($res->id);
         return view('searchengineer.searchengineerview')->with($resultSearchEngineer);

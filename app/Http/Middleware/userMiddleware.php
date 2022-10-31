@@ -50,6 +50,7 @@ class userMiddleware
         
           //    searchbarengineer
           // proceed
+         
           if($routename == 'searchengineer'){
                if(session()->has('routename')){
                     session()->forget('routename');
@@ -65,14 +66,21 @@ class userMiddleware
                     session()->forget('routename');
                     session()->forget('city_name');
                     session()->forget('category_id');
+                    session()->forget('search_client_lat');
+                    session()->forget('search_client_lon');
                     session()->put('routename',$routename);
                     session()->put('city_name',$request->cityname);
                     session()->put('category_id',$request->date);
+                    session()->put('search_client_lat',$request->addresslat);
+                    session()->put('search_client_lon',$request->addresslon);
+                   
                     
                }else{
                     session()->put('routename',$routename);
                     session()->put('city_name',$request->cityname);
                     session()->put('category_id',$request->date);
+                    session()->put('search_client_lat',$request->addresslat);
+                    session()->put('search_client_lon',$request->addresslon);
                }
           }elseif($routename == 'proceed'){
             

@@ -71,13 +71,15 @@ class AuthenticatedSessionController extends Controller
             }
         } else {
            
-          
+         
                  if(session()->has('search_id')){
                     return redirect()->route('search_engineer');
                   }
-                  if(session()->has('select_date')){
-                    
+                  if(session()->has('select_date')){  
                     return redirect()->route('proceedlogin');
+                  }
+                  if(session()->has('city_name')){  
+                    return redirect()->route('getsearchbarengineer');
                   }
                 // return redirect()->route('userfrontpageview');
                 return redirect(RouteServiceProvider::INDEXPAGE);
