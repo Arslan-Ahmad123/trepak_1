@@ -24,16 +24,16 @@
                             <input type="text" name="cityname" value="{{ $city_name }}" hidden>
                             <input type="text" name="engtype" value="{{ $eng_type }}" hidden>
                         @endif
-                        <div class="col-md-7 col-lg-6 login-left">
+                     <!--   <div class="col-md-7 col-lg-6 login-left">
                             <img src="{{ asset('newpanel/assets/img/login-banner.jpg') }}" class="img-fluid"
-                                alt="Doccure Register">
+                                alt="Doccure Register">-->
                         </div>
-                        <div class="col-md-12 col-lg-6 login-right">
-                            <div class="login-header">
+                        <div class="col-md-10 col-lg-8 col-sm-12 login-right mx-auto py-5" style="box-shadow: 0px 0px 15px 0px rgb(0 0 0 / 50%); margin-bottom: 100px;margin-top: 40px;">
+                            <div class="login-header" style="text-align:center;font-size:25px;font-weight:500">
                                 @if ($currentURL == 'user_register' || $currentURL == 'user_regis')
-                                    <h3>User Register</h3>
+                                    <h2>User Register</h2>
                                 @else
-                                    <h3>Engineer Register</h3>
+                                    <h2>Engineer Register</h2>
                                 @endif
 
                             </div>
@@ -65,8 +65,10 @@
                                                 :value="old('pic')" autofocus />
                                         </div>
                                         <!--Engr Category  -->
-                                    
-                                       @if (url()->current() == 'http://localhost:8000/user_regis')
+                                        @php
+                                              $routename = Route::current()->getName();
+                                        @endphp
+                                       @if ($routename == 'user_regis')
                                         @else 
                                         <div class="mt-4">
                                             <x-label for="engrcategory" style="margin-bottom:5px"
@@ -111,6 +113,10 @@
                                             <x-input id="password_confirmation" class="block mt-1 w-full"
                                                 type="password" name="password_confirmation" required />
                                         </div>
+										<div class="form-navigation">
+                                        <button type="submit"  style="background-color: #15558d !important;color:white;"
+                                            class="btn bg-success float-right  mt-3">Register</button>
+                                    </div>
                                         <!--Address -->
                                         {{-- <div>
                                             <x-label for="address" style="margin-bottom:5px" :value="__('Address')" />
@@ -257,13 +263,7 @@
 
 
 
-                                    <div class="form-navigation">
-                                        <button type="button"
-                                            class="previous btn bg-info float-left mt-2">Previous</button>
-                                        <button type="button" class="next btn bg-info float-right  mt-2">Next</button>
-                                        <button type="submit"
-                                            class="btn bg-success float-right  mt-2">Register</button>
-                                    </div>
+                                    
 
                                 </form>
                                 <div id="map"></div>

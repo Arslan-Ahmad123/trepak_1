@@ -1023,8 +1023,8 @@
   
   #footer-navigation a {
     color: #fff;
-    font-size: 14px;
-    /*font-weight: 600;*/
+    font-size: 15px;
+    font-weight: 500;
     margin-bottom: 17px;
     text-decoration: none;
     -webkit-transition: all 250ms 0s ease;
@@ -1118,6 +1118,7 @@
       margin-bottom: 0;
       padding: 0;
       border: none;
+      font-weight: 500;
     }
   }
   
@@ -1139,6 +1140,7 @@
   .footer-logo img {
     display: block;
     width:150px;
+    filter: brightness(1.5);
     /*max-width: 100%;*/
     height: auto;
   }
@@ -1170,6 +1172,7 @@
     margin: 0;
     line-height: 30px;
     font-size:14px;
+    font-weight: 500;
   }
   
   #copyright p br {

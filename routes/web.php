@@ -21,10 +21,29 @@ Route::get('/indexpage', [index::class, 'showindex_page'])->name('indexpage');
 // Route::view('/indexpage', [index::class,'showindex_page'])->name('indexpage');
 // ===================email ===========================
 Route::get('/conformemail', function () {
-    return view('conformemail.conformemail');
+
+    if (Auth::check() && Auth::user()->role == 'enge') {
+        if (Auth::user()->emailstatus == 1) {
+            return redirect()->back();
+        } else {
+            return view('conformemail.conformemail');
+        }
+    } else {
+        return redirect()->back();
+    }
 })->name('conformemail');
 Route::post('/resendemail', function () {
-    return redirect()->back();
+    if (Auth::check() && Auth::user()->role == 'enge') {
+        if (Auth::user()->emailstatus == 1) {
+            return redirect()->back();
+        } else {
+            $user = Auth::user();
+            Event(new conformemail($user));
+            return redirect()->back();
+        }
+    } else {
+        return redirect()->back();
+    }
 })->name('resendemail');
 Route::post('submit_role', function (Request $res) {
     if ($res->select_role == 'enge') {
@@ -41,7 +60,7 @@ Route::post('submit_role', function (Request $res) {
             'address' => $res->address,
         ]);
         $user =  User::where('email', Auth::user()->email)->get();
-        //   Event(new conformemail($user[0]));
+        Event(new conformemail($user[0]));
         if (Auth::user()->emailstatus == 0) {
             return redirect(RouteServiceProvider::EMAILVERIFY);
         } else {
@@ -58,8 +77,8 @@ Route::post('submit_role', function (Request $res) {
     } else {
         User::where('email', Auth::user()->email)->update([
             'role' => $res->select_role,
-            'latitude' => $res->lat,
-            'longitude' => $res->lon,
+            'latitude' => $res->lat * 1E6,
+            'longitude' => $res->lon * 1E6,
             'city' => $res->city,
             'subcity' => $res->locality,
             'state' => $res->state,
@@ -83,32 +102,18 @@ Route::get('/fetchcategorynamemap/{id?}', function (engCategory $id) {
 })->name('fetchcategorynamemap');
 
 Route::get('/google/callback', function () {
+    if (Auth::check()) {
+        return redirect()->back();
+    } else {
+        $user = Socialite::driver('google')->stateless()->user();
 
+        $users       =   User::where(['email' => $user->email])->first();
 
-    $user = Socialite::driver('google')->stateless()->user();
-
-    $users       =   User::where(['email' => $user->email])->first();
-
-    if ($users) {
-        Auth::login($users);
-
-        if (Auth::user()->role == 'enge') {
-            if ($users->adminengr == 1) {
-                User::where('id', $users->id)->update(['adminengr' => 2]);
-                if (Auth::user()->docsstatus == 0) {
-                    return redirect(RouteServiceProvider::DOCSSTATUS);
-                } else {
-                    if (Auth::user()->status == 0) {
-                        return redirect(RouteServiceProvider::ADMINSTATUS);
-                    } else {
-                        return redirect(RouteServiceProvider::ENGE);
-                    }
-                }
-            } else {
-                //  Event(new conformemail($user));
-                if (Auth::user()->emailstatus == 0) {
-                    return redirect(RouteServiceProvider::EMAILVERIFY);
-                } else {
+        if ($users) {
+            Auth::login($users);
+            if (Auth::user()->role == 'enge') {
+                if ($users->adminengr == 1) {
+                    User::where('id', $users->id)->update(['adminengr' => 2]);
                     if (Auth::user()->docsstatus == 0) {
                         return redirect(RouteServiceProvider::DOCSSTATUS);
                     } else {
@@ -118,38 +123,50 @@ Route::get('/google/callback', function () {
                             return redirect(RouteServiceProvider::ENGE);
                         }
                     }
+                } else {
+                    if (Auth::user()->emailstatus == 0) {
+                        return redirect(RouteServiceProvider::EMAILVERIFY);
+                    } else {
+                        if (Auth::user()->docsstatus == 0) {
+                            return redirect(RouteServiceProvider::DOCSSTATUS);
+                        } else {
+                            if (Auth::user()->status == 0) {
+                                return redirect(RouteServiceProvider::ADMINSTATUS);
+                            } else {
+                                return redirect(RouteServiceProvider::ENGE);
+                            }
+                        }
+                    }
                 }
+            } elseif (Auth::user()->role == 'user') {
+                if (session()->has('search_id')) {
+                    return redirect()->route('search_engineer');
+                }
+                if (session()->has('select_date')) {
+                    return redirect()->route('proceedlogin');
+                }
+                if (session()->has('city_name')) {
+                    return redirect()->route('getsearchbarengineer');
+                }
+                // return redirect()->route('userfrontpageview');
+                return redirect(RouteServiceProvider::INDEXPAGE);
+            } else {
+                return redirect()->route('role_view');
             }
-        } elseif (Auth::user()->role == 'user') {
-            if(session()->has('search_id')){
-                return redirect()->route('search_engineer');
-              }
-              if(session()->has('select_date')){  
-                return redirect()->route('proceedlogin');
-              }
-              if(session()->has('city_name')){  
-                return redirect()->route('getsearchbarengineer');
-              }
-            // return redirect()->route('userfrontpageview');
-            return redirect(RouteServiceProvider::INDEXPAGE);
         } else {
+            $users = User::create([
+                'pic' => $user->avatar,
+                'fname' => $user->name,
+                'emailcode' => rand(111111, 999999),
+                'email' => $user->email,
+                'password' => Hash::make('null12345'),
+                'emailstatus' => 0,
+                'signupoption' => 0,
+                'status' => 0,
+            ]);
+            Auth::login($users);
             return redirect()->route('role_view');
         }
-    } else {
-
-        $users = User::create([
-            'pic' => $user->avatar,
-            'fname' => $user->name,
-            'emailcode' => rand(111111, 999999),
-            'email' => $user->email,
-            'password' => Hash::make('null12345'),
-            'emailstatus' => 1,
-            'signupoption' => 1,
-            'status' => 1,
-
-        ]);
-        Auth::login($users);
-        return redirect()->route('role_view');
     }
 });
 Route::get('/loginfacebook', function () {
@@ -165,35 +182,17 @@ Route::post('sessionforrole', function (Request $res) {
     return response()->json('ok');
 });
 Route::get('/facebook/callback', function () {
+    if (Auth::check()) {
+        return redirect()->back();
+    } else {
+        $user = Socialite::driver('facebook')->stateless()->user();
 
-    // if(session()->has('state')){
-    //     session()->forget('state');
-    //     Session::put('state',Str::random(40));
-    // }else{
-    //     Session::put('state',Str::random(40));
-    // }
-    $user = Socialite::driver('facebook')->stateless()->user();
-
-    $users       =   User::where(['email' => $user->email])->first();
-    if ($users) {
-        Auth::login($users);
-        if (Auth::user()->role == 'enge') {
-            if ($users->adminengr == 1) {
-                User::where('id', $users->id)->update(['adminengr' => 2]);
-                if (Auth::user()->docsstatus == 0) {
-                    return redirect(RouteServiceProvider::DOCSSTATUS);
-                } else {
-                    if (Auth::user()->status == 0) {
-                        return redirect(RouteServiceProvider::ADMINSTATUS);
-                    } else {
-                        return redirect(RouteServiceProvider::ENGE);
-                    }
-                }
-            } else {
-                //  Event(new conformemail($user));
-                if (Auth::user()->emailstatus == 0) {
-                    return redirect(RouteServiceProvider::EMAILVERIFY);
-                } else {
+        $users       =   User::where(['email' => $user->email])->first();
+        if ($users) {
+            Auth::login($users);
+            if (Auth::user()->role == 'enge') {
+                if ($users->adminengr == 1) {
+                    User::where('id', $users->id)->update(['adminengr' => 2]);
                     if (Auth::user()->docsstatus == 0) {
                         return redirect(RouteServiceProvider::DOCSSTATUS);
                     } else {
@@ -203,71 +202,94 @@ Route::get('/facebook/callback', function () {
                             return redirect(RouteServiceProvider::ENGE);
                         }
                     }
+                } else {
+                    //  Event(new conformemail($user));
+                    if (Auth::user()->emailstatus == 0) {
+                        return redirect(RouteServiceProvider::EMAILVERIFY);
+                    } else {
+                        if (Auth::user()->docsstatus == 0) {
+                            return redirect(RouteServiceProvider::DOCSSTATUS);
+                        } else {
+                            if (Auth::user()->status == 0) {
+                                return redirect(RouteServiceProvider::ADMINSTATUS);
+                            } else {
+                                return redirect(RouteServiceProvider::ENGE);
+                            }
+                        }
+                    }
                 }
+            } elseif (Auth::user()->role == 'user') {
+                if (session()->has('search_id')) {
+                    return redirect()->route('search_engineer');
+                }
+                if (session()->has('select_date')) {
+                    return redirect()->route('proceedlogin');
+                }
+                if (session()->has('city_name')) {
+                    return redirect()->route('getsearchbarengineer');
+                }
+                // return redirect()->route('userfrontpageview');
+                return redirect(RouteServiceProvider::INDEXPAGE);
+            } else {
+                return redirect()->route('role_view');
             }
-        } elseif (Auth::user()->role == 'user') {
-            if(session()->has('search_id')){
-                return redirect()->route('search_engineer');
-              }
-              if(session()->has('select_date')){  
-                return redirect()->route('proceedlogin');
-              }
-              if(session()->has('city_name')){  
-                return redirect()->route('getsearchbarengineer');
-              }
-            // return redirect()->route('userfrontpageview');
-            return redirect(RouteServiceProvider::INDEXPAGE);
         } else {
+
+            $users = User::create([
+                'pic' => $user->avatar,
+                'fname' => $user->name,
+                'emailcode' => rand(111111, 999999),
+                'email' => $user->email,
+                'password' => Hash::make('null12345'),
+                'emailstatus' => 0,
+                'signupoption' => 0,
+                'status' => 0,
+            ]);
+            Auth::login($users);
             return redirect()->route('role_view');
         }
-    } else {
-
-        $users = User::create([
-            'pic' => $user->avatar,
-            'fname' => $user->name,
-            'emailcode' => rand(111111, 999999),
-            'email' => $user->email,
-            'password' => Hash::make('null12345'),
-            'emailstatus' => 1,
-            'signupoption' => 1,
-            'status' => 1,
-        ]);
-        Auth::login($users);
-        return redirect()->route('role_view');
     }
 });
 Route::get('role_view', function () {
-    if (Auth::user()->role == 'enge') {
-        if (Auth::user()->emailstatus == 0) {
-            return redirect(RouteServiceProvider::EMAILVERIFY);
-        } else {
-            if (Auth::user()->docsstatus == 0) {
-                return redirect(RouteServiceProvider::DOCSSTATUS);
+    if (Auth::check()) {
+        if (Auth::user()->role == 'enge') {
+            if (Auth::user()->emailstatus == 0) {
+                return redirect(RouteServiceProvider::EMAILVERIFY);
             } else {
-                if (Auth::user()->status == 0) {
-                    return redirect(RouteServiceProvider::ADMINSTATUS);
+                if (Auth::user()->docsstatus == 0) {
+                    return redirect(RouteServiceProvider::DOCSSTATUS);
                 } else {
-                    return redirect()->back();
+                    if (Auth::user()->status == 0) {
+                        return redirect(RouteServiceProvider::ADMINSTATUS);
+                    } else {
+                        return redirect()->back();
+                    }
                 }
             }
+        } elseif (Auth::user()->role == 'admin') {
+            return redirect()->back();
+        } elseif (Auth::user()->role == 'user') {
+            if (session()->has('search_id')) {
+                return redirect()->route('search_engineer');
+            }
+            if (session()->has('select_date')) {
+                return redirect()->route('proceedlogin');
+            }
+            if (session()->has('city_name')) {
+                return redirect()->route('getsearchbarengineer');
+            }
+            // return redirect()->route('userfrontpageview');
+            // return redirect(RouteServiceProvider::INDEXPAGE);
+            return redirect()->back();
+        } else {
+            if (Auth::user()->role == null) {
+                return view('roleselect.select_role');
+            } else {
+                return redirect()->back();
+            }
         }
-    } elseif (Auth::user()->role == 'admin') {
-        return redirect()->back();
-    } elseif (Auth::user()->role == 'user') {
-        if(session()->has('search_id')){
-            return redirect()->route('search_engineer');
-          }
-          if(session()->has('select_date')){  
-            return redirect()->route('proceedlogin');
-          }
-          if(session()->has('city_name')){  
-            return redirect()->route('getsearchbarengineer');
-          }
-        // return redirect()->route('userfrontpageview');
-        // return redirect(RouteServiceProvider::INDEXPAGE);
-        return redirect()->back();
     } else {
-        return view('roleselect.select_role');
+        return redirect()->back();
     }
 })->name('role_view');
 Route::get('getdistance', function () {

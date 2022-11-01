@@ -140,7 +140,7 @@
 													</div>
 												</div>
 											</div>
-											<div class="exist-customer">Existing Customer? <a href="#">Click here to login</a></div>
+											
 										</div>
 										<!-- /Personal Information -->
 										

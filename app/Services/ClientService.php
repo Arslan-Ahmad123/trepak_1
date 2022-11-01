@@ -58,7 +58,7 @@ class ClientService
         $new_latitude = Auth::user()->latitude / 1000000;
         $engr_array = [];
         $user = User::where('role', 'enge')->where('engrcategoryid', $id)->get()->toArray();
-    
+        
         foreach ($user as $users) {
     
             $old_longitude = $users['longitude'] / 1000000;
@@ -71,6 +71,7 @@ class ClientService
                 sin($dLon / 2) * sin($dLon / 2);
             $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
             $d = $radius * $c; // Distance in km
+            
             if ($d <= 100) {
                 // array_push($users, $d);
                 // array_push($users,$categoryname->engrcategory);
@@ -85,6 +86,7 @@ class ClientService
                 $engr_array[] = $users;
               
             }
+            
         }
         
         if(session()->has('all_engrs')){
@@ -93,6 +95,7 @@ class ClientService
         }else{
             session()->push('all_engrs', $engr_array);
         }
+       
        return ['engr' => $engr, 'tlengr' => $totalengr, 'cate_name' => $categoryname, 'category_id' => $id,'allengr'=>json_encode($allengr)];
     }
     public function searchEngineraddressWise($id,$city,$lat,$lon)

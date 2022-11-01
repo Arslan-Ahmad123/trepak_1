@@ -1802,13 +1802,13 @@ button.bg-danger:hover {
     -webkit-justify-content: space-between;
     -ms-flex-pack: space-between;
     
-    height: 65px;
+    /* height: 65px; */
     padding: 0 30px;
     margin-bottom: 0;
 }
 .navbrand_logo{
-    width: 165px;
-    height: 59px;
+    width: 150px;
+    height: 70px;
 }
 .main-nav {
     display: -webkit-box;
@@ -1835,7 +1835,7 @@ button.bg-danger:hover {
     border-top: 1px solid #f0f0f0;
 }
 .topsection{
-    margin-top: 75px;
+    margin-top: 50px;
 }
 .main-nav > li .submenu > li.has-submenu > a::after {
     content: "\f054";
@@ -1851,8 +1851,8 @@ button.bg-danger:hover {
 }
 .main-nav li a {
     display: block;
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 600;
 }
 .main-nav li.login-link {
     display: none;

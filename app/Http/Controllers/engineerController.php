@@ -112,7 +112,11 @@ class engineerController extends Controller
     }
    
      public function engrlogin(){
-        return view('loginview.loginpageview');
+        if(Auth::check()){
+            return redirect()->back();
+        }else{
+            return view('loginview.loginpageview');
+        }
     }
     
     public function engehomepage(){
@@ -132,12 +136,17 @@ class engineerController extends Controller
         return view('conform_email.conformemailpage');
     }
       public function engerequest(){ 
-        $usestatus = Auth::user()->status;
-        if($usestatus == 0){
-            return view('engineerrequestadmin.requestpageview');
+        if(Auth::user()->status == 1){
+            return redirect()->back();
         }else{
-            return redirect(RouteServiceProvider::ENGE);
+            $usestatus = Auth::user()->status;
+            if($usestatus == 0){
+                return view('engineerrequestadmin.requestpageview');
+            }else{
+                return redirect(RouteServiceProvider::ENGE);
+            }
         }
+       
     }
     public function getcomments(){
         $res = Auth::user()->comment;
@@ -171,13 +180,21 @@ class engineerController extends Controller
         return response()->json($clientarray);
     }
     public function conformemailenge(Request $res){ 
-       
-        if($res->conformemail == Auth::user()->emailcode){
-            User::where('id',Auth::user()->id)->update(['emailstatus'=>1]);
-           return redirect(RouteServiceProvider::DOCSSTATUS);
-        }
-        else{
+      if(Auth::check() && Auth::user()->role == 'enge'){
+        if(Auth::user()->emailstatus == 1){
             return redirect()->back();
-        }
+           }else{
+            if($res->conformemail == Auth::user()->emailcode){
+                User::where('id',Auth::user()->id)->update(['emailstatus'=>1]);
+               return redirect(RouteServiceProvider::DOCSSTATUS);
+            }
+            else{
+                return redirect()->back();
+            }
+           }
+      }else{
+        return redirect()->back();
+      }
+       
     }
 }

@@ -339,6 +339,37 @@
     </div>
 </section>
  <!-- /Page Content -->
+
+ {{-- ===========modal for select order date================== --}}
+ <div class="modal" tabindex="-1" role="dialog" id="orderdetail_modal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Select Date</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="{{ route('proceed') }}" method="post">
+            @csrf
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="selectdateorder">Select Date</label>
+                    <input class="form-control" type="date" name="engr_date" id="selectdateorder" min="<?php echo date('Y-m-d');?>"  value="<?php echo date('Y-m-d');?>">
+                    <input class="form-control" type="text" name="engr_id" id="select_engrid" hidden>
+                   
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" >Place Order</button>
+              {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
+            </div>
+        </form>
+       
+      </div>
+    </div>
+  </div>
+ {{-- ===========modal for select order date================== --}}
  {{-- ==========================chat box ========================	 --}}
  <div class="container customchatbox" style="display:none">
      <div class="chat_box">
@@ -391,6 +422,7 @@
      </div>
  </div>
 @php
+
     if(session()->has('search_id')){
         session()->forget('search_id');
         session()->forget('routename');
@@ -486,8 +518,9 @@
                             @csrf
                             <input type="text" name="userid" value="${v.id}" hidden>
                             <input type="text" name="bookingid" value="${v.id}" hidden>
+                          
                             <button class="btn-info p-0 px-2 btn w-45" type="submit" formaction="{{ route('viewprofileeng') }}"><i class="fa fa-eye" aria-hidden="true"></i>Profile</button>
-                            <button class="btn-info p-0 px-2 btn w-45" type="submit" formaction="{{ route('booking') }}"><i class="fa fa-check" aria-hidden="true"></i>Booked</button>
+                            <button class="btn-info p-0 px-2 btn w-45" type="submit" onclick="shoemodeldate(${v.id})" ><i class="fa fa-check" aria-hidden="true"></i>Booked</button>
                         </form>
                     </div>
                 </div>
@@ -508,8 +541,9 @@
                     @csrf
                     <input type="text" name="userid" value="${v.id}" hidden>
                     <input type="text" name="bookingid" value="${v.id}" hidden>
+                   
                     <button class="btn-info p-0 px-2 btn w-45" type="submit" formaction="{{ route('viewprofileeng') }}"><i class="fa fa-eye" aria-hidden="true"></i>Profile</button>
-                    <button class="btn-info p-0 px-2 btn w-45" type="submit" formaction="{{ route('booking') }}"><i class="fa fa-check" aria-hidden="true"></i>Booked</button>
+                    <button class="btn-info p-0 px-2 btn w-45" type="submit" onclick="shoemodeldate(${v.id})" ><i class="fa fa-check" aria-hidden="true"></i>Booked</button>
                 </form>
                 {{-- <a class="apt-btn" href="{{ route('booking',['id'=>$engr->id]) }}"><i class="fa fa-check" aria-hidden="true"></i>Booked</a> --}}
             </div>
@@ -932,7 +966,11 @@
                 });
             }
         }
-       
+       function shoemodeldate(id){
+        event.preventDefault();
+        $('#orderdetail_modal').appendTo('body').modal('show');
+        $('#select_engrid').val(id);
+       }
      </script>
       <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry"

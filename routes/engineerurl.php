@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\engineerController;
 
@@ -26,7 +27,19 @@ Route::middleware(['isEngineer'])->prefix('engineer')->group(function () {
     Route::view('engr_profilesetting','engr_password.engrpasswordpage')->name('engr_profilesetting');
     Route::view('engrchat','engineerpage.engrchat.engrchatpage')->name('engrchat');
 });
-Route::view('engrdocs','conformdocs.conformdocs')->name('engrdocs');
+// Route::view('engrdocs','conformdocs.conformdocs')->name('engrdocs');
+Route::get('engrdocs',function(){
+    if(Auth::check() && Auth::user()->role == 'enge'){
+        if(Auth::user()->docsstatus ==  1){
+            return redirect()->back();
+        }else{
+            return view('conformdocs.conformdocs');
+        }
+    }else{
+        return redirect()->back();
+    }
+   
+})->name('engrdocs');
 
 Route::post('/engrfetchmessage',[engineerController::class,'engrfetchmessage'])->name('engrfetchmessage')->middleware('auth');
 Route::post('/engrdocsmentation',[engineerController::class,'engrdocsmentation'])->name('engrdocsmentation')->middleware('auth');

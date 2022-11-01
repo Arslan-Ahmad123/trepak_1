@@ -184,7 +184,7 @@ a {
 				<i class="fas fa-times"></i>
 			</a>
 		</div>
-		<ul class="main-nav" style="margin-top:0px">
+		<ul class="main-nav" >
 			@if(Auth::check())
 			@if(Auth::user()->role == 'user')
 			<li>
@@ -269,7 +269,7 @@ a {
 			<li class="has-submenu " id="clientnabfirst">
 				<a href="#">Clients <i class="fas fa-chevron-down"></i></a>
 				<ul class="submenu">
-					<li class=""><a href="{{ route('clientsearchengr') }}">Search Engineers</a></li>
+					{{-- <li class=""><a href="{{ route('clientsearchengr') }}">Search Engineers</a></li> --}}
 					{{-- <li><a href="{{ route('engineerprofile') }}">Engineer Profile</a></li> --}}
 					{{-- <li><a href="booking.html">Booking</a></li> --}}
 					{{-- <li><a href="checkout.html">Checkout</a></li> --}}
@@ -284,7 +284,7 @@ a {
 			<li class="has-submenu " id="clientnab">
 				<a href="#">Clients <i class="fas fa-chevron-down" onclick="showbtn('clientbtn')"></i></a>
 				<ul class="submenu" id="clientbtn">
-					<li class=""><a href="{{ route('clientsearchengr') }}">Search Engineers</a></li>
+					{{-- <li class=""><a href="{{ route('clientsearchengr') }}">Search Engineers</a></li> --}}
 					{{-- <li><a href="{{ route('engineerprofile') }}">Engineer Profile</a></li> --}}
 					{{-- <li><a href="booking.html">Booking</a></li> --}}
 					{{-- <li><a href="checkout.html">Checkout</a></li> --}}

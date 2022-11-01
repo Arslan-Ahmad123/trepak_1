@@ -80,9 +80,7 @@
                                     <div>
                                         <form action="{{ route('login') }}" method="POST">
                                             @csrf
-                                            @php
-                                                print_r(session()->all());
-                                            @endphp
+                                            
                                             {{-- @php
                                            
                                             $previousroute =  url()->previous();

@@ -58,7 +58,7 @@ class index extends Controller
                 return view('newpanel.newpanelview');
             }
             else{
-                if(url()->previous() == 'http://127.0.0.8000'){
+                if(url()->previous() == 'http://127.0.0.8000' || url()->previous() == 'https://trepak.pms.net.pk/'){
                     return redirect()->back();
                 }
                 else{
@@ -175,6 +175,7 @@ class index extends Controller
         return redirect()->back();
     }
     public function booking(Request $res){
+       
         $engr = User::find($res->bookingid);
         return view('booking.bookingpageview')->with('engr',$engr);
     }
@@ -187,6 +188,7 @@ class index extends Controller
         }
     }
      public function proceed(Request $res){
+        
         $times = Carbon::now();
         $engineerFind = User::find($res->engr_id);
         return view('proceedtopay.proceedpageview')->with(['engr'=>$engineerFind,'meetingdate'=>$res->engr_date,'meetingtime'=>$times]);
@@ -345,7 +347,9 @@ class index extends Controller
         }
     }
      public function conformemailcode(Request $res){ 
-       
+       if(Auth::user()->emailstatus == 1){
+        return redirect()->back();
+       }else{
         if($res->conformemail == Auth::user()->emailcode){
             User::where('id',Auth::user()->id)->update(['emailstatus'=>1]);
            return redirect(RouteServiceProvider::HOME);
@@ -353,6 +357,8 @@ class index extends Controller
         else{
             return redirect()->back();
         }
+       }
+       
     }
     public function searchspecificcategory(Request $res){
         $specific_engr = User::where('role','enge')->where('status',1)->where('emailstatus',1)->where('engrcategoryid',$res->id)->get();

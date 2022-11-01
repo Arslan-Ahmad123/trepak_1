@@ -45,7 +45,7 @@
                                         <div class="mt-4">
                                             <x-label for="workplace" :value="__('Job Workplace Type')"  style="color:black;font-weight: bold;"/>
                                             <select class="block mt-1 w-full border-gray-300 rounded-md" name="workplace"
-                                                id="workplace" >
+                                                id="workplace" required>
                                                     <option value="">Job Work Place</option>
                                                     <option value="onsite">On Site</option>
                                                     <option value="remote">Remote</option>
@@ -54,7 +54,7 @@
                                         <div class="mt-4">
                                             <x-label for="jobtype" :value="__('Job  Type')"  style="color:black;font-weight: bold;"/>
                                             <select class="block mt-1 w-full border-gray-300 rounded-md" name="jobtype"
-                                                id="jobtype" >
+                                                id="jobtype" required>
                                                     <option value="">Select Job Type</option>
                                                     <option value="full">Full Time</option>
                                                     <option value="part">Part Time</option>
