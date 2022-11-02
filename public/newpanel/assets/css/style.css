@@ -1835,7 +1835,7 @@ button.bg-danger:hover {
     border-top: 1px solid #f0f0f0;
 }
 .topsection{
-    margin-top: 50px;
+    margin-top: 90px;
 }
 .main-nav > li .submenu > li.has-submenu > a::after {
     content: "\f054";
@@ -2839,7 +2839,7 @@ html.menu-opened body {
 
 .breadcrumb-bar {
     background-color: #15558d;
-    padding: 15px 0;
+    padding: 8px 0;
 }
 .breadcrumb-bar .breadcrumb-title {
     color: #fff;
@@ -6795,7 +6795,7 @@ display:none;
         max-width: 50%;
     }
     .breadcrumb-bar .breadcrumb-title {
-        font-size: 18px;
+        font-size: 16px;
     }
     .dash-widget h6 {
         font-size: 15px;

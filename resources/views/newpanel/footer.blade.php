@@ -1,4 +1,3 @@
-
 <!-- Footer -->
 
 {{-- <section id="motto">
@@ -21,42 +20,42 @@ target="_blank"><img src="{{asset('newpanel/assets/img/app-store-button.png') }}
 <div id="motto-image"></div>
 </section> --}}
 <footer id="footer" class="footer">
-<div class="container">
-<div id="footer-wrapper">
-<nav id="footer-navigation">
-	<a href="#" class="footer-logo d-none d-lg-block">
-							 <img src="{{asset('newpanel/assets/img/footer-logo.png') }}" alt="Engineering Portal">
-						</a>
-	<a href="#">Engineer Dashboard</a>
-	<a href="#">Client Dashboard</a>
-	<a href="#">Admin Dashboard</a>
-   
-					</nav>
-<div class="social-media-links">
-	<a href="#" target="_blank">
-		<img src="{{asset('newpanel/assets/img/facebook.svg') }}" alt="facebook">
-	</a>
-	<a href="#" target="_blank">
-		<img src="{{asset('newpanel/assets/img/twitter.svg') }}" alt="twitter">
-	</a>
-	<a href="#" target="_blank">
-		<img src="{{asset('newpanel/assets/img/linkedin.svg') }}" alt="linkedin">
-	</a>
-</div>
-</div>
-<div id="bottom">
-<nav id="bottom-navigation">
-	<a href="#">Terms of Service</a>
-	<a href="#">Privacy Policy</a>
-</nav>
-<div id="copyright">
-	<a href="#" class="footer-logo d-lg-none">
-		<img src="{{asset('newpanel/assets/img/footer-logo.png') }}" alt="Engineering Portal">
-	</a>
-	<p>© 2022 All Rights Reserved. Engineering Portal</p>
-</div>
-</div>
-</div>
+    <div class="container">
+        <div id="footer-wrapper">
+            <nav id="footer-navigation">
+                <a href="#" class="footer-logo d-none d-lg-block">
+                    <img src="{{ asset('newpanel/assets/img/footer-logo.png') }}" alt="Engineering Portal">
+                </a>
+                <a href="#">Engineer Dashboard</a>
+                <a href="#">Client Dashboard</a>
+                <a href="#">Admin Dashboard</a>
+
+            </nav>
+            <div class="social-media-links">
+                <a href="#" target="_blank">
+                    <img src="{{ asset('newpanel/assets/img/facebook.svg') }}" alt="facebook">
+                </a>
+                <a href="#" target="_blank">
+                    <img src="{{ asset('newpanel/assets/img/twitter.svg') }}" alt="twitter">
+                </a>
+                <a href="#" target="_blank">
+                    <img src="{{ asset('newpanel/assets/img/linkedin.svg') }}" alt="linkedin">
+                </a>
+            </div>
+        </div>
+        <div id="bottom">
+            <nav id="bottom-navigation">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+            </nav>
+            <div id="copyright">
+                <a href="#" class="footer-logo d-lg-none">
+                    <img src="{{ asset('newpanel/assets/img/footer-logo.png') }}" alt="Engineering Portal">
+                </a>
+                <p>© 2022 All Rights Reserved. Engineering Portal</p>
+            </div>
+        </div>
+    </div>
 </footer>
 
 {{-- <footer class="footer">
@@ -170,7 +169,7 @@ target="_blank"><img src="{{asset('newpanel/assets/img/app-store-button.png') }}
 <script>
     // previous page should be reloaded when user navigate through browser navigation
     // for mozilla
-    window.onunload = function(){};
+    window.onunload = function() {};
     // for chrome
     if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
         location.reload();
@@ -178,26 +177,25 @@ target="_blank"><img src="{{asset('newpanel/assets/img/app-store-button.png') }}
 </script>
 @stack('customjscode')
 <script>
-
-function showbtn(id){
-if(id == 'loginbtn'){
-	$('#engrbtn').hide('slow');
-	$('#clientbtn').hide('slow');
-	$('#loginbtn').toggle('slow');
-}else if(id == 'engrbtn'){
-	$('#engrbtn').toggle('slow');
-	$('#clientbtn').hide('slow');
-	$('#loginbtn').hide('slow');
-}else{
-	$('#engrbtn').hide('slow');
-	$('#clientbtn').toggle('slow');
-	$('#loginbtn').hide('slow');
-}
-}
-
+    function showbtn(id) {
+        if (id == 'loginbtn') {
+            $('#engrbtn').hide('slow');
+            $('#clientbtn').hide('slow');
+            $('#loginbtn').toggle('slow');
+        } else if (id == 'engrbtn') {
+            $('#engrbtn').toggle('slow');
+            $('#clientbtn').hide('slow');
+            $('#loginbtn').hide('slow');
+        } else {
+            $('#engrbtn').hide('slow');
+            $('#clientbtn').toggle('slow');
+            $('#loginbtn').hide('slow');
+        }
+    }
 </script>
 
 </body>
 
 <!-- doccure/  30 Nov 2019 04:11:53 GMT -->
+
 </html>
