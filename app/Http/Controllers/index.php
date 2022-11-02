@@ -47,27 +47,46 @@ class index extends Controller
        
     }
     public function showindex_page(){
+      
+        $redirectPageName = $this->clientservices->showIndexpage();
+       if($redirectPageName == 'ADMIN'){
+        return redirect(RouteServiceProvider::ADMIN);
+       } 
        
-       
-        if(Auth::check()){
-            if(Auth::user()->role ==  'admin'){
-                return redirect()->back();
-            }elseif(Auth::user()->role ==  'enge'){
-                return redirect()->back();
-            }elseif(Auth::user()->role ==  'user'){
-                return view('newpanel.newpanelview');
-            }
-            else{
-                if(url()->previous() == 'http://127.0.0.8000' || url()->previous() == 'https://trepak.pms.net.pk/'){
-                    return redirect()->back();
-                }
-                else{
-                    return redirect()->route('role_view');
-                }  
-            }
-        }else{
-            return view('newpanel.newpanelview');
-        }
+       if($redirectPageName == 'ENGEEMAIL'){
+        return redirect(RouteServiceProvider::EMAILVERIFY);
+       }  
+         
+       if($redirectPageName == 'SUBMITDOCS'){
+        return redirect(RouteServiceProvider::DOCSSTATUS);
+       }        
+       if($redirectPageName == 'ENGE'){
+        return redirect(RouteServiceProvider::ENGE);
+       }
+       if($redirectPageName == 'ENGEFAILED'){
+        return redirect(RouteServiceProvider::ADMINSTATUS);
+       } 
+       if(Auth::check() && Auth::user()->role ==  null){
+        return redirect()->route('role_view');
+        }     
+        return view('newpanel.newpanelview');
+        // if(Auth::check()){
+           
+        //     if(Auth::user()->role ==  'admin'){
+        //         return redirect()->back();
+        //     }elseif(Auth::user()->role ==  'enge'){
+        //         $previousurl = url()->previous();
+        //         dd($previousurl);
+        //         // return redirect()->back();
+        //     }elseif(Auth::user()->role ==  'user'){
+        //         return view('newpanel.newpanelview');
+        //     }
+        //     else{ 
+        //             return redirect()->route('role_view');   
+        //     }
+        // }else{
+        //     return view('newpanel.newpanelview');
+        // }
     }
     
     public function searchbarengineer(Request $res){

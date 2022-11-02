@@ -16,8 +16,9 @@ use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
 
 
-Route::get('/', [index::class, 'showindex'])->name('home');
+Route::get('/', [index::class, 'showindex'])->name('home')->middleware('Preventpage');
 Route::get('/indexpage', [index::class, 'showindex_page'])->name('indexpage');
+// Route::get('/index_page', [index::class, 'showindex_page'])->name('index_page');
 // Route::view('/indexpage', [index::class,'showindex_page'])->name('indexpage');
 // ===================email ===========================
 Route::get('/conformemail', function () {

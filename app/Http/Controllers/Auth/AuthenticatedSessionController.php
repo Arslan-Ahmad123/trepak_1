@@ -20,7 +20,12 @@ class AuthenticatedSessionController extends Controller
      */
     public function create()
     {
+       
+        if(Auth::check()){
+            return redirect()->back();
+        }else{
             return view('loginview.loginpageview');   
+        }
     }
 
     /**
