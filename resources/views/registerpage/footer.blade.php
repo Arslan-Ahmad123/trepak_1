@@ -1,5 +1,76 @@
  
- 
+ <style>
+    .containerlogin {
+        width: 100%;
+    }
+
+    @media (min-width: 576px) {
+
+        .containerlogin {
+            max-width: 540px;
+        }
+    }
+
+    @media (min-width: 768px) {
+
+        .containerlogin {
+            max-width: 720px;
+        }
+    }
+
+    @media (min-width: 992px) {
+
+        .containerlogin {
+            max-width: 960px;
+        }
+    }
+
+    @media (min-width: 1200px) {
+
+        .containerlogin {
+            max-width: 1140px;
+        }
+    }
+</style>
+<footer id="footer" class="footer">
+    <div class="containerlogin mx-auto">
+        <div id="footer-wrapper">
+            <nav id="footer-navigation">
+                <a href="#" class="footer-logo d-none d-lg-block">
+                    <img src="{{ asset('newpanel/assets/img/footer-logo.png') }}" alt="Engineering Portal">
+                </a>
+                <a href="#">Engineer Dashboard</a>
+                <a href="#">Client Dashboard</a>
+                <a href="#">Admin Dashboard</a>
+
+            </nav>
+            <div class="social-media-links">
+                <a href="#" target="_blank">
+                    <img src="{{ asset('newpanel/assets/img/facebook.svg') }}" alt="facebook">
+                </a>
+                <a href="#" target="_blank">
+                    <img src="{{ asset('newpanel/assets/img/twitter.svg') }}" alt="twitter">
+                </a>
+                <a href="#" target="_blank">
+                    <img src="{{ asset('newpanel/assets/img/linkedin.svg') }}" alt="linkedin">
+                </a>
+            </div>
+        </div>
+        <div id="bottom">
+            <nav id="bottom-navigation">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+            </nav>
+            <div id="copyright">
+                <a href="#" class="footer-logo d-lg-none">
+                    <img src="{{ asset('newpanel/assets/img/footer-logo.png') }}" alt="Engineering Portal">
+                </a>
+                <p>© 2022 All Rights Reserved. Engineering Portal</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
 {{-- <footer class="footer">
 				
 		<!-- Footer Top -->
@@ -86,44 +157,7 @@
 							
 				
 </footer> --}}
-<footer id="footer" class="footer">
-	<div class="container">
-		<div id="footer-wrapper">
-			<nav id="footer-navigation">
-				<a href="#" class="footer-logo d-none d-lg-block">
-										 <img src="{{asset('newpanel/assets/img/footer-logo.png') }}" alt="Engineering Portal">
-									</a>
-				<a href="#">Engineer Dashboard</a>
-				<a href="#">Client Dashboard</a>
-				<a href="#">Admin Dashboard</a>
-			   
-								</nav>
-			<div class="social-media-links">
-				<a href="#" target="_blank">
-					<img src="{{asset('newpanel/assets/img/facebook.svg') }}" alt="facebook">
-				</a>
-				<a href="#" target="_blank">
-					<img src="{{asset('newpanel/assets/img/twitter.svg') }}" alt="twitter">
-				</a>
-				<a href="#" target="_blank">
-					<img src="{{asset('newpanel/assets/img/linkedin.svg') }}" alt="linkedin">
-				</a>
-			</div>
-		</div>
-		<div id="bottom">
-			<nav id="bottom-navigation">
-				<a href="#">Terms of Service</a>
-				<a href="#">Privacy Policy</a>
-			</nav>
-			<div id="copyright">
-				<a href="#" class="footer-logo d-lg-none">
-					<img src="{{asset('newpanel/assets/img/footer-logo.png') }}" alt="Engineering Portal">
-				</a>
-				<p>© 2022 All Rights Reserved. Engineering Portal</p>
-			</div>
-		</div>
-	</div>
-</footer>
+
 
 			<!-- /Footer -->
 		   
