@@ -215,6 +215,7 @@
 																<tr>
 																	@php
 																		$engrinfo = getuser($orders->engrid);
+																		
 																		if($engrinfo->signupoption == 1){
 																			$engrimg = $engrinfo->pic;
 																		}else{

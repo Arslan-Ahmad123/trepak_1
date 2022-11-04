@@ -175,11 +175,13 @@
          position: relative;
          left: 30%;
      }
-     #select2-engrcategory-container{
-        display:none;
+
+     #select2-engrcategory-container {
+         display: none;
      }
-     .select2-container--default{
-        display: none;
+
+     .select2-container--default {
+         display: none;
      }
  </style>
 
@@ -234,35 +236,45 @@
                          <h4 class="card-title mb-0">Search Filter</h4>
                      </div>
                      <div class="card-body">
+                         <form action="{{ route('searchbarengineer') }}" method="post">
+                             @csrf
+                             <div class="slidecontainer">
+                                 Price Range
+                                 <input type="range" min="500" max="5000" value="500" step="500"
+                                     class="slider" id="myRange">
+                                 <p>Value: <span id="demo"></span></p>
+                             </div>
 
-                         <div class="filter-widget">
 
-                             <input type="text" class="form-control " placeholder="Select City">
-
-                         </div>
-                         <div class="slidecontainer">
-                             <h4>Price Range</h4>
-                             <input type="range" min="500" max="5000" value="500" step="500"
-                                 class="slider" id="myRange">
-                             <p>Value: <span id="demo"></span></p>
-                         </div>
-                         <div class="filter-widget">
-                             <h4>Select Specialist</h4>
-                             <select id="engrcategory" class="form-control">
-                                 @php
-                                     $res = getallcategory();
-                                 @endphp
-                                 @foreach ($res as $res)
-                                     <option value="{{ $res->id }}"
-                                         {{ $res->id == $category_id ? 'selected' : '' }}>
-                                         {{ $res->engrcategory }}</option>
-                                 @endforeach
-                             </select>
-                         </div>
-                         <div class="btn-search">
-                             <button type="button" class="btn btn-block">Search</button>
-                         </div>
+                             <div class="filter-widget">
+                                 <h4>Select Specialist</h4>
+                                 <select id="engrcategory" class="form-control" name="date">
+                                     @php
+                                         $res = getallcategory();
+                                     @endphp
+                                     @foreach ($res as $res)
+                                         <option value="{{ $res->engrcategory }}"
+                                             {{ $res->id == $category_id ? 'selected' : '' }}>
+                                             {{ $res->engrcategory }}</option>
+                                     @endforeach
+                                 </select>
+                             </div>
+                             <div class="filter-widget">
+                                 <div class="form-group">
+                                     Select City
+                                     <input type="text" onblur="getcordinataddress()" class="form-control"
+                                         name="cityname" id="selectcity" placeholder="Select City"
+                                         style="position:relative;border:1px solid rgb(180, 177, 177)">
+                                     <input type="hidden" name="addresslat" id="addresslat">
+                                     <input type="hidden" name="addresslon" id="addresslon">
+                                 </div>
+                             </div>
+                             <div class="btn-search">
+                                 <button type="submit" id="search_btn" disabled class="btn btn-block">Search</button>
+                             </div>
+                         </form>
                      </div>
+
                  </div>
                  <!-- /Search Filter -->
 
@@ -275,33 +287,43 @@
                      </div>
                      <div class="card-body">
 
-                         <div class="filter-widget">
+                         <form action="{{ route('searchbarengineer') }}" method="post">
+                             @csrf
+                             <div class="slidecontainer">
+                                 Price Range
+                                 <input type="range" min="500" max="5000" value="500" step="500"
+                                     class="slider" id="myRange">
+                                 <p>Value: <span id="demo"></span></p>
+                             </div>
 
-                             <input type="text" class="form-control " placeholder="Select City">
+                             <div class="filter-widget">
+                                 <h4>Select Specialist</h4>
+                                 <select id="engrcategory" class="form-control" name="date">
+                                     @php
+                                         $res = getallcategory();
+                                     @endphp
+                                     @foreach ($res as $res)
+                                         <option value="{{ $res->engrcategory }}"
+                                             {{ $res->id == $category_id ? 'selected' : '' }}>
+                                             {{ $res->engrcategory }}</option>
+                                     @endforeach
+                                 </select>
+                             </div>
+                             <div class="filter-widget">
+                                 <div class="form-group">
+                                     Select City
+                                     <input type="text" onblur="getcordinataddresss()" class="form-control"
+                                         name="cityname" id="selectcitys" placeholder="Select City"
+                                         style="position:relative;border:1px solid rgb(180, 177, 177)">
+                                     <input type="hidden" name="addresslat" id="addresslats">
+                                     <input type="hidden" name="addresslon" id="addresslons">
+                                 </div>
+                             </div>
 
-                         </div>
-                         <div class="slidecontainer">
-                             <h4>Price Range</h4>
-                             <input type="range" min="500" max="5000" value="500" step="500"
-                                 class="slider" id="myRange">
-                             <p>Value: <span id="demo"></span></p>
-                         </div>
-                         <div class="filter-widget">
-                             <h4>Select Specialist</h4>
-                             <select id="engrcategory" class="form-control">
-                                 @php
-                                     $res = getallcategory();
-                                 @endphp
-                                 @foreach ($res as $res)
-                                     <option value="{{ $res->id }}"
-                                         {{ $res->id == $category_id ? 'selected' : '' }}>
-                                         {{ $res->engrcategory }}</option>
-                                 @endforeach
-                             </select>
-                         </div>
-                         <div class="btn-search">
-                             <button type="button" class="btn btn-block">Search</button>
-                         </div>
+                             <div class="btn-search">
+                                 <button type="submit" id="search_btns" disabled class="btn btn-block">Search</button>
+                             </div>
+                         </form>
                      </div>
                  </div>
                  <!-- /Search Filter -->
@@ -351,7 +373,8 @@
          <div class="head">
              <div class="user">
                  <div class="avatar">
-                     <img src="{{ Auth::check() ? asset('engrphoto/' . Auth::user()->pic) : '' }}" id="picofreciver" />
+                     <img src="{{ Auth::check() ? asset('engrphoto/' . Auth::user()->pic) : '' }}"
+                         id="picofreciver" />
                  </div>
                  <div class="name" id="nameofreciver">{{ Auth::check() ? Auth::user()->fname : 'Test' }}</div>
              </div>
@@ -403,35 +426,36 @@
      }
  @endphp
  {{-- ==========================chat box ========================	 --}}
-  {{-- ===========modal for select order date================== --}}
-  <div class="modal" tabindex="-1" role="dialog" id="orderdetail_modal">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Select Date</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <form action="{{ route('proceed') }}" method="post">
-            @csrf
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="selectdateorder">Select Date</label>
-                    <input class="form-control" type="date" name="engr_date" id="selectdateorder" min="<?php echo date('Y-m-d');?>"  value="<?php echo date('Y-m-d');?>">
-                    <input class="form-control" type="text" name="engr_id" id="select_engrid" hidden>
-                   
-                </div>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary" >Place Order</button>
-              {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
-            </div>
-        </form>
-       
-      </div>
-    </div>
-  </div>
+ {{-- ===========modal for select order date================== --}}
+ <div class="modal" tabindex="-1" role="dialog" id="orderdetail_modal">
+     <div class="modal-dialog" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title">Select Date</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+             </div>
+             <form action="{{ route('proceed') }}" method="post">
+                 @csrf
+                 <div class="modal-body">
+                     <div class="form-group">
+                         <label for="selectdateorder">Select Date</label>
+                         <input class="form-control" type="date" name="engr_date" id="selectdateorder"
+                             min="<?php echo date('Y-m-d'); ?>" value="<?php echo date('Y-m-d'); ?>">
+                         <input class="form-control" type="text" name="engr_id" id="select_engrid" hidden>
+
+                     </div>
+                 </div>
+                 <div class="modal-footer">
+                     <button type="submit" class="btn btn-primary">Place Order</button>
+                     {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
+                 </div>
+             </form>
+
+         </div>
+     </div>
+ </div>
  {{-- ===========modal for select order date================== --}}
  <!-- /Page Content -->
 
@@ -601,7 +625,7 @@
              $("#filter_later").slideToggle('slow');
          });
          $(document).on("click", "#mobile_btn", function() {
-            
+
              $(".main-wrapper").toggleClass("slide-nav");
              $(".sidebar-overlay").toggleClass("opened");
              $("html").addClass("menu-opened");
@@ -741,7 +765,18 @@
                  }
              });
 
+             var input = document.getElementById('selectcity');
+             var inputs = document.getElementById('selectcitys');
+             const options = {
+                 types: ['administrative_area_level_2'],
 
+                 fields: ["address_components", "geometry", "icon", "name"],
+                 strictBounds: false,
+
+
+             };
+             new google.maps.places.Autocomplete(input, options);
+             new google.maps.places.Autocomplete(inputs, options);
              var map;
 
              var latitude_cur = $('#lat_cur').val() != "" ? parseFloat($('#lat_cur').val()) : 32.1877;
@@ -753,7 +788,7 @@
                      lat: latitude_cur,
                      lng: longitude_cur,
                  },
-
+                 mapTypeControl: false,
                  zoom: 8,
              });
              const shape = {
@@ -804,8 +839,8 @@
                      //  var latLngB = {'lat':m.lan,'lng':m.lng};
                      var latitude1 = latitude_cur;
                      var longitude1 = longitude_cur;
-                     var latitude2 = m.latitude / 1000000;
-                     var longitude2 = m.longitude / 1000000;
+                     var latitude2 = m.latitude;
+                     var longitude2 = m.longitude;
                      new google.maps.Marker({
                          position: new google.maps.LatLng(latitude1, longitude1),
                          shape: shape,
@@ -873,12 +908,12 @@
                              map: map,
                              icon: image
                          });
-                        
-                       
+
+
                          (function(marker, m) {
-                           console.log('opjhwhoqweqw bqwkjhdsdnsdjoia sdsdiasdijasidj j dsajdsjd');
+                             console.log('opjhwhoqweqw bqwkjhdsdnsdjoia sdsdiasdijasidj j dsajdsjd');
                              google.maps.event.addListener(marker, "mouseover", function(e) {
-                               
+
                                  //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
                                  infoWindow.setContent(
                                      `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`
@@ -886,17 +921,17 @@
                                  infoWindow.open(map, marker);
                              });
                          })(marker_s, m);
-                      
+
                      }
                  });
              } else {
-                let infoWindow = new google.maps.InfoWindow();
+                 let infoWindow = new google.maps.InfoWindow();
                  $.each(allengr, function(i, m) {
                      //  var latLngA = {'lat':32.1877,'lng':74.1945};
                      //  var latLngB = {'lat':m.lan,'lng':m.lng};
 
-                     var latitude2 = m.latitude / 1000000;
-                     var longitude2 = m.longitude / 1000000;
+                     var latitude2 = m.latitude;
+                     var longitude2 = m.longitude;
 
                      // var idfetch =  m.id;
                      // var url = '{{ route('fetchcategorynamemap', ':id') }}';
@@ -959,7 +994,7 @@
                      //         shouldFocus: false,
                      //     });
                      // });
-                    
+
                      (function(marker, m) {
                          google.maps.event.addListener(marker_s, "mouseover", function(e) {
 
@@ -974,13 +1009,70 @@
                  });
              }
          }
-         function shoemodeldate(id){
-        event.preventDefault();
-        $('#orderdetail_modal').appendTo('body').modal('show');
-        $('#select_engrid').val(id);
-       }
+
+         function getcordinataddress() {
+             setTimeout(() => {
+                 var value_city = $('#selectcity').val();
+                 if (value_city != "") {
+                     var geocoder = new google.maps.Geocoder();
+                     geocoder.geocode({
+                         'address': value_city
+                     }, function(results, status) {
+                         if (status == google.maps.GeocoderStatus.OK) {
+                             var Lat = results[0].geometry.location.lat();
+                             var Lng = results[0].geometry.location.lng();
+                             $('#addresslat').val(Lat);
+                             $('#addresslon').val(Lng);
+                             document.getElementById('search_btn').disabled = false;
+
+                         } else {
+                             alert("Something got wrong " + status);
+                         }
+                     });
+                 } else {
+                     $('#addresslat').val('');
+                     $('#addresslon').val('');
+                     document.getElementById('search_btn').disabled = true;
+                 }
+             }, 500);
+
+         }
+
+         function getcordinataddresss() {
+             setTimeout(() => {
+                 var value_city = $('#selectcitys').val();
+                 if (value_city != "") {
+                     var geocoder = new google.maps.Geocoder();
+                     geocoder.geocode({
+                         'address': value_city
+                     }, function(results, status) {
+                         if (status == google.maps.GeocoderStatus.OK) {
+                             var Lat = results[0].geometry.location.lat();
+                             var Lng = results[0].geometry.location.lng();
+                             $('#addresslats').val(Lat);
+                             $('#addresslons').val(Lng);
+                             document.getElementById('search_btns').disabled = false;
+
+                         } else {
+                             alert("Something got wrong " + status);
+                         }
+                     });
+                 } else {
+                     $('#addresslats').val('');
+                     $('#addresslons').val('');
+                     document.getElementById('search_btns').disabled = true;
+                 }
+             }, 500);
+
+         }
+
+         function shoemodeldate(id) {
+             event.preventDefault();
+             $('#orderdetail_modal').appendTo('body').modal('show');
+             $('#select_engrid').val(id);
+         }
      </script>
      <script
-         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry"
+         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry,places"
          async></script>
  @endpush

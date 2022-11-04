@@ -54,15 +54,15 @@ class ClientService
         $engr = User::where('role', 'enge')->where('engrcategoryid', $id)->paginate(10);
         $allengr = User::where('role', 'enge')->where('engrcategoryid', $id)->get();
         $totalengr = User::where('role', 'enge')->count();
-        $new_longitude =  Auth::user()->longitude / 1000000;
-        $new_latitude = Auth::user()->latitude / 1000000;
+        $new_longitude =  Auth::user()->longitude ;
+        $new_latitude = Auth::user()->latitude ;
         $engr_array = [];
         $user = User::where('role', 'enge')->where('engrcategoryid', $id)->get()->toArray();
         
         foreach ($user as $users) {
     
-            $old_longitude = $users['longitude'] / 1000000;
-            $old_latitude = $users['latitude'] / 1000000;
+            $old_longitude = $users['longitude'] ;
+            $old_latitude = $users['latitude'] ;
             $dLat = deg2rad($new_latitude - $old_latitude);
             $dLon = deg2rad($new_longitude - $old_longitude);
             $radius = 6371;
@@ -111,8 +111,8 @@ class ClientService
     
         foreach ($user as $users) {
     
-            $old_longitude = $users['longitude'] / 1000000;
-            $old_latitude = $users['latitude'] / 1000000;
+            $old_longitude = $users['longitude'] ;
+            $old_latitude = $users['latitude'] ;
             $dLat = deg2rad($new_latitude - $old_latitude);
             $dLon = deg2rad($new_longitude - $old_longitude);
             $radius = 6371;

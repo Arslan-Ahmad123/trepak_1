@@ -228,34 +228,46 @@
                          <h4 class="card-title mb-0">Search Filter</h4>
                      </div>
                      <div class="card-body">
-
-                         <div class="filter-widget">
-
-                             <input type="text" class="form-control " placeholder="Select City">
-
-                         </div>
+                        <form action="{{ route('searchbarengineer') }}" method="post">
+                            @csrf
+                         
                          <div class="slidecontainer">
-                             <h4>Price Range</h4>
+                             Price Range
                              <input type="range" min="500" max="5000" value="500" step="500"
                                  class="slider" id="myRange">
                              <p>Value: <span id="demo"></span></p>
                          </div>
+                         <style>
+                            .pac-container{
+                                margin-top:-95px;
+                            }
+                            </style>
+                       
                          <div class="filter-widget">
                              <h4>Select Specialist</h4>
-                             <select id="engrcategory" class="form-control">
+                             <select id="engrcategory" class="form-control" name="date">
                                  @php
                                      $res = getallcategory();
                                  @endphp
                                  @foreach ($res as $res)
-                                     <option value="{{ $res->id }}"
+                                     <option value="{{ $res->engrcategory }}"
                                          {{ $res->id == $category_id ? 'selected' : '' }}>
                                          {{ $res->engrcategory }}</option>
                                  @endforeach
                              </select>
                          </div>
+                         <div class="filter-widget">
+                            <div class="form-group" >
+                                Select City
+                                <input type="text" style="border:1px solid grey" onblur="getcordinataddress()" class="form-control" name="cityname" id="selectcity" placeholder="Select City" style="position:relative">
+                                <input type="hidden" name="addresslat" id="addresslat" value="">
+                                <input type="hidden" name="addresslon" id="addresslon" value="">
+                             </div>
+                        </div>
                          <div class="btn-search">
-                             <button type="button" class="btn btn-block">Search</button>
+                             <button type="submit" id="search_btn" disabled class="btn btn-block">Search</button>
                          </div>
+                        </form>
                      </div>
                  </div>
                  <!-- /Search Filter -->
@@ -268,42 +280,54 @@
                          <h4 class="card-title mb-0">Search Filter</h4>
                      </div>
                      <div class="card-body">
-
-                         <div class="filter-widget">
-
-                             <input type="text" class="form-control " placeholder="Select City">
-
-                         </div>
+                        <form action="{{ route('searchbarengineer') }}" method="post">
+                            @csrf
+                         
                          <div class="slidecontainer">
-                             <h4>Price Range</h4>
+                             Price Range
                              <input type="range" min="500" max="5000" value="500" step="500"
                                  class="slider" id="myRange">
                              <p>Value: <span id="demo"></span></p>
                          </div>
+                         <style>
+                            .pac-container{
+                                margin-top:-95px;
+                            }
+                            </style>
+                       
                          <div class="filter-widget">
                              <h4>Select Specialist</h4>
-                             <select id="engrcategory" class="form-control">
+                             <select id="engrcategory" class="form-control" name="date">
                                  @php
                                      $res = getallcategory();
                                  @endphp
                                  @foreach ($res as $res)
-                                     <option value="{{ $res->id }}"
+                                     <option value="{{ $res->engrcategory }}"
                                          {{ $res->id == $category_id ? 'selected' : '' }}>
                                          {{ $res->engrcategory }}</option>
                                  @endforeach
                              </select>
                          </div>
+                         <div class="filter-widget">
+                            <div class="form-group" >
+                                Select City
+                                <input type="text"   onblur="getcordinataddress()" class="form-control" name="cityname" id="selectcity" placeholder="Select City" style="position:relative;border: 1px solid #cdc5c5">
+                                <input type="hidden" name="addresslat" id="addresslat" value="">
+                                <input type="hidden" name="addresslon" id="addresslon" value="">
+                             </div>
+                        </div>
                          <div class="btn-search">
-                             <button type="button" class="btn btn-block">Search</button>
+                             <button type="submit" id="search_btn" disabled class="btn btn-block">Search</button>
                          </div>
+                        </form>
                      </div>
                  </div>
                  <!-- /Search Filter -->
 
              </div>
-         
+
              <div class="col-md-12 col-lg-8 col-xl-9" id="all_engr_show">
-                
+
                  {{-- @include('searchengineer.searchengrpage')
  {!! $engr->links() !!} --}}
              </div>
@@ -314,61 +338,62 @@
 
  </div>
  <section class=" section-category mt-2 pt-2">
-    <div class="container category_container">
-        <div class="row  ml-0 mr-0">
+     <div class="container category_container">
+         <div class="row  ml-0 mr-0">
 
-            <div class="col-12 mx-auto mx-md-0 p-0">
-                <!--<div id="floating-panel">-->
-                <!--     <input id="latlng" type="text" value="31.4504,73.1350" />-->
-                <!--     <input id="submit" type="button" value="Reverse Geocode" />-->
-                <!--     </div>-->
+             <div class="col-12 mx-auto mx-md-0 p-0">
+                 <!--<div id="floating-panel">-->
+                 <!--     <input id="latlng" type="text" value="31.4504,73.1350" />-->
+                 <!--     <input id="submit" type="button" value="Reverse Geocode" />-->
+                 <!--     </div>-->
 
-                <div id="result"></div>
-             
-                    <div id="mapid" style="width: 100%; height: 400px;" class="mb-3"></div>
-       
-                {{-- <div id=""></div> --}}
-                <input type="text" id="lat_cur" hidden>
-                <input type="text" id="lon_cur" hidden>
-                
-            </div>
+                 <div id="result"></div>
+
+                 <div id="mapid" style="width: 100%; height: 400px;" class="mb-3"></div>
+
+                 {{-- <div id=""></div> --}}
+                 <input type="text" id="lat_cur" hidden>
+                 <input type="text" id="lon_cur" hidden>
+
+             </div>
 
 
 
-        </div>
-    </div>
-</section>
+         </div>
+     </div>
+ </section>
  <!-- /Page Content -->
 
  {{-- ===========modal for select order date================== --}}
  <div class="modal" tabindex="-1" role="dialog" id="orderdetail_modal">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Select Date</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <form action="{{ route('proceed') }}" method="post">
-            @csrf
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="selectdateorder">Select Date</label>
-                    <input class="form-control" type="date" name="engr_date" id="selectdateorder" min="<?php echo date('Y-m-d');?>"  value="<?php echo date('Y-m-d');?>">
-                    <input class="form-control" type="text" name="engr_id" id="select_engrid" hidden>
-                   
-                </div>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary" >Place Order</button>
-              {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
-            </div>
-        </form>
-       
-      </div>
-    </div>
-  </div>
+     <div class="modal-dialog" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title">Select Date</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+             </div>
+             <form action="{{ route('proceed') }}" method="post">
+                 @csrf
+                 <div class="modal-body">
+                     <div class="form-group">
+                         <label for="selectdateorder">Select Date</label>
+                         <input class="form-control" type="date" name="engr_date" id="selectdateorder"
+                             min="<?php echo date('Y-m-d'); ?>" value="<?php echo date('Y-m-d'); ?>">
+                         <input class="form-control" type="text" name="engr_id" id="select_engrid" hidden>
+
+                     </div>
+                 </div>
+                 <div class="modal-footer">
+                     <button type="submit" class="btn btn-primary">Place Order</button>
+                     {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
+                 </div>
+             </form>
+
+         </div>
+     </div>
+ </div>
  {{-- ===========modal for select order date================== --}}
  {{-- ==========================chat box ========================	 --}}
  <div class="container customchatbox" style="display:none">
@@ -376,7 +401,8 @@
          <div class="head">
              <div class="user">
                  <div class="avatar">
-                     <img src="{{ Auth::check() ? asset('engrphoto/' . Auth::user()->pic) : '' }}" id="picofreciver" />
+                     <img src="{{ Auth::check() ? asset('engrphoto/' . Auth::user()->pic) : '' }}"
+                         id="picofreciver" />
                  </div>
                  <div class="name" id="nameofreciver">{{ Auth::check() ? Auth::user()->fname : 'Test' }}</div>
              </div>
@@ -421,40 +447,42 @@
          </div>
      </div>
  </div>
-@php
-
-    if(session()->has('search_id')){
-        session()->forget('search_id');
-        session()->forget('routename');
-    }
-@endphp
+ @php
+     
+     if (session()->has('search_id')) {
+         session()->forget('search_id');
+         session()->forget('routename');
+     }
+ @endphp
  {{-- ==========================chat box ========================	 --}}
  <!-- /Page Content -->
 
  <!-- Footer -->
 
  @push('childscript')
- 
      <script src="{{ asset('js/app.js') }}"></script>
+     {{-- <script
+         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=places,geometry"
+         async></script> --}}
      <script>
-                //  ============function for show map and clients=================
-               
-        //  ============function for show map and clients=================
+         //  ============function for show map and clients=================
+
+         //  ============function for show map and clients=================
          $(document).ready(function() {
-             
-             fetch('{{ route("returnsession") }}').then((res) => {
+
+             fetch('{{ route('returnsession') }}').then((res) => {
                  return res.json()
              }).then((res) => {
-                console.log('output res: '+res);
+                 console.log('output res: ' + res);
                  var output = "";
-                   $('#all_engr_show').html('');
+                 $('#all_engr_show').html('');
                  $.each(res, function(i, v) {
-                  
+
                      if (v.signupoption == 1) {
                          var image = v.pic;
                      } else {
-                         var image =`{{ asset('engrphoto/${v.pic}') }}` ;
-                         
+                         var image = `{{ asset('engrphoto/${v.pic}') }}`;
+
                      }
                      $('#all_engr_show').append(`<div class="card">
     
@@ -681,298 +709,373 @@
              $('.customchatbox').hide('slow');
          }
 
-     function initMap() {
-            try{
-                make_cord(make_map);
-            }catch(e){
-                console.log(e);
-            }
-        }
+         function initMap() {
+          
+              
+             try {
+                 make_cord(make_map);
+             } catch (e) {
+                 console.log(e);
+             }
+         }
+
          function make_cord(callback) {
-            const success = (position) => {
-                $('#lat_cur').val(position.coords.latitude);
-                $('#lon_cur').val(position.coords.longitude);
-                callback();
-                console.log('1st');
-            }
-            const error = () => {
-                console.log("error");
-                callback();
-            }
+             const success = (position) => {
+                //  $('#lat_cur').val(position.coords.latitude);
+                //  $('#lon_cur').val(position.coords.longitude);
+                 $('#lat_cur').val('{{ Auth::user()->latitude }}');
+                 $('#lon_cur').val('{{ Auth::user()->longitude }}');
+                 callback();
+                 console.log('1st');
+             }
+             const error = () => {
+                 console.log("error");
+                 callback();
+             }
 
-            navigator.geolocation.getCurrentPosition(success, error);
-            navigator.permissions.query({
-                name: 'geolocation'
-            }).then(function(result) {
-                console.log(result);
-                if (result.state == 'denied' || result.state == 'gratned') {
-                    alert(result.state);
-                }
-            });
-            // setTimeout(()=>{
+             navigator.geolocation.getCurrentPosition(success, error);
+             navigator.permissions.query({
+                 name: 'geolocation'
+             }).then(function(result) {
+                 console.log(result);
+                 if (result.state == 'denied' || result.state == 'gratned') {
+                     alert(result.state);
+                 }
+             });
+             // setTimeout(()=>{
 
-            // },1000)
+             // },1000)
 
-        }
+         }
 
-        function make_map() {
-            var allengr = [];
-            $.ajax({
-                url: '{{ route("returnsession") }}',
-                type: 'get',
-                async: false,
-                success: function(data) {
-                   
-                    console.log('fetch all user :' + data.length)
+         function make_map() {
+             var allengr = [];
+             $.ajax({
+                 url: '{{ route('returnsession') }}',
+                 type: 'get',
+                 async: false,
+                 success: function(data) {
 
-                    $.each(data, function(index, value) {
-                        allengr[index] = value;
-                    });
+                     console.log('fetch all user :' + data.length)
 
-                }
-            });
+                     $.each(data, function(index, value) {
+                         allengr[index] = value;
+                     });
+
+                 }
+             });
+
+             var input = document.getElementById('selectcity');
+             var inputs = document.getElementById('selectcitys');
+                const options = {
+                    types: ['administrative_area_level_2'],
+                    
+                    fields: ["address_components", "geometry", "icon", "name"],
+                    strictBounds: false,
 
 
-            var map;
-           
-            var latitude_cur = $('#lat_cur').val() != "" ? parseFloat($('#lat_cur').val()) : 32.1877;
-            var longitude_cur = $('#lon_cur').val() != "" ? parseFloat($('#lon_cur').val()) : 74.1945;
-
-          
-            map = new google.maps.Map(document.getElementById("mapid"), {
-                center: {
-                    lat: latitude_cur,
-                    lng: longitude_cur,
-                },
+                };
+                new google.maps.places.Autocomplete(input, options);
+                new google.maps.places.Autocomplete(inputs, options);
                
-                zoom: 8,
-            });
-          
-           
-            console.log('before load map '+ latitude_cur +'  ' +longitude_cur);
-            const shape = {
-                coords: [1, 1, 1, 20, 18, 20, 18, 1],
-                type: "poly",
-            };
-            var checkuserlogin = {{ Auth::user() ? '1' : '0' }};
-            console.warn(checkuserlogin);
-            if (checkuserlogin == 1 || $('#lat_cur').val() != "") {
-                new google.maps.Marker({
-                    position: new google.maps.LatLng(latitude_cur, longitude_cur),
-                    shape: shape,
-                    title: 'Current location',
-                    label: {
-                        text: 'U',
-                        color: "black",
-                        fontSize: "15px",
-                        fontWeight: "bold"
-                    },
-                    map: map,
+             var map;
 
-                });
+            //  var latitude_cur = $('#lat_cur').val() != "" ? parseFloat($('#lat_cur').val()) : 32.1877;
+            //  var longitude_cur = $('#lon_cur').val() != "" ? parseFloat($('#lon_cur').val()) : 74.1945;
+
+             var latitude_cur = '{{ Auth::user()->latitude }}';
+             var longitude_cur = '{{ Auth::user()->longitude }}';
+             console.log('database loc is lat:'+latitude_cur);
+             console.log('database loc is lon:'+longitude_cur);
+
+             map = new google.maps.Map(document.getElementById("mapid"), {
+                 center: {
+                     lat: parseFloat(latitude_cur),
+                     lng: parseFloat(longitude_cur),
+                 },
+                 mapTypeControl: false,
+                 zoom: 8,
+             });
 
 
-                var style_s = [{
-                        featureType: "poi.business",
-                        stylers: [{
-                            visibility: "off"
-                        }],
-                    },
-                    {
-                        featureType: "transit",
-                        elementType: "labels.icon",
-                        stylers: [{
-                            visibility: "off"
-                        }],
-                    },
-                ];
-                //  new google.maps.StyledMapType(styles,{name: "Styled Map"});
-                map.setOptions({
-                    styles: style_s
-                });
-                //   map.setOptions({ styles: styles["hide"] });
+             console.log('before load map ' + latitude_cur + '  ' + longitude_cur);
+             const shape = {
+                 coords: [1, 1, 1, 20, 18, 20, 18, 1],
+                 type: "poly",
+             };
+             var checkuserlogin = {{ Auth::user() ? '1' : '0' }};
+             console.warn(checkuserlogin);
+             if (checkuserlogin == 1 || $('#lat_cur').val() != "") {
+                 new google.maps.Marker({
+                     position: new google.maps.LatLng(latitude_cur, longitude_cur),
+                     shape: shape,
+                     title: 'Current location',
+                     label: {
+                         text: 'U',
+                         color: "black",
+                         fontSize: "15px",
+                         fontWeight: "bold"
+                     },
+                     map: map,
 
-                var infoWindow = new google.maps.InfoWindow();
-                $.each(allengr, function(i, m) {
-                    //  var latLngA = {'lat':32.1877,'lng':74.1945};
-                    //  var latLngB = {'lat':m.lan,'lng':m.lng};
-                    var latitude1 = latitude_cur;
-                    var longitude1 = longitude_cur;
-                    var latitude2 = m.latitude / 1000000;
-                    var longitude2 = m.longitude / 1000000;
-                    new google.maps.Marker({
-                        position: new google.maps.LatLng(latitude1, longitude1),
-                        shape: shape,
-                        title: 'Current location',
-                        label: {
-                            text: 'U',
-                            color: "black",
-                            fontSize: "15px",
-                            fontWeight: "bold"
-                        },
-                        map: map,
+                 });
 
+
+                 var style_s = [{
+                         featureType: "poi.business",
+                         stylers: [{
+                             visibility: "off"
+                         }],
+                     },
+                     {
+                         featureType: "transit",
+                         elementType: "labels.icon",
+                         stylers: [{
+                             visibility: "off"
+                         }],
+                     },
+                 ];
+                 //  new google.maps.StyledMapType(styles,{name: "Styled Map"});
+                 map.setOptions({
+                     styles: style_s
+                 });
+                 //   map.setOptions({ styles: styles["hide"] });
+
+                 var infoWindow = new google.maps.InfoWindow();
+                 $.each(allengr, function(i, m) {
+                     //  var latLngA = {'lat':32.1877,'lng':74.1945};
+                     //  var latLngB = {'lat':m.lan,'lng':m.lng};
+                     var latitude1 = latitude_cur;
+                     var longitude1 = longitude_cur;
+                     var latitude2 = m.latitude;
+                     var longitude2 = m.longitude;
+                     new google.maps.Marker({
+                         position: new google.maps.LatLng(latitude1, longitude1),
+                         shape: shape,
+                         title: 'Current location',
+                         label: {
+                             text: 'U',
+                             color: "black",
+                             fontSize: "15px",
+                             fontWeight: "bold"
+                         },
+                         map: map,
+
+                     });
+                     var distance = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(
+                         latitude1, longitude1), new google.maps.LatLng(latitude2, longitude2));
+                     var distance_km = distance / 1000;
+
+                     if (distance_km < 100) {
+                         // var idfetch =  m.id;
+                         // var url = '{{ route('fetchcategorynamemap', ':id') }}';
+                         // url = url.replace(':id', idfetch );
+                         // let message;
+                         // $.ajax({
+                         //     url:url,
+                         //     type:'get',
+                         //     success:function(data){
+                         //         console.log("Arfan ahmad is a:"+data);
+                         //         message = 
+                         //     }
+                         // });
+                         // console.log(m.category.engrcategory);
+                         // const message =
+                         //     `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name:<br> ${m.fname}</h6><h6>Engineer Type:<br> ${m.categoryname}</h6>Date: <br>  <input class="form-control" type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`;
+
+
+                         const svgMarker = {
+                             path: "M10.453 14.016l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+                             fillColor: "red",
+                             fillOpacity: 1,
+                             strokeWeight: 0,
+                             rotation: 0,
+                             scale: 2,
+                             anchor: new google.maps.Point(15, 30),
+                         };
+                         var image = {
+                             url: "{{ asset('engrphoto/demo.png') }}",
+                             size: new google.maps.Size(71, 71),
+                             origin: new google.maps.Point(0, 0),
+                             anchor: new google.maps.Point(17, 34),
+                             scaledSize: new google.maps.Size(25, 25)
+                         };
+
+
+                         let marker_s = new google.maps.Marker({
+                             position: new google.maps.LatLng(latitude2, longitude2),
+                             shape: shape,
+                             title: m.fname,
+                             label: {
+                                 text: parseFloat(distance_km).toFixed(1) + 'KM',
+                                 color: "red",
+                                 fontSize: "15px",
+                                 fontWeight: "bold"
+                             },
+                             map: map,
+                             icon: image
+                         });
+                         (function(marker, m) {
+                             google.maps.event.addListener(marker_s, "mouseover", function(e) {
+
+                                 //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
+                                 infoWindow.setContent(
+                                     `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.categoryname}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`
+                                 );
+                                 infoWindow.open(map, marker);
+                             });
+                         })(marker_s, m);
+                         // google.maps.event.addListener(marker_s, 'click', function() {
+                         //     infowindow.open({
+                         //         anchor: marker_s,
+                         //         map,
+                         //         shouldFocus: false,
+                         //     });
+                         // });
+                     }
+                 });
+             } else {
+                 $.each(allengr, function(i, m) {
+                     //  var latLngA = {'lat':32.1877,'lng':74.1945};
+                     //  var latLngB = {'lat':m.lan,'lng':m.lng};
+
+                     var latitude2 = m.latitude;
+                     var longitude2 = m.longitude;
+
+                     // var idfetch =  m.id;
+                     // var url = '{{ route('fetchcategorynamemap', ':id') }}';
+                     // url = url.replace(':id', idfetch );
+                     // let message;
+                     // $.ajax({
+                     //     url:url,
+                     //     type:'get',
+                     //     success:function(data){
+                     //         console.log("Arfan ahmad is a:"+data);
+                     //         message = 
+                     //     }
+                     // });
+                     // console.log(m.category.engrcategory);
+                     // const message =
+                     //     `<form action='{{ route('proceed') }}' method='post'> 
+                //         @csrf
+                //          <div>
+                //             <h6>Engineer Name: ${m.fname}</h6>
+                //             <h6>Engineer Type: ${m.categoryname}</h6>
+                //             Date:   <input class="form-controll" type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br>
+                //             <input type="text"  name="engr_id" value='${m.id}' hidden>
+                //             <button class='btn w-100 btn-primary p-0'>Booked</button>
+                //             </div>
+                //             <form>`;
+
+
+                     const svgMarker = {
+                         path: "M10.453 14.016l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+                         fillColor: "red",
+                         fillOpacity: 1,
+                         strokeWeight: 0,
+                         rotation: 0,
+                         scale: 2,
+                         anchor: new google.maps.Point(15, 30),
+                     };
+                     var image = {
+                         url: "{{ asset('engrphoto/demo.png') }}",
+                         size: new google.maps.Size(71, 71),
+                         origin: new google.maps.Point(0, 0),
+                         anchor: new google.maps.Point(17, 34),
+                         scaledSize: new google.maps.Size(25, 25)
+                     };
+
+
+                     let marker_s = new google.maps.Marker({
+                         position: new google.maps.LatLng(latitude2, longitude2),
+                         shape: shape,
+                         title: m.fname,
+
+                         map: map,
+                         icon: image
+                     });
+                     // google.maps.event.addListener(marker_s, 'click', function() {
+                     //     infowindow.open({
+                     //         anchor: marker_s,
+                     //         map,
+                     //         shouldFocus: false,
+                     //     });
+                     // });
+                     (function(marker, m) {
+                         google.maps.event.addListener(marker_s, "mouseover", function(e) {
+
+                             //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
+                             infoWindow.setContent(
+                                 `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.categoryname}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`
+                             );
+                             infoWindow.open(map, marker);
+                         });
+                     })(marker_s, m);
+
+                 });
+             }
+         }
+         function getcordinataddress() {
+            setTimeout(() => {
+                var value_city = $('#selectcity').val();
+                if (value_city != "") {
+                    var geocoder = new google.maps.Geocoder();
+                    geocoder.geocode({
+                        'address': value_city
+                    }, function(results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            var Lat = results[0].geometry.location.lat();
+                            var Lng = results[0].geometry.location.lng();
+                            $('#addresslat').val(Lat);
+                            $('#addresslon').val(Lng);
+                            document.getElementById('search_btn').disabled = false;
+                            
+                        } else {
+                            alert("Something got wrong " + status);
+                        }
                     });
-                    var distance = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(
-                        latitude1, longitude1), new google.maps.LatLng(latitude2, longitude2));
-                    var distance_km = distance / 1000;
+                } else {
+                            $('#addresslat').val('');
+                            $('#addresslon').val('');
+                            document.getElementById('search_btn').disabled = true;
+                }
+            }, 500);
 
-                    if (distance_km < 100) {
-                        // var idfetch =  m.id;
-                        // var url = '{{ route('fetchcategorynamemap', ':id') }}';
-                        // url = url.replace(':id', idfetch );
-                        // let message;
-                        // $.ajax({
-                        //     url:url,
-                        //     type:'get',
-                        //     success:function(data){
-                        //         console.log("Arfan ahmad is a:"+data);
-                        //         message = 
-                        //     }
-                        // });
-                        // console.log(m.category.engrcategory);
-                        // const message =
-                        //     `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name:<br> ${m.fname}</h6><h6>Engineer Type:<br> ${m.categoryname}</h6>Date: <br>  <input class="form-control" type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`;
-
-                       
-                        const svgMarker = {
-                            path: "M10.453 14.016l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
-                            fillColor: "red",
-                            fillOpacity: 1,
-                            strokeWeight: 0,
-                            rotation: 0,
-                            scale: 2,
-                            anchor: new google.maps.Point(15, 30),
-                        };
-                        var image = {
-                            url: "{{ asset('engrphoto/demo.png') }}",
-                            size: new google.maps.Size(71, 71),
-                            origin: new google.maps.Point(0, 0),
-                            anchor: new google.maps.Point(17, 34),
-                            scaledSize: new google.maps.Size(25, 25)
-                        };
-
-
-                        let marker_s = new google.maps.Marker({
-                            position: new google.maps.LatLng(latitude2, longitude2),
-                            shape: shape,
-                            title: m.fname,
-                            label: {
-                                text: parseFloat(distance_km).toFixed(1) + 'KM',
-                                color: "red",
-                                fontSize: "15px",
-                                fontWeight: "bold"
-                            },
-                            map: map,
-                            icon: image
-                        });
-                        (function(marker, m) {
-                            google.maps.event.addListener(marker_s, "mouseover", function(e) {
-                               
-                                //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
-                                infoWindow.setContent(
-                                    `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.categoryname}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`
-                                );
-                                infoWindow.open(map, marker);
-                            });
-                        })(marker_s, m);
-                        // google.maps.event.addListener(marker_s, 'click', function() {
-                        //     infowindow.open({
-                        //         anchor: marker_s,
-                        //         map,
-                        //         shouldFocus: false,
-                        //     });
-                        // });
-                    }
-                });
-            } else {
-                $.each(allengr, function(i, m) {
-                    //  var latLngA = {'lat':32.1877,'lng':74.1945};
-                    //  var latLngB = {'lat':m.lan,'lng':m.lng};
-
-                    var latitude2 = m.latitude / 1000000;
-                    var longitude2 = m.longitude / 1000000;
-
-                    // var idfetch =  m.id;
-                    // var url = '{{ route('fetchcategorynamemap', ':id') }}';
-                    // url = url.replace(':id', idfetch );
-                    // let message;
-                    // $.ajax({
-                    //     url:url,
-                    //     type:'get',
-                    //     success:function(data){
-                    //         console.log("Arfan ahmad is a:"+data);
-                    //         message = 
-                    //     }
-                    // });
-                    // console.log(m.category.engrcategory);
-                    // const message =
-                    //     `<form action='{{ route('proceed') }}' method='post'> 
-                    //         @csrf
-                    //          <div>
-                    //             <h6>Engineer Name: ${m.fname}</h6>
-                    //             <h6>Engineer Type: ${m.categoryname}</h6>
-                    //             Date:   <input class="form-controll" type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br>
-                    //             <input type="text"  name="engr_id" value='${m.id}' hidden>
-                    //             <button class='btn w-100 btn-primary p-0'>Booked</button>
-                    //             </div>
-                    //             <form>`;
-
-                   
-                    const svgMarker = {
-                        path: "M10.453 14.016l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
-                        fillColor: "red",
-                        fillOpacity: 1,
-                        strokeWeight: 0,
-                        rotation: 0,
-                        scale: 2,
-                        anchor: new google.maps.Point(15, 30),
-                    };
-                    var image = {
-                        url: "{{ asset('engrphoto/demo.png') }}",
-                        size: new google.maps.Size(71, 71),
-                        origin: new google.maps.Point(0, 0),
-                        anchor: new google.maps.Point(17, 34),
-                        scaledSize: new google.maps.Size(25, 25)
-                    };
-
-
-                    let marker_s = new google.maps.Marker({
-                        position: new google.maps.LatLng(latitude2, longitude2),
-                        shape: shape,
-                        title: m.fname,
-
-                        map: map,
-                        icon: image
-                    });
-                    // google.maps.event.addListener(marker_s, 'click', function() {
-                    //     infowindow.open({
-                    //         anchor: marker_s,
-                    //         map,
-                    //         shouldFocus: false,
-                    //     });
-                    // });
-                    (function(marker, m) {
-                            google.maps.event.addListener(marker_s, "mouseover", function(e) {
-                              
-                                //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
-                                infoWindow.setContent(
-                                    `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.categoryname}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`
-                                );
-                                infoWindow.open(map, marker);
-                            });
-                        })(marker_s, m);
-
-                });
-            }
         }
-       function shoemodeldate(id){
-        event.preventDefault();
-        $('#orderdetail_modal').appendTo('body').modal('show');
-        $('#select_engrid').val(id);
-       }
+        function getcordinataddresss() {
+            setTimeout(() => {
+                var value_city = $('#selectcitys').val();
+                if (value_city != "") {
+                    var geocoder = new google.maps.Geocoder();
+                    geocoder.geocode({
+                        'address': value_city
+                    }, function(results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            var Lat = results[0].geometry.location.lat();
+                            var Lng = results[0].geometry.location.lng();
+                            $('#addresslats').val(Lat);
+                            $('#addresslons').val(Lng);
+                            document.getElementById('search_btns').disabled = false;
+                            
+                        } else {
+                            alert("Something got wrong " + status);
+                        }
+                    });
+                } else {
+                            $('#addresslats').val('');
+                            $('#addresslons').val('');
+                            document.getElementById('search_btns').disabled = true;
+                }
+            }, 500);
+
+        }
+         function shoemodeldate(id) {
+             event.preventDefault();
+             $('#orderdetail_modal').appendTo('body').modal('show');
+             $('#select_engrid').val(id);
+         }
      </script>
       <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry,places"
       async></script>
  @endpush

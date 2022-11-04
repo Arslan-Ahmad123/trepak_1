@@ -44,7 +44,7 @@
                                             <x-label for="conformemail" :value="__('Confirm Email')" />
 
                                             <x-input id="conformemail" class="block mt-1 w-full" type="text"
-                                                name="conformemail" :value="old('conformemail')" required autofocus />
+                                                name="conformemail" :value="old('conformemail')"  autofocus />
                                         </div>
                                         <!-- Remember Me -->
                                         {{-- <div class="block mt-4">
@@ -63,9 +63,9 @@
                                             <x-button class="ml-5" formaction="{{ route('resendemail') }}">
                                                 {{ __('Resend Email') }}
                                             </x-button>
-                                            <x-button class="ml-5 px-4 py-3"
+                                            <x-button class="ml-5 px-4 py-2"
                                                 formaction="{{ url()->to('conformemailenge') }}">
-                                                {{ __('Confirm') }}
+                                                {{ __('Conform') }}
                                             </x-button>
                                         </div>
                                     </form>

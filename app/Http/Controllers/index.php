@@ -99,6 +99,7 @@ class index extends Controller
         $address_ex =  explode(',',$res->cityname);
        
         $categoryid = engCategory::where('engrcategory',$res->date)->get('id')->toArray();
+      
         $resultSearchEngineer = $this->clientservices->searchEngineraddressWise($categoryid[0]['id'], $address_ex[0],$res->addresslat,$res->addresslon);
         // dd($resultSearchEngineer);
         return view('searchengineerbar.searchengineerview')->with($resultSearchEngineer);
@@ -111,13 +112,22 @@ class index extends Controller
             $address_ex =  explode(',',session()->get('city_name'));
        
             $categoryid = engCategory::where('engrcategory',session()->get('category_id'))->get('id')->toArray();
-            $resultSearchEngineer = $this->clientservices->searchEngineraddressWise($categoryid[0]['id'], $address_ex[0],session()->get('search_client_lat'),session()->get('search_client_lon'));
-            // dd($resultSearchEngineer);
-            session()->forget('search_client_lat');
-            session()->forget('search_client_lon');
-            session()->forget('category_id');
-            session()->forget('city_name');
-            return view('searchengineerbar.searchengineerview')->with($resultSearchEngineer);
+            if(count($categoryid) > 0){
+                $resultSearchEngineer = $this->clientservices->searchEngineraddressWise($categoryid[0]['id'], $address_ex[0],session()->get('search_client_lat'),session()->get('search_client_lon'));
+                session()->forget('search_client_lat');
+                session()->forget('search_client_lon');
+                session()->forget('category_id');
+                session()->forget('city_name');
+                return view('searchengineerbar.searchengineerview')->with($resultSearchEngineer);
+            }else{
+                session()->forget('search_client_lat');
+                session()->forget('search_client_lon');
+                session()->forget('category_id');
+                session()->forget('city_name');
+                return redirect(RouteServiceProvider::INDEXPAGE);
+
+            }
+           
             // $categoryid = engCategory::where('engrcategory',$res->date)->get('id')->toArray();
             // $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise($categoryid[0]['id']);
             // return view('searchengineer.searchengineerview')->with($resultSearchEngineer);
@@ -261,9 +271,10 @@ class index extends Controller
             }
         
     }
-     public function clientsearchengr(){ 
-        $engr = User::where('role','enge')->paginate(5);
-        return view('client.searchengr.searchengepageview')->with('engr',$engr);
+     public function clientsearchengr(){
+        return  redirect(RouteServiceProvider::INDEXPAGE); 
+        // $engr = User::where('role','enge')->paginate(5);
+        // return view('client.searchengr.searchengepageview')->with('engr',$engr);
     }
     public function conformorder(Request $res){
        

@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Providers\RouteServiceProvider;
 use App\Http\Controllers\engineerController;
 
 
@@ -31,7 +32,11 @@ Route::middleware(['isEngineer'])->prefix('engineer')->group(function () {
 Route::get('engrdocs',function(){
     if(Auth::check() && Auth::user()->role == 'enge'){
         if(Auth::user()->docsstatus ==  1){
-            return redirect()->back();
+            if (Auth::user()->status == 0) {
+                return redirect(RouteServiceProvider::ADMINSTATUS);
+            } else {
+                return redirect(RouteServiceProvider::ENGE);
+            }
         }else{
             return view('conformdocs.conformdocs');
         }

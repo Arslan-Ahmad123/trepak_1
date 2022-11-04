@@ -97,6 +97,10 @@
 
                                                 </select>
                                             </div>
+                                            <div class="form-group" id="showselectcitydiv" style="display:none">
+                                                <label for="select_city">Select City</label>
+                                                <input class="form-control"  onblur="getcordinataddress()" required type="text" id="select_city" name="select_city" style="border-radius:6px">
+                                            </div>
                                             <input type="hidden" name="lon" id="lon">
                                             <input type="hidden" name="lat" id="lat">
                                             <input type="hidden" name="city" id="city">
@@ -151,13 +155,50 @@
     <!-- /Page Content -->
     @push('customjscode')
         <script
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&v=weekly&channel=2&libraries=geometry,places"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&v=weekly&channel=2&libraries=geometry,places&callback=initMap"
             async></script>
         <script>
-            function initMap() {
+            function initMap(){
+                if(document.getElementById('select_city')){
+                    var input = document.getElementById('select_city');
+                const options = {
+                    fields: ["address_components", "geometry", "icon", "name"],
+                    strictBounds: false,
+                };
+                var autocomplete = new google.maps.places.Autocomplete(input, options);
+                }
+            }
+            function initMaps() {
                 const geocoder = new google.maps.Geocoder();
                 geocodeLatLng(geocoder);
             }
+            function getcordinataddress() {
+            setTimeout(() => {
+                var value_city = $('#select_city').val();
+                if (value_city != "") {
+                    var geocoder = new google.maps.Geocoder();
+                    geocoder.geocode({
+                        'address': value_city
+                    }, function(results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            var Lat = results[0].geometry.location.lat();
+                            var Lng = results[0].geometry.location.lng();
+                            $('#lat').val(Lat);
+                            $('#lon').val(Lng);
+                            const geocoder = new google.maps.Geocoder();
+                            geocodeLatLng(geocoder);
+                            
+                            
+                        } else {
+                            alert("Something got wrong " + status);
+                        }
+                    });
+                } else {
+                   console.log('please fill all the field');
+                }
+            }, 500);
+
+        }
 
             function geocodeLatLng(geocoder) {
 
@@ -216,57 +257,49 @@
             const success = (position) => {
                 custom_lat = position.coords.latitude;
                 custom_lon = position.coords.longitude;
-
+                document.getElementById('select_city').removeAttribute('required');
                 $('#lat').val(custom_lat);
                 $('#lon').val(custom_lon);
-                initMap();
+                initMaps();
 
 
             }
             const error = () => {
-                $('#show_location_msg').show();
+                $('#showselectcitydiv').show('slow');
+                
                 // var element = $('.toast')[0];
                 // var myToast = new bootstrap.Toast(element, {
                 //     autohide: false
                 // });
                 // myToast.show();
-                document.querySelector('#submit_role').disabled = true;
-                $('#lat').val('');
-                $('#lon').val('');
+               
+               
 
             }
 
             function geo_location() {
                 navigator.geolocation.getCurrentPosition(success, error);
-                navigator.permissions.query({
-                    name: 'geolocation'
-                }).then(function(result) {
-                    if (result.state == 'denied') {
-                        document.querySelector('#submit_role').disabled = true;
-
-                    }
-                });
             }
 
             function closelocationmsg() {
                 $('#show_location_msg').hide();
             }
-            setInterval(() => {
-                navigator.geolocation.getCurrentPosition(success, error);
-                navigator.permissions.query({
-                    name: 'geolocation'
-                }).then(function(result) {
+            // setInterval(() => {
+            //     navigator.geolocation.getCurrentPosition(success, error);
+            //     navigator.permissions.query({
+            //         name: 'geolocation'
+            //     }).then(function(result) {
 
-                    if (result.state == 'denied') {
-                        document.querySelector('#submit_role').disabled = true;
-                        console.log("Not give you permission")
+            //         if (result.state == 'denied') {
+            //             document.querySelector('#submit_role').disabled = true;
+            //             console.log("Not give you permission")
 
-                    }
-                    if (result.state == 'granted') {
-                        document.querySelector('#submit_role').disabled = false;
-                    }
-                });
-            }, 5000);
+            //         }
+            //         if (result.state == 'granted') {
+            //             document.querySelector('#submit_role').disabled = false;
+            //         }
+            //     });
+            // }, 5000);
             $(document).ready(function() {
 
                 if (navigator.geolocation) {

@@ -33,8 +33,8 @@ return new class extends Migration
             $table->integer('docsstatus')->default(0);       
             $table->integer('status')->default(0);
             $table->integer('adminengr')->default(0);
-            $table->integer('latitude')->default(0);
-            $table->integer('longitude')->default(0);
+            $table->string('latitude')->default(0);
+            $table->string('longitude')->default(0);
             $table->string('address')->nullable();
             $table->string('subcity')->nullable();
             $table->string('city')->nullable();

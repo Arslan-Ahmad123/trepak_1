@@ -792,8 +792,8 @@
                         return Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math.random() * (max - min) + min);
                         }
                     let variation = randomInRange(0.1, 5) / 500;
-                    var latitude2 = (m.latitude / 1000000) + variation;
-                    var longitude2 = (m.longitude / 1000000) + variation;
+                    var latitude2 = m.latitude + variation;
+                    var longitude2 = m.longitude  + variation;
                     // var idfetch =  m.id;
                     // var url = '{{ route('fetchcategorynamemap', ':id') }}';
                     // url = url.replace(':id', idfetch );
@@ -956,11 +956,11 @@
                         }
                         let variation = randomInRange(0.1, 5) / 500;
 
-                        var latitude2 = (m.latitude / 1000000) + variation;
-                        var longitude2 = (m.longitude / 1000000) + variation;
+                        var latitude2 = m.latitude  + variation;
+                        var longitude2 = m.longitude  + variation;
                     } else {
-                        var latitude2 = (m.latitude / 1000000);
-                        var longitude2 = (m.longitude / 1000000);
+                        var latitude2 = m.latitude ;
+                        var longitude2 = m.longitude ;
                     }
                     lon_s.push(m.longitude);
                     lat_s.push(m.latitude);
@@ -1114,8 +1114,10 @@
                 var val_login_status = $('input[name="select_type"]:checked').val();
                 if (val_login_status == 'databaseloc') {
                     console.log('userlogin and select access db');
-                    var longitudeclient = '{{ Auth::check() ? Auth::user()->longitude / 1000000 : '' }}';
-                    var latitudeclient = '{{ Auth::check() ? Auth::user()->longitude / 1000000 : '' }}';
+                    var longitudeclient = '{{ Auth::check() ? Auth::user()->longitude : '' }}';
+                    var latitudeclient = '{{ Auth::check() ? Auth::user()->latitude : '' }}';
+                    console.log('database url is :'+longitudeclient);
+                    console.log('database url is :'+latitudeclient);
                     const geocoder = new google.maps.Geocoder();
                     $res = geocodeLatLng(geocoder, latitudeclient, longitudeclient);
                     setTimeout(() => {
@@ -1168,8 +1170,8 @@
             var val_login_status = $('input[name="select_type"]:checked').val();
             if (val_login_status == 'databaseloc') {
 
-                var longitudeclient = '{{ Auth::check() ? Auth::user()->longitude / 1000000 : '' }}';
-                var latitudeclient = '{{ Auth::check() ? Auth::user()->latitude / 1000000 : '' }}';
+                var longitudeclient = '{{ Auth::check() ? Auth::user()->longitude  : '' }}';
+                var latitudeclient = '{{ Auth::check() ? Auth::user()->latitude  : '' }}';
                 console.log(longitudeclient + ' , lat :' + latitudeclient);
                 const geocoder = new google.maps.Geocoder();
                 $res = geocodeLatLng(geocoder, latitudeclient, longitudeclient);

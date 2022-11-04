@@ -21,6 +21,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(ClientService $clientservices)
     {
+        // dd(Auth::user());
         $redirectPageName = $clientservices->showIndexpage();
         if($redirectPageName == 'ADMIN'){
          return redirect(RouteServiceProvider::ADMIN);
