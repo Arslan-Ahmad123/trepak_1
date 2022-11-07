@@ -48,7 +48,7 @@ Route::get('engrdocs',function(){
 
 Route::post('/engrfetchmessage',[engineerController::class,'engrfetchmessage'])->name('engrfetchmessage')->middleware('auth');
 Route::post('/engrdocsmentation',[engineerController::class,'engrdocsmentation'])->name('engrdocsmentation')->middleware('auth');
-Route::get('/engregister',[engineerController::class,'engregister'])->name('engregister');
+Route::get('/engregister',[engineerController::class,'engregister'])->name('engregister')->middleware('Preventpage');
 Route::get('/getallgroup',[engineerController::class,'getallgroup'])->name('getallgroup')->middleware('auth');
 Route::get('/getallgroupengr',[engineerController::class,'getallgroupengr'])->name('getallgroupengr')->middleware('auth');
 

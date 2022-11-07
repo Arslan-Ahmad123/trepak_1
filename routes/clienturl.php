@@ -31,7 +31,7 @@ Route::middleware(['isUser'])->prefix('user')->group(function () {
     Route::get('/proceed',[index::class,'loginproceed'])->name('proceeds');
 });
 // Route::post('/user_register',[index::class,'registerformshow'])->name('user_register');
-Route::get('/user_regis',[index::class,'register_show'])->name('user_regis');
+Route::get('/user_regis',[index::class,'register_show'])->name('user_regis')->middleware('Preventpage');
 Route::get('/conformemailpage',[index::class,'conformemailpage'])->name('conformemailpage')->middleware('auth');
 
 

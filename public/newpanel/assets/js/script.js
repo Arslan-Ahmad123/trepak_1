@@ -58,12 +58,12 @@ Version      : 1.0
 
     // Select 2
 
-    if ($("#engrcategory").length > 0) {
-        $("#engrcategory").select2({
-            minimumResultsForSearch: -1,
-            width: "100%",
-        });
-    }
+    // if ($("#engrcategory").length > 0) {
+    //     $("#engrcategory").select2({
+    //         minimumResultsForSearch: -1,
+    //         width: "100%",
+    //     });
+    // }
 
     // Date Time Picker
 

@@ -49,6 +49,7 @@ class index extends Controller
     public function showindex_page(){
       
         $redirectPageName = $this->clientservices->showIndexpage();
+       
        if($redirectPageName == 'ADMIN'){
         return redirect(RouteServiceProvider::ADMIN);
        } 

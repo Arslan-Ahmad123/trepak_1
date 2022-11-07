@@ -24,55 +24,57 @@
                             <input type="text" name="cityname" value="{{ $city_name }}" hidden>
                             <input type="text" name="engtype" value="{{ $eng_type }}" hidden>
                         @endif
-                     <!--   <div class="col-md-7 col-lg-6 login-left">
+                        <!--   <div class="col-md-7 col-lg-6 login-left">
                             <img src="{{ asset('newpanel/assets/img/login-banner.jpg') }}" class="img-fluid"
                                 alt="Doccure Register">-->
-                        </div>
-                        <div class="col-md-10 col-lg-8 col-sm-12 login-right mx-auto py-5" style="box-shadow: 0px 0px 15px 0px rgb(0 0 0 / 50%); margin-bottom: 100px;margin-top: 40px;">
-                            <div class="login-header" style="text-align:center;font-size:25px;font-weight:500">
-                                @if ($currentURL == 'user_register' || $currentURL == 'user_regis')
-                                    <h2>User Register</h2>
-                                @else
-                                    <h2>Engineer Register</h2>
-                                @endif
+                    </div>
+                    <div class="col-md-10 col-lg-8 col-sm-12 login-right mx-auto py-5"
+                        style="box-shadow: 0px 0px 15px 0px rgb(0 0 0 / 50%); margin-bottom: 100px;margin-top: 40px;">
+                        <div class="login-header" style="text-align:center;font-size:25px;font-weight:500">
+                            @if ($currentURL == 'user_register' || $currentURL == 'user_regis')
+                                <h2>User Register</h2>
+                            @else
+                                <h2>Engineer Register</h2>
+                            @endif
 
-                            </div>
-                            <x-guest-layout>
-                                <!-- Validation Errors -->
-                                <x-auth-validation-errors class="mb-4" :errors="$errors" />
-                                <!-- Register Form -->
-                                <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data"
-                                    class="contact-form">
-                                    @csrf
-                                    <div class="form-section">
-                                        <!--First Name -->
-                                        <div>
-                                            <x-label for="fname" :value="__('First Name')" />
-                                            <x-input id="fname" class="block mt-2 w-full" type="text"
-                                                name="fname" :value="old('fname')" required autofocus />
-                                        </div>
-                                        <!-- Last Name -->
+                        </div>
+                        <x-guest-layout>
+                            <!-- Validation Errors -->
+                            <x-auth-validation-errors class="mb-4" :errors="$errors" />
+                            <!-- Register Form -->
+                            <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data"
+                                class="contact-form">
+                                @csrf
+                                <div class="form-section">
+                                    <!--First Name -->
+                                    <div>
+                                        <x-label for="fname" :value="__('First Name')" />
+                                        <x-input id="fname" class="block mt-2 w-full" type="text"
+                                            placeholder="FIrst Name" name="fname" :value="old('fname')" required
+                                            autofocus />
+                                    </div>
+                                    <!-- Last Name -->
+                                    <div class="mt-4">
+                                        <x-label for="lname" :value="__('Last Name')" />
+                                        <x-input id="lname" class="block mt-2 w-full" type="text"
+                                            placeholder="Last Name" name="lname" :value="old('lname')" required
+                                            autofocus />
+                                    </div>
+                                    <!--Pic -->
+                                    <div class="mt-4">
+                                        <x-label for="pic" style="margin-bottom:5px" :value="__('Pic')" />
+                                        <x-input id="pic" style="margin-bottom:10px"
+                                            class="block  w-full form-control" type="file" name="pic"
+                                            :value="old('pic')" autofocus />
+                                    </div>
+                                    <!--Engr Category  -->
+                                    @php
+                                        $routename = Route::current()->getName();
+                                    @endphp
+                                    @if ($routename == 'user_regis')
+                                    @else
                                         <div class="mt-4">
-                                            <x-label for="lname" :value="__('Last Name')" />
-                                            <x-input id="lname" class="block mt-2 w-full" type="text"
-                                                name="lname" :value="old('lname')" required autofocus />
-                                        </div>
-                                        <!--Pic -->
-                                        <div class="mt-4">
-                                            <x-label for="pic" style="margin-bottom:5px" :value="__('Pic')" />
-                                            <x-input id="pic" style="margin-bottom:10px"
-                                                class="block  w-full form-control" type="file" name="pic"
-                                                :value="old('pic')" autofocus />
-                                        </div>
-                                        <!--Engr Category  -->
-                                        @php
-                                              $routename = Route::current()->getName();
-                                        @endphp
-                                       @if ($routename == 'user_regis')
-                                        @else 
-                                        <div class="mt-4">
-                                            <x-label for="engrcategory" style="margin-bottom:5px"
-                                                :value="__('Engineer Category')" />
+                                            <x-label for="engrcategory" style="margin-bottom:5px" :value="__('Engineer Category')" />
                                             <select class="block mt-1 w-full border-gray-300 rounded-md"
                                                 name="engrcategory" id="engrcategory">
                                                 <option value="">Select Engineer category</option>
@@ -85,76 +87,90 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                       @endif 
-                                        
-                                        <!--Mobile -->
-                                        <div class="mt-4">
-                                            <x-label for="mobile" style="margin-bottom:5px" :value="__('Mobile')" />
-                                            <x-input id="mobile" style="margin-bottom:10px" class="block  w-full"
-                                                type="text" name="mobile" :value="old('mobile')" required autofocus />
-                                        </div>
+                                    @endif
 
-                                        <!-- Email Address -->
-                                        <div class="mt-4">
-                                            <x-label for="email" :value="__('Email')" />
-                                            <x-input id="email" class="block mt-1 w-full" type="email"
-                                                name="email" :value="old('email')" required />
-                                        </div>
-                                        <!-- Password -->
-                                        <div class="mt-4">
-                                            <x-label for="password" :value="__('Password')" />
-                                            <x-input id="password" class="block mt-1 w-full" type="password"
-                                                name="password" required autocomplete="new-password" />
-                                        </div>
-                                        <!-- Confirm Password -->
-                                        <div class="mt-4">
-                                            <x-label for="password_confirmation" :value="__('Confirm Password')" />
-
-                                            <x-input id="password_confirmation" class="block mt-1 w-full"
-                                                type="password" name="password_confirmation" required />
-                                        </div>
-										<div class="form-navigation">
-                                        <button type="submit"  style="background-color: #15558d !important;color:white;"
-                                            class="btn bg-success float-right  mt-3">Register</button>
+                                    <!--Mobile -->
+                                    <div class="mt-4">
+                                        <x-label for="mobile" style="margin-bottom:5px" :value="__('Mobile')" />
+                                        <x-input id="mobile" style="margin-bottom:10px" class="block  w-full"
+                                            placeholder="Mobile Number" type="text" name="mobile" :value="old('mobile')"
+                                            required autofocus />
                                     </div>
-                                        <!--Address -->
-                                        {{-- <div>
+                                    <!--Address -->
+                                    <div class="mt-2" id="addressdiv" style="display:none;">
+                                        <x-label for="address" style="margin-bottom:5px" :value="__('Address')" />
+                                        <x-input id="address"  onblur="getcordinataddress()" style="margin-bottom:10px" class="block  w-full"
+                                            placeholder="Address" type="text" name="address" :value="old('address')"
+                                            required autofocus />
+                                    </div>
+
+                                    <!-- Email Address -->
+                                    <div class="mt-4">
+                                        <x-label for="email" :value="__('Email')" />
+                                        <x-input id="email" class="block mt-1 w-full" type="email" name="email"
+                                            :value="old('email')" required />
+                                    </div>
+                                    <!-- Password -->
+                                    <div class="mt-4">
+                                        <x-label for="password" :value="__('Password')" />
+                                        <x-input id="password" class="block mt-1 w-full" type="password"
+                                            name="password" required autocomplete="new-password" />
+                                    </div>
+                                    <!-- Confirm Password -->
+                                    <div class="mt-4">
+                                        <x-label for="password_confirmation" :value="__('Confirm Password')" />
+
+                                        <x-input id="password_confirmation" class="block mt-1 w-full" type="password"
+                                            name="password_confirmation" required />
+                                    </div>
+                                    <div class="form-navigation">
+                                        <button type="submit" style="background-color: #15558d !important;color:white;"
+                                            class="btn bg-success float-right  mt-3" id="registerbtn" disabled>Register</button>
+                                    </div>
+                                    <!--Address -->
+                                    {{-- <div>
                                             <x-label for="address" style="margin-bottom:5px" :value="__('Address')" />
                                             <x-input id="address" style="margin-bottom:10px" class="block  w-full"
                                                 type="text" name="address" :value="old('address')" required autofocus
                                                 readonly />
                                         </div> --}}
-                                        {{-- -- Role -- --}}
-                                        <div class="mt-4">
-                                            {{-- <x-label for="role" :value="__('Role')" /> --}}
-                                            <select class="block mt-1 w-full border-gray-300 rounded-md" name="role"
-                                                id="role" hidden>
-                                                @if ($currentURL == 'user_register' || $currentURL == 'user_regis')
-                                                    <option value="user">User</option>
-                                                @else
-                                                    <option value="enge">Engineer</option>
-                                                @endif
-                                            </select>
-                                        </div>
-
-                                        <!-- longitude and latitude -->
-                                        <div>
-                                            {{-- <x-label for="latitude" style="margin-bottom:5px;margin-top:10px"
-                                                :value="__('Latitude')" /> --}}
-                                            <x-input style="margin-bottom:10px" class="block  w-full" type="number"
-                                                step="any" name="latitude" id="latitude" :value="old('latitude')"
-                                                required autofocus hidden />
-                                        </div>
-                                        <div>
-                                            {{-- <x-label for="longitude" style="margin-bottom:5px" :value="__('Longitude')" /> --}}
-                                            <x-input style="margin-bottom:10px" class="block  w-full" type="number"
-                                                step="any" name="longitude" id="longitude" :value="old('longitude')"
-                                                required autofocus hidden />
-                                        </div>
-                                        {{-- <input type="text" name="longitude" id="longitude"  readonly> 
-                                            <input type="text" name="latitude" id="latitude"  readonly> --}}
+                                    {{-- -- Role -- --}}
+                                    <div class="mt-4">
+                                        {{-- <x-label for="role" :value="__('Role')" /> --}}
+                                        <select class="block mt-1 w-full border-gray-300 rounded-md" name="role"
+                                            id="role" hidden>
+                                            @if ($currentURL == 'user_register' || $currentURL == 'user_regis')
+                                                <option value="user">User</option>
+                                            @else
+                                                <option value="enge">Engineer</option>
+                                            @endif
+                                        </select>
                                     </div>
-                                    {{-- @if ($currentURL == 'engregister')
+
+                                    <!-- longitude and latitude -->
+                                    <div>
+                                        {{-- <x-label for="latitude" style="margin-bottom:5px;margin-top:10px"
+                                                :value="__('Latitude')" /> --}}
+                                        <x-input style="margin-bottom:10px" class="block  w-full" type="number"
+                                            step="any" name="latitude" id="latitude" :value="old('latitude')" required
+                                             hidden />
+                                    </div>
+                                    <input type="hidden" name="city" id="city">
+                                    <input type="hidden" name="state" id="state">
+                                    <input type="hidden" name="country" id="country">
+                                    <input type="hidden" name="short_country" id="shortcountry">
+                                    <input type="hidden" name="addres" id="addres">
+                                    <input type="hidden" name="subcity" id="locality">
+                                    <div>
+                                        {{-- <x-label for="longitude" style="margin-bottom:5px" :value="__('Longitude')" /> --}}
+                                        <x-input style="margin-bottom:10px" class="block  w-full" type="number"
+                                            step="any" name="longitude" id="longitude" :value="old('longitude')"
+                                            required  hidden/>
+                                    </div>
+                                    {{-- <input type="text" name="longitude" id="longitude"  readonly> 
+                                            <input type="text" name="latitude" id="latitude"  readonly> --}}
+                                </div>
+                                {{-- @if ($currentURL == 'engregister')
                                         {{-- <div class="form-section">
                                             <!-- Engineer category -->
                                             <div>
@@ -202,7 +218,7 @@
                                                     name="specialize" :value="old('specialize')" required autofocus />
                                             </div>
                                         </div> --}}
-                                    {{-- <div class="form-section">
+                                {{-- <div class="form-section">
                                             <div class="mt-4">
                                                 <x-label for="aboutme" :value="__('About Me')" />
                                                 <textarea id="aboutme" row="4" class="block mt-1 form-control w-full" type="text" name="aboutme"
@@ -229,7 +245,7 @@
                                             </div>
                                         </div> 
                                     @endif --}}
-                                    {{-- <div class="form-section">
+                                {{-- <div class="form-section">
 
                                         <!-- Email Address -->
                                         <div class="mt-4">
@@ -263,23 +279,23 @@
 
 
 
-                                    
 
-                                </form>
-                                <div id="map"></div>
 
-                            </x-guest-layout>
-                            <!-- /Register Form -->
+                            </form>
+                            <div id="map"></div>
 
-                        </div>
+                        </x-guest-layout>
+                        <!-- /Register Form -->
+
                     </div>
                 </div>
-                <!-- /Register Content -->
-
             </div>
-        </div>
+            <!-- /Register Content -->
 
+        </div>
     </div>
+
+</div>
 
 </div>
 <!-- /Page Content -->
@@ -289,6 +305,9 @@
         integrity="sha512-eyHL1atYNycXNXZMDndxrDhNAegH2BDWt1TmkXJPoGf1WLlNYt08CSjkqF5lnCRmdm3IrkHid8s2jOUY4NIZVQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('inteltelphone/js/intlTelInput.js') }}"></script>
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry,places"
+    async></script>
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js" integrity="sha512-+gShyB8GWoOiXNwOlBaYXdLTiZt10Iy6xjACGadpqMs20aJOoh+PJt3bwUVA6Cefe7yF7vblX6QwyXZiVwTWGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
     <script>
         var input = document.querySelector("#mobile");
@@ -330,17 +349,24 @@
             $(".sidebar-overlay").removeClass("opened");
             $("main-wrapper").removeClass("slide-nav");
         });
-        $('#address').val('Model Town Gujranwala Punjab Pakistan');
+
         const success = (position) => {
             latd = position.coords.latitude;
             lond = position.coords.longitude;
             $('#latitude').val(latd);
             $('#longitude').val(lond);
 
+            $('#addressdiv').hide();
+            document.getElementById('address').removeAttribute('required');
+            const geocoder = new google.maps.Geocoder();
+                geocodeLatLng(geocoder,latd,lond);
+                document.getElementById('registerbtn').disabled = false;
+
 
         }
         const error = () => {
-            console.log("error")
+            $('#addressdiv').show();
+
         }
         navigator.geolocation.getCurrentPosition(success, error);
         navigator.permissions.query({
@@ -348,8 +374,17 @@
         }).then(function(result) {
             // Will return ['granted', 'prompt', 'denied']
             if (result.state == 'denied') {
-                alert("Please manaully allow your location");
+
+                
+               
             }
+            if (result.state == 'granted') {
+                
+               
+                
+
+            }
+
         });
 
         $(function() {
@@ -385,5 +420,102 @@
 
             navigateTo(0);
         });
+
+        function initMap() {
+          
+            var input = document.getElementById('address');
+
+const options = {
+    fields: ["address_components", "geometry", "icon", "name"],
+    strictBounds: false,
+
+};
+new google.maps.places.Autocomplete(input, options);
+        };
+
+        function getcordinataddress() {
+            setTimeout(() => {
+                var value_city = $('#address').val();
+                if (value_city != "") {
+                    var geocoder = new google.maps.Geocoder();
+                    geocoder.geocode({
+                        'address': value_city
+                    }, function(results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            var Lat = results[0].geometry.location.lat();
+                            var Lng = results[0].geometry.location.lng();
+                            $('#latitude').val(Lat);
+                            $('#longitude').val(Lng);
+                            const geocoder = new google.maps.Geocoder();
+                           geocodeLatLng(geocoder,Lat,Lng);
+                            document.getElementById('registerbtn').disabled = false;
+
+                        } else {
+                            alert("Something got wrong " + status);
+                        }
+                    });
+                } else {
+                    $('#latitude').val('');
+                    $('#latitude').val('');
+                   
+                }
+            }, 500);
+
+        }
+
+        function geocodeLatLng(geocoder,lat,lon) {
+           
+            const latlng = {
+                lat: parseFloat(lat),
+                lng: parseFloat(lon),
+            };
+
+            geocoder
+                .geocode({
+                    location: latlng
+                })
+                .then((response) => {
+                    if (response.results[0]) {
+
+
+
+
+                        $('#addres').val(response.results[0].formatted_address)
+                        for (var i = 0; i < response.results[0].address_components.length; i++) {
+                            if (response.results[0].address_components[i].types[0] == "locality") {
+                                //this is the object you are looking for City
+                                city = response.results[0].address_components[i];
+
+                                $('#locality').val(city.long_name)
+                            }
+                            if (response.results[0].address_components[i].types[0] == "administrative_area_level_1") {
+                                //this is the object you are looking for State
+                                region = response.results[0].address_components[i];
+
+                                $('#state').val(region.long_name);
+                            }
+                            if (response.results[0].address_components[i].types[0] == "administrative_area_level_2") {
+                                //this is the object you are looking for State
+                                region2 = response.results[0].address_components[i];
+
+                                $('#city').val(region2.long_name);
+                            }
+                            if (response.results[0].address_components[i].types[0] == "country") {
+                                //this is the object you are looking for
+                                country = response.results[0].address_components[i];
+
+                                $('#country').val(country.long_name);
+                                $('#shortcountry').val(country.short_name.toLowerCase());
+                            }
+                        }
+
+                    } else {
+                        window.alert("No results found");
+                    }
+                })
+
+        }
     </script>
+
+  
 @endpush

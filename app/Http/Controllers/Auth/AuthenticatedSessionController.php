@@ -19,35 +19,10 @@ class AuthenticatedSessionController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function create(ClientService $clientservices)
+    public function create()
     {
-        // dd(Auth::user());
-        $redirectPageName = $clientservices->showIndexpage();
-        if($redirectPageName == 'ADMIN'){
-         return redirect(RouteServiceProvider::ADMIN);
-        } 
-        
-        if($redirectPageName == 'ENGEEMAIL'){
-         return redirect(RouteServiceProvider::EMAILVERIFY);
-        }  
-          
-        if($redirectPageName == 'SUBMITDOCS'){
-         return redirect(RouteServiceProvider::DOCSSTATUS);
-        }        
-        if($redirectPageName == 'ENGE'){
-         return redirect(RouteServiceProvider::ENGE);
-        }
-        if($redirectPageName == 'ENGEFAILED'){
-         return redirect(RouteServiceProvider::ADMINSTATUS);
-        } 
-        if(Auth::check() && Auth::user()->role ==  null){
-         return redirect()->route('role_view');
-         }
-         if(Auth::check() && Auth::user()->role == 'user'){
-            return redirect(RouteServiceProvider::INDEXPAGE);
-        }      
-        return view('loginview.loginpageview');
-        
+        return view('loginview.loginpageview');   
+      
     }
 
     /**

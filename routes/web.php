@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
 
 
-Route::get('/', [index::class, 'showindex'])->name('home')->middleware('Preventpage');
+Route::get('/', [index::class, 'showindex'])->name('home');
 Route::get('/indexpage', [index::class, 'showindex_page'])->name('indexpage');
 Route::get('/index_page', [index::class, 'showindex_page'])->name('index_page');
 // Route::view('/indexpage', [index::class,'showindex_page'])->name('indexpage');
@@ -58,13 +58,18 @@ Route::post('/resendemail', function () {
         } else {
             $user = Auth::user();
             Event(new conformemail($user));
-            if (Auth::user()->docsstatus == 0) {
-                return redirect(RouteServiceProvider::DOCSSTATUS);
+            if (Auth::user()->emailstatus == 0) {
+                return redirect(RouteServiceProvider::EMAILVERIFY);
             } else {
-                if (Auth::user()->status == 0) {
-                    return redirect(RouteServiceProvider::ADMINSTATUS);
+
+                if (Auth::user()->docsstatus == 0) {
+                    return redirect(RouteServiceProvider::DOCSSTATUS);
                 } else {
-                    return redirect(RouteServiceProvider::ENGE);
+                    if (Auth::user()->status == 0) {
+                        return redirect(RouteServiceProvider::ADMINSTATUS);
+                    } else {
+                        return redirect(RouteServiceProvider::ENGE);
+                    }
                 }
             }
         }
@@ -132,7 +137,7 @@ Route::get('/fetchcategorynamemap/{id?}', function (engCategory $id) {
 Route::get('/google/callback', function () {
     if (Auth::check()) {
         $users =  Auth::user();
-      
+
         if (Auth::user()->role == 'enge') {
             if ($users->adminengr == 1) {
                 User::where('id', $users->id)->update(['adminengr' => 2]);
@@ -232,7 +237,7 @@ Route::get('/google/callback', function () {
                 'email' => $user->email,
                 'password' => Hash::make('null12345'),
                 'emailstatus' => 0,
-                'signupoption' => 0,
+                'signupoption' => 1,
                 'status' => 0,
             ]);
             Auth::login($users);
@@ -253,12 +258,12 @@ Route::post('sessionforrole', function (Request $res) {
     return response()->json('ok');
 });
 Route::get('/facebook/callback', function () {
-    
 
-       
-    if(Auth::check()) {
+
+
+    if (Auth::check()) {
         $users =  Auth::user();
-      
+
         if (Auth::user()->role == 'enge') {
             if ($users->adminengr == 1) {
                 User::where('id', $users->id)->update(['adminengr' => 2]);
@@ -360,7 +365,7 @@ Route::get('/facebook/callback', function () {
                 'email' => $user->email,
                 'password' => Hash::make('null12345'),
                 'emailstatus' => 0,
-                'signupoption' => 0,
+                'signupoption' => 1,
                 'status' => 0,
             ]);
             Auth::login($users);

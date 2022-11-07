@@ -15,8 +15,8 @@ class LoginService
     public function storeSignupdata($request)
     {
         $email_code = rand(111111, 999999);
-        $longitude = $request->longitude * 1E6;
-        $latitude = $request->latitude * 1E6;
+        $longitude = $request->longitude;
+        $latitude = $request->latitude;
         if ($request->has('pic')) {
             $imagename = $request->pic->getClientOriginalName();
             $saveimage = time() . '.' . $imagename;
@@ -39,10 +39,12 @@ class LoginService
             'latitude' => $latitude,
             'engrcategoryid'=> $engrcategoryid,
             'emailcode' => $email_code,
-            'subcity' => "Model Town",
-            'city' => "Gujranwala",
-            'state' => "punjab",
-            'country' => 'Pakistan',
+            'address' => $request->addres,
+            'subcity' => $request->subcity,
+            'city' => $request->city,
+            'state' => $request->state,
+            'country' => $request->country,
+            'short_country' => $request->short_country,
             'email' => $request->email,
             'password' => Hash::make($request->password),
            

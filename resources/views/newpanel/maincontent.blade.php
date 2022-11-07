@@ -470,6 +470,7 @@
                             <input id="withoutauth" style="display:none" type="radio" name="select_type" checked
                                 value="currentloc"><label>&nbsp;&nbsp;Current
                                 Location</label>
+                        </div>
                     @endif
                     @php
                         if (Auth::check()) {
