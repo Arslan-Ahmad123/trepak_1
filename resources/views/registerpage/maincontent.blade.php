@@ -100,7 +100,7 @@
                                     <div class="mt-2" id="addressdiv" style="display:none;">
                                         <x-label for="address" style="margin-bottom:5px" :value="__('Address')" />
                                         <x-input id="address"  onblur="getcordinataddress()" style="margin-bottom:10px" class="block  w-full"
-                                            placeholder="Address" type="text" name="address" :value="old('address')"
+                                            placeholder="Address" type="text" name="address" 
                                             required autofocus />
                                     </div>
 
