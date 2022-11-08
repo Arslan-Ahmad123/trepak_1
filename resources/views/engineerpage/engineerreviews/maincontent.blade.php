@@ -246,7 +246,7 @@
 							
 								<!-- Review Listing -->
 								<ul class="comments-list">
-								@if ($engrcmt)
+								@if (count($engrcmt) > 0)
 									@foreach ($engrcmt as $engrcmts)
 									@php
 										$client = getuser($engrcmts->clientid);
@@ -329,10 +329,12 @@
 									</li>
 									<!-- /Comment List -->
 									@endforeach									
-								@endif
+								
 								
 								{{ $engrcmt->links() }}
-									
+								@else
+								<li>No Comments Found!!</li>
+								@endif
 							
 									
 								</ul>

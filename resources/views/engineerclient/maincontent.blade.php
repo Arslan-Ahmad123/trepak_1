@@ -253,6 +253,14 @@
 								</div>
 								@endforeach
 								@else
+								<div class="col-md-6 col-lg-4 col-xl-3">
+									<div class="card widget-profile pat-widget-profile">
+										<div class="card-body">
+													<p>No Clients Found!!</p>
+										</div>
+									</div>
+								</div>
+								
 								@endif
 								
 								

@@ -378,6 +378,7 @@
 																	</tr>
 																</thead>
 																<tbody>
+																	@if(count($todayclient) > 0)
 																	@foreach($todayclient as $t_client)
 																	@php
 																	$clientt  = getuser($t_client->clientid);
@@ -413,6 +414,11 @@
 																		</td> --}}
 																	</tr>
 																	@endforeach
+																	@else
+																	<tr>
+																		<td colspan="3" class="text-center">{{ 'No Upcomming Appointments!!' }}</td>
+																	</tr>
+																	@endif
 																</tbody>
 															</table>		
 														</div>	

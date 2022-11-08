@@ -268,6 +268,9 @@
 												</tr>
 												@endforeach
 												@else
+												<tr>
+													<td colspan="4" style="text-align: center">No Invoice Found!!</td>
+												</tr>
 												@endif
 												
 												

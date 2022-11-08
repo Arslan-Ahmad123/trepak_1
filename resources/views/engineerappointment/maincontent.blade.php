@@ -254,7 +254,13 @@
 								<!-- /Appointment List -->
 							@endforeach
 							@else
-							{{ 'No Client Found!!' }}
+							<div class="appointment-list">
+								<div class="profile-info-widget">
+									<p>No Appointments Found!!</p>
+								</div>
+								
+							</div>
+							
 							@endif
 								{{-- <!-- Appointment List -->
 								<div class="appointment-list">
