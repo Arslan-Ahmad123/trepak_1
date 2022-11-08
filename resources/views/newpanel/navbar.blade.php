@@ -206,7 +206,7 @@ a {
 					<li><a href="{{ route('engappointment') }}">Appointments</a></li>
 					{{-- <li><a href="{{ route('engschedule') }}">Schedule Timing</a></li> --}}
 					<li><a href="{{ route('engclient') }}">Clients List</a></li>
-					<li><a href="{{ route('engclientprofile') }}">Clients Profile</a></li>
+					{{-- <li><a href="{{ route('engclientprofile') }}">Clients Profile</a></li> --}}
 					{{-- <li><a href="chat-doctor.html">Chat</a></li> --}}
 					<li><a href="{{ route('enginvoice') }}">Invoices</a></li>
 					<li><a href="{{ route('engprofilesetting') }}">Profile Settings</a></li>
@@ -235,7 +235,7 @@ a {
 					<li><a href="{{ route('engappointment') }}">Appointments</a></li>
 					{{-- <li><a href="{{ route('engschedule') }}">Schedule Timing</a></li> --}}
 					<li><a href="{{ route('engclient') }}">Clients List</a></li>
-					<li><a href="{{ route('engclientprofile') }}">Clients Profile</a></li>
+					{{-- <li><a href="{{ route('engclientprofile') }}">Clients Profile</a></li> --}}
 					{{-- <li><a href="chat-doctor.html">Chat</a></li> --}}
 					<li><a href="{{ route('enginvoice') }}">Invoices</a></li>
 					<li><a href="{{ route('engprofilesetting') }}" >Profile Settings</a></li>
