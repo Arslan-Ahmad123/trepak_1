@@ -335,6 +335,7 @@ class index extends Controller
     }
      public function clientprofile(){ 
         $order = appointmentInfo::paginate(10);
+    
         return view('client.clientprofile.clientprofile')->with('order',$order);
     }
      public function clientprofilesetting(){ 

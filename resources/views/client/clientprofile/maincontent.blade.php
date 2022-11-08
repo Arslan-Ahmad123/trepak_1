@@ -290,7 +290,7 @@
 																				<img class="avatar-img rounded-circle" src="{{$engrimg }}" alt="User Image">
 																			</a>
 
-
+																			
 																			<a href="doctor-profile.html"> {{ getuser($orders->engrid)->fname }} <span> {{ getcategoryname(getuser($orders->engrid)->engrcategoryid)  }}</span></a>
 																		</h2>
 																	</td>

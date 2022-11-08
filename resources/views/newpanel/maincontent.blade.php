@@ -266,8 +266,8 @@
 }
 .search-box .search-btn {
     position: relative;
-    width: 20%;
-    left: 79%;
+    width: 100%;
+    
 }
     }
 </style>
@@ -664,7 +664,7 @@
 
                     } else {
                         return 'no';
-                        window.alert("No results found");
+                       console.log("No results found");
                     }
                 })
 
@@ -686,11 +686,11 @@
                             document.getElementById('search_btn').disabled = false;
                             
                         } else {
-                            alert("Something got wrong " + status);
+                            console.log("Something got wrong " + status);
                         }
                     });
                 } else {
-                    alert('please fill this field');
+                    console.log('please fill this field');
                 }
             }, 500);
 
@@ -1241,7 +1241,7 @@
                             make_map(sn_con, latitudeclient, longitudeclient,'yes');
                         }, 1500);
                     } else {
-                        alert('Please Allow Your Current Location');
+                        console.log('Please Allow Your Current Location');
                     }
                 });
             }
