@@ -1,3 +1,11 @@
+<style>
+    @media only screen and (max-width: 575.98px) {
+     .navbrand_logo {
+        position: relative;
+        left: 25vw;
+        }
+    }
+</style>
 <!-- Page Content -->
 			<div class="content topsection">
 				<div class="container-fluid">

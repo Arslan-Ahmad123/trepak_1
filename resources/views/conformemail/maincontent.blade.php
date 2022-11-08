@@ -1,3 +1,23 @@
+<style>
+    @media only screen and (max-width: 575.98px) {
+     .navbrand_logo {
+        position: relative;
+        left: 25vw;
+        }
+    }
+    @media only screen and (max-width: 400px) {
+        #conformemailbtn{
+            margin-left: 20px !important;
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+        }
+        #resendemailbtn{
+          
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+        }
+    }
+</style>
 <!-- Page Content -->
 <div class="content topsection" style="margin-top:150px;">
     <div class="container-fluid">
@@ -60,10 +80,10 @@
                                                         {{ __('Forgot your password?') }}
                                                     </a>
                                                 @endif --}}
-                                            <x-button class="ml-5" formaction="{{ route('resendemail') }}">
+                                            <x-button  formaction="{{ route('resendemail') }}" id="resendemailbtn">
                                                 {{ __('Resend Email') }}
                                             </x-button>
-                                            <x-button class="ml-5 px-4 py-2"
+                                            <x-button class="ml-5 px-4 py-2" id="conformemailbtn"
                                                 formaction="{{ url()->to('conformemailenge') }}">
                                                 {{ __('Conform') }}
                                             </x-button>

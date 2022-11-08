@@ -472,18 +472,20 @@
              fetch('{{ route('returnsession') }}').then((res) => {
                  return res.json()
              }).then((res) => {
-                 console.log('output res: ' + res);
+                 console.log('output res: ' + res.length);
+
                  var output = "";
                  $('#all_engr_show').html('');
-                 $.each(res, function(i, v) {
+                 if (res.length > 0) {
+                     $.each(res, function(i, v) {
 
-                     if (v.signupoption == 1) {
-                         var image = v.pic;
-                     } else {
-                         var image = `{{ asset('engrphoto/${v.pic}') }}`;
+                         if (v.signupoption == 1) {
+                             var image = v.pic;
+                         } else {
+                             var image = `{{ asset('engrphoto/${v.pic}') }}`;
 
-                     }
-                     $('#all_engr_show').append(`<div class="card">
+                         }
+                         $('#all_engr_show').append(`<div class="card">
     
              <div class="doctor-widget searchcard">
         <div class="doc-info-left">
@@ -577,7 +579,10 @@
 
 </div>`);
 
-                 })
+                     });
+                 } else {
+                     $('#all_engr_show').html('No Engineer Found!!');
+                 }
              });
              if (jQuery(window).width() > 767) {
                  if (jQuery(".theiaStickySidebar").length > 0) {
@@ -732,7 +737,7 @@
              }).then(function(result) {
                  console.log(result);
                  if (result.state == 'denied' || result.state == 'gratned') {
-                     alert(result.state);
+                   
                  }
              });
              // setTimeout(()=>{
@@ -749,18 +754,38 @@
                  type: 'get',
                  async: false,
                  success: function(data) {
+                 
+                     if (data.length > 0) {
+                         $.each(data, function(index, value) {
+                             if (index == 0) {
+                                 firstengr[index] = value;
+                             }
+                             console.log('user lat: '+value.client_lat +' user lon: '+value.client_lon);
+                             $('#lat_cur').val(value.client_lat);
+                             $('#lon_cur').val(value.client_lon);
+                             allengr[index] = value;
+                         });
+                     } else {
+                         $.ajax({
+                             url: '{{ route('returnclientsession') }}',
+                             type: 'get',
+                             async: false,
+                             success: function(data) {
+                               
+                                $.each(data, function(index, value) { 
+                                    console.log('lat: '+value.client_lat +' lon: '+value.client_lon);
+                                    $('#lat_cur').val(value.client_lat);
+                                 $('#lon_cur').val(value.client_lon);
+                                 });
+                               
+                               
+                                
 
-                     console.log('fetch all user :' + data.length)
 
-                     $.each(data, function(index, value) {
-                         if (index == 0) {
-                             firstengr[index] = value;
-                         }
-                         console.log(value.client_lon);
-                         $('#lat_cur').val(value.client_lat);
-                         $('#lon_cur').val(value.client_lon);
-                         allengr[index] = value;
-                     });
+                             }
+                         });
+                     }
+
 
                  }
              });
@@ -912,7 +937,7 @@
 
                          (function(marker, m) {
                              console.log('opjhwhoqweqw bqwkjhdsdnsdjoia sdsdiasdijasidj j dsajdsjd');
-                             google.maps.event.addListener(marker, "mouseover", function(e) {
+                             google.maps.event.addListener(marker, "click", function(e) {
 
                                  //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
                                  infoWindow.setContent(
@@ -996,7 +1021,7 @@
                      // });
 
                      (function(marker, m) {
-                         google.maps.event.addListener(marker_s, "mouseover", function(e) {
+                         google.maps.event.addListener(marker_s, "click", function(e) {
 
                              //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
                              infoWindow.setContent(
@@ -1026,7 +1051,7 @@
                              document.getElementById('search_btn').disabled = false;
 
                          } else {
-                             alert("Something got wrong " + status);
+                             console.log("Something got wrong " + status);
                          }
                      });
                  } else {
@@ -1054,7 +1079,7 @@
                              document.getElementById('search_btns').disabled = false;
 
                          } else {
-                             alert("Something got wrong " + status);
+                             console.log("Something got wrong " + status);
                          }
                      });
                  } else {

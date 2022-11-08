@@ -148,6 +148,37 @@
 			@endphp
 			{{-- ==========================chat box ========================	 --}}
 			
+			 {{-- ===========modal for select order date================== --}}
+ <div class="modal" tabindex="-1" role="dialog" id="orderdetail_modal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Select Date</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form action="{{ route('proceed') }}" method="post">
+				@csrf
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="selectdateorder">Select Date</label>
+						<input class="form-control" type="date" name="engr_date" id="selectdateorder"
+							min="<?php echo date('Y-m-d'); ?>" value="<?php echo date('Y-m-d'); ?>">
+						<input class="form-control" type="text" value="{{ $engr->id }}" name="engr_id"  hidden>
+
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">Place Order</button>
+					{{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
+				</div>
+			</form>
+
+		</div>
+	</div>
+</div>
+{{-- ===========modal for select order date================== --}}
 		
 			<div class="container customchatbox" style="display:none">
 				<div class="chat_box">
@@ -257,11 +288,9 @@
 											</ul> --}}
 										</div>
 										<div  id="showhideactionbtn" class="mt-2">
-											<form action="{{ route('booking')}}" method="post">
-												@csrf
-												<input type="hidden" name="bookingid" value="{{ $engr->id }}">
-												<button type="submit" class="btn btn-primary">Book Appointment</button>
-											</form>
+											
+												<button  onclick="shoemodeldate()" class="btn btn-primary">Book Appointment</button>
+											
 											{{-- <a class="apt-btn" href="{{ route('booking',['id'=>$engr->id]) }}">Book Appointment</a> --}}
 										</div>
 										{{-- <div class="clinic-services">
@@ -284,11 +313,10 @@
 									</div>
 									
 									<div class="clinic-booking">
-										<form action="{{ route('booking')}}" method="post">
-											@csrf
-											<input type="hidden" name="bookingid" value="{{ $engr->id }}">
-											<button type="submit" class="btn btn-primary">Book Appointment</button>
-										</form>
+										
+											
+											<button  onclick="shoemodeldate()" class="btn btn-primary">Book Appointment</button>
+										
 										{{-- <a class="apt-btn" href="{{ route('booking',['id'=>$engr->id]) }}">Book Appointment</a> --}}
 									</div>
 								</div>
@@ -1024,6 +1052,11 @@
 				function closeclientchatbox(){
 					$('.customchatbox').hide('slow');
 				}
+				function shoemodeldate() {
+					event.preventDefault();
+					$('#orderdetail_modal').appendTo('body').modal('show');
+            
+                }
 				
 					</script>
 				@endpush

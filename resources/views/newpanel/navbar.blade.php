@@ -229,7 +229,7 @@ a {
 				</ul>
 			</li>
 			<li class="has-submenu" id="engrnab">
-				<a href="#">Engineers <i class="fas fa-chevron-down" onclick="showbtn('engrbtn')"></i></a>
+				<a href="#"><span onclick="showbtn('engrbtn')">Engineers</span> <i class="fas fa-chevron-down" onclick="showbtn('engrbtn')"></i></a>
 				<ul class="submenu" id="engrbtn">
 					<li><a href="{{ route('newengineerpanel') }}">Engineer Dashboard</a></li>
 					<li><a href="{{ route('engappointment') }}">Appointments</a></li>
@@ -282,7 +282,7 @@ a {
 				</ul>
 			</li>
 			<li class="has-submenu " id="clientnab">
-				<a href="#">Clients <i class="fas fa-chevron-down" onclick="showbtn('clientbtn')"></i></a>
+				<a href="#"><span onclick="showbtn('clientbtn')">Clients</span> <i class="fas fa-chevron-down" onclick="showbtn('clientbtn')"></i></a>
 				<ul class="submenu" id="clientbtn">
 					{{-- <li class=""><a href="{{ route('clientsearchengr') }}">Search Engineers</a></li> --}}
 					{{-- <li><a href="{{ route('engineerprofile') }}">Engineer Profile</a></li> --}}
@@ -339,19 +339,19 @@ a {
 				@if(Auth::user()->role == 'user')
 				
 				
-				<button class="btn   my-1 form-control" formaction="{{ route('userlogout') }}" style="border:none;text-align:initial;font-size:15px;color:white">Logout</button>
+				<button class="btn ml-1" formaction="{{ route('userlogout') }}" style="border:none;text-align:initial;font-size:15px;color:white">Logout</button>
 				@elseif(Auth::user()->role == 'admin')
 				
-				<button class="btn   my-1 form-control" formaction="{{ route('adminlogout') }}" style="border:none;text-align:initial;font-size:15px;color:white">Logout</button>
+				<button class="btn ml-1" formaction="{{ route('adminlogout') }}" style="border:none;text-align:initial;font-size:15px;color:white">Logout</button>
 				@elseif(Auth::user()->role == 'enge')
-				<button class="btn   my-1 form-control" formaction="{{ route('engineerlogout') }}" style="border:none;text-align:initial;font-size:15px;color:white">Logout</button>
+				<button class="btn ml-1" formaction="{{ route('engineerlogout') }}" style="border:none;text-align:initial;font-size:15px;color:white">Logout</button>
 				@else
-				<button class="btn   my-1 form-control" formaction="{{ route('logout') }}" style="border:none;text-align:initial;font-size:15px;color:white">Logout</button>
+				<button class="btn ml-1" formaction="{{ route('logout') }}" style="border:none;text-align:initial;font-size:15px;color:white">Logout</button>
 				
 				@endif
 		   </form>
 				@else
-				<a href="#">Login / Signup <i class="fas fa-chevron-down" onclick="showbtn('loginbtn')"></i></a>
+				<a href="#"><span onclick="showbtn('loginbtn')">Login / Signup </span><i class="fas fa-chevron-down" onclick="showbtn('loginbtn')"></i></a>
 				<ul class="submenu" id="loginbtn">
 					
 				<form>

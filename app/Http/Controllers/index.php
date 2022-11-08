@@ -91,6 +91,7 @@ class index extends Controller
     }
     
     public function searchbarengineer(Request $res){
+     
         $res->validate([
             'cityname' => 'required',
             'date' => 'required',
@@ -98,11 +99,12 @@ class index extends Controller
             'addresslon' => 'required',
         ]);
         $address_ex =  explode(',',$res->cityname);
-       
+        
         $categoryid = engCategory::where('engrcategory',$res->date)->get('id')->toArray();
-      
+        // dd($categoryid);
         $resultSearchEngineer = $this->clientservices->searchEngineraddressWise($categoryid[0]['id'], $address_ex[0],$res->addresslat,$res->addresslon);
         // dd($resultSearchEngineer);
+       
         return view('searchengineerbar.searchengineerview')->with($resultSearchEngineer);
         // $categoryid = engCategory::where('engrcategory',$res->date)->get('id')->toArray();
         // $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise($categoryid[0]['id']);
@@ -188,11 +190,13 @@ class index extends Controller
     }
     public function viewprofileeng(Request $res){
         $engineerComment =  $this->clientservices->viewEngineerComment($res);
+       
         return view('engineerprofile.engineerprofileview')->with(['engr'=>$engineerComment]);
     }
     public function viewp_rofileeng(){
         if(session()->has('indexengrid')){
         $engineerComment =  $this->clientservices->viewEngineerComment('test');
+       
         return view('engineerprofile.engineerprofileview')->with(['engr'=>$engineerComment]);
         }else{
             return redirect()->route('indexpage');

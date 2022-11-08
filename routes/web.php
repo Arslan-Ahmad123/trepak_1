@@ -483,8 +483,22 @@ Route::get('getdistance', function () {
 
 Route::get('returnsession', function () {
     $res = session()->get('all_engrs');
-    return response()->json($res[0]);
+    if($res == null){
+        return response()->json([]);
+    }else{
+        return response()->json($res[0]);
+    }
+   
 })->name('returnsession');
+Route::get('returnclientsession', function () {
+    $res = session()->get('search_client_address');
+    if($res == null){
+        return response()->json([]);
+    }else{
+        return response()->json($res);
+    }
+    
+})->name('returnclientsession');
 Route::post('getuserlanlog', function (Request $res) {
     $new_longitude =  $res->lon;
     $new_latitude = $res->lat;

@@ -26,7 +26,7 @@
         z-index: 9999;
         justify-content: center;
         align-items: center;
-        width: 500px;
+        width: 475px;
         height: 530px;
 
 
@@ -227,6 +227,49 @@
     #previous_btn {
         position: absolute;
     }
+    @media only screen and (max-width: 510px) {
+       
+    .search-box .search-location {
+    width: 43%;
+}
+.search-box .search-info {
+    width: 43%;
+}
+.search-box .search-btn {
+   
+    width: 10%;
+   
+}
+    }
+
+    @media only screen and (max-width: 479px) {
+        .modal-container {
+        width: 400px;
+    }
+
+    }
+    @media only screen and (max-width: 400px) {
+        .modal-container {
+        width: 340px;
+      
+    }
+    .search-box form {
+    /* display: -webkit-box; */
+    display: inline;
+   
+}
+.search-box .search-location {
+    width: 100%;
+}
+.search-box .search-info {
+    width: 100%;
+}
+.search-box .search-btn {
+    position: relative;
+    width: 20%;
+    left: 79%;
+}
+    }
 </style>
 {{-- ======================guideline====================== --}}
 <div class="modal-container" id="modal-opened" style="display:none">
@@ -340,12 +383,12 @@
                     @endisset
 
                     <!-- Search -->
-                    <div class="search-box d-none d-sm-block">
+                    <div class="search-box">
                         <form method="post" action="{{ route('searchbarengineer') }}">
                             @csrf
                             <div class="form-group search-location">
                                 <input type="text" class="form-control" id="search" name="cityname"
-                                    placeholder="What are you looking for?"
+                                    placeholder="Location"
                                     onblur="getcordinataddress()">
                                 @error('cityname')
                                     <div class="alert alert-danger" id="cityname_div">This Field is Required.</div>
@@ -837,7 +880,7 @@
                         icon: image
                     });
                     (function(marker, m) {
-                        google.maps.event.addListener(marker_s, "mouseover", function(e) {
+                        google.maps.event.addListener(marker_s, "click", function(e) {
                             //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
                             infoWindow.setContent(
                                 `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`
@@ -1044,7 +1087,7 @@
                         // });
 
                         (function(marker, m) {
-                            google.maps.event.addListener(marker_s, "mouseover", function(e) {
+                            google.maps.event.addListener(marker_s, "click", function(e) {
                                 //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
                                 infoWindow.setContent(
                                     `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`

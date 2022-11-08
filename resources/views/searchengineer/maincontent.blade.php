@@ -228,46 +228,48 @@
                          <h4 class="card-title mb-0">Search Filter</h4>
                      </div>
                      <div class="card-body">
-                        <form action="{{ route('searchbarengineer') }}" method="post">
-                            @csrf
-                         
-                         <div class="slidecontainer">
-                             Price Range
-                             <input type="range" min="500" max="5000" value="500" step="500"
-                                 class="slider" id="myRange">
-                             <p>Value: <span id="demo"></span></p>
-                         </div>
-                         <style>
-                            .pac-container{
-                                margin-top:-95px;
-                            }
-                            </style>
-                       
-                         <div class="filter-widget">
-                             <h4>Select Specialist</h4>
-                             <select id="engrcategory" class="form-control" name="date">
-                                 @php
-                                     $res = getallcategory();
-                                 @endphp
-                                 @foreach ($res as $res)
-                                     <option value="{{ $res->engrcategory }}"
-                                         {{ $res->id == $category_id ? 'selected' : '' }}>
-                                         {{ $res->engrcategory }}</option>
-                                 @endforeach
-                             </select>
-                         </div>
-                         <div class="filter-widget">
-                            <div class="form-group" >
-                                Select City
-                                <input type="text" style="border:1px solid grey" onblur="getcordinataddress()" class="form-control" name="cityname" id="selectcity" placeholder="Select City" style="position:relative">
-                                <input type="hidden" name="addresslat" id="addresslat" value="">
-                                <input type="hidden" name="addresslon" id="addresslon" value="">
+                         <form action="{{ route('searchbarengineer') }}" method="post">
+                             @csrf
+
+                             <div class="slidecontainer">
+                                 Price Range
+                                 <input type="range" min="500" max="5000" value="500" step="500"
+                                     class="slider" id="myRange">
+                                 <p>Value: <span id="demo"></span></p>
                              </div>
-                        </div>
-                         <div class="btn-search">
-                             <button type="submit" id="search_btn" disabled class="btn btn-block">Search</button>
-                         </div>
-                        </form>
+                             <style>
+                                 .pac-container {
+                                     margin-top: -95px;
+                                 }
+                             </style>
+
+                             <div class="filter-widget">
+                                 <h4>Select Specialist</h4>
+                                 <select id="engrcategory" class="form-control" name="date">
+                                     @php
+                                         $res = getallcategory();
+                                     @endphp
+                                     @foreach ($res as $res)
+                                         <option value="{{ $res->engrcategory }}"
+                                             {{ $res->id == $category_id ? 'selected' : '' }}>
+                                             {{ $res->engrcategory }}</option>
+                                     @endforeach
+                                 </select>
+                             </div>
+                             <div class="filter-widget">
+                                 <div class="form-group">
+                                     Select City
+                                     <input type="text" style="border:1px solid grey" onblur="getcordinataddress()"
+                                         class="form-control" name="cityname" id="selectcity" placeholder="Select City"
+                                         style="position:relative">
+                                     <input type="hidden" name="addresslat" id="addresslat" value="">
+                                     <input type="hidden" name="addresslon" id="addresslon" value="">
+                                 </div>
+                             </div>
+                             <div class="btn-search">
+                                 <button type="submit" id="search_btn" disabled class="btn btn-block">Search</button>
+                             </div>
+                         </form>
                      </div>
                  </div>
                  <!-- /Search Filter -->
@@ -275,53 +277,7 @@
                  <!-- Search show Filter -->
                  <div class="p-2 mb-3" id="filter_eng" style="cursor:pointer">Filter<i
                          class="fa fa-angle-down filtericon_cpro" aria-hidden="true"></i></div>
-                 <div class="card search-filter" id="filter_later">
-                     <div class="card-header">
-                         <h4 class="card-title mb-0">Search Filter</h4>
-                     </div>
-                     <div class="card-body">
-                        <form action="{{ route('searchbarengineer') }}" method="post">
-                            @csrf
-                         
-                         <div class="slidecontainer">
-                             Price Range
-                             <input type="range" min="500" max="5000" value="500" step="500"
-                                 class="slider" id="myRange">
-                             <p>Value: <span id="demo"></span></p>
-                         </div>
-                         <style>
-                            .pac-container{
-                                margin-top:-95px;
-                            }
-                            </style>
-                       
-                         <div class="filter-widget">
-                             <h4>Select Specialist</h4>
-                             <select id="engrcategory" class="form-control" name="date">
-                                 @php
-                                     $res = getallcategory();
-                                 @endphp
-                                 @foreach ($res as $res)
-                                     <option value="{{ $res->engrcategory }}"
-                                         {{ $res->id == $category_id ? 'selected' : '' }}>
-                                         {{ $res->engrcategory }}</option>
-                                 @endforeach
-                             </select>
-                         </div>
-                         <div class="filter-widget">
-                            <div class="form-group" >
-                                Select City
-                                <input type="text"   onblur="getcordinataddress()" class="form-control" name="cityname" id="selectcity" placeholder="Select City" style="position:relative;border: 1px solid #cdc5c5">
-                                <input type="hidden" name="addresslat" id="addresslat" value="">
-                                <input type="hidden" name="addresslon" id="addresslon" value="">
-                             </div>
-                        </div>
-                         <div class="btn-search">
-                             <button type="submit" id="search_btn" disabled class="btn btn-block">Search</button>
-                         </div>
-                        </form>
-                     </div>
-                 </div>
+
                  <!-- /Search Filter -->
 
              </div>
@@ -476,6 +432,7 @@
                  console.log('output res: ' + res);
                  var output = "";
                  $('#all_engr_show').html('');
+                 if(res.length > 0){
                  $.each(res, function(i, v) {
 
                      if (v.signupoption == 1) {
@@ -486,7 +443,7 @@
                      }
                      $('#all_engr_show').append(`<div class="card">
     
-    <div class="doctor-widget searchcard">
+                   <div class="doctor-widget searchcard">
         <div class="doc-info-left">
             <div class="doctor-img">
                 {{-- <a href="doctor-profile.html"> --}}
@@ -581,6 +538,9 @@
 </div>`);
 
                  })
+                }else{
+                    $('#all_engr_show').html('No Record Found!');
+                }
              });
              if (jQuery(window).width() > 767) {
                  if (jQuery(".theiaStickySidebar").length > 0) {
@@ -625,7 +585,7 @@
              output.innerHTML = this.value;
          }
          $("#filter_eng").click(function() {
-             $("#filter_later").slideToggle('slow');
+             $("#filter_start").slideToggle('slow');
          });
          $(document).on("click", "#mobile_btn", function() {
              console.log("Arfan");
@@ -710,8 +670,8 @@
          }
 
          function initMap() {
-          
-              
+
+
              try {
                  make_cord(make_map);
              } catch (e) {
@@ -721,12 +681,12 @@
 
          function make_cord(callback) {
              const success = (position) => {
-                //  $('#lat_cur').val(position.coords.latitude);
-                //  $('#lon_cur').val(position.coords.longitude);
+                 //  $('#lat_cur').val(position.coords.latitude);
+                 //  $('#lon_cur').val(position.coords.longitude);
                  $('#lat_cur').val('{{ Auth::user()->latitude }}');
                  $('#lon_cur').val('{{ Auth::user()->longitude }}');
                  callback();
-                 console.log('1st');
+
              }
              const error = () => {
                  console.log("error");
@@ -739,7 +699,7 @@
              }).then(function(result) {
                  console.log(result);
                  if (result.state == 'denied' || result.state == 'gratned') {
-                     alert(result.state);
+
                  }
              });
              // setTimeout(()=>{
@@ -766,27 +726,27 @@
              });
 
              var input = document.getElementById('selectcity');
-             var inputs = document.getElementById('selectcitys');
-                const options = {
-                    types: ['administrative_area_level_2'],
-                    
-                    fields: ["address_components", "geometry", "icon", "name"],
-                    strictBounds: false,
+
+             const options = {
+                 types: ['administrative_area_level_2'],
+
+                 fields: ["address_components", "geometry", "icon", "name"],
+                 strictBounds: false,
 
 
-                };
-                new google.maps.places.Autocomplete(input, options);
-                new google.maps.places.Autocomplete(inputs, options);
-               
+             };
+             new google.maps.places.Autocomplete(input, options);
+
+
              var map;
 
-            //  var latitude_cur = $('#lat_cur').val() != "" ? parseFloat($('#lat_cur').val()) : 32.1877;
-            //  var longitude_cur = $('#lon_cur').val() != "" ? parseFloat($('#lon_cur').val()) : 74.1945;
+             //  var latitude_cur = $('#lat_cur').val() != "" ? parseFloat($('#lat_cur').val()) : 32.1877;
+             //  var longitude_cur = $('#lon_cur').val() != "" ? parseFloat($('#lon_cur').val()) : 74.1945;
 
              var latitude_cur = '{{ Auth::user()->latitude }}';
              var longitude_cur = '{{ Auth::user()->longitude }}';
-             console.log('database loc is lat:'+latitude_cur);
-             console.log('database loc is lon:'+longitude_cur);
+             console.log('database loc is lat:' + latitude_cur);
+             console.log('database loc is lon:' + longitude_cur);
 
              map = new google.maps.Map(document.getElementById("mapid"), {
                  center: {
@@ -916,7 +876,7 @@
                              icon: image
                          });
                          (function(marker, m) {
-                             google.maps.event.addListener(marker_s, "mouseover", function(e) {
+                             google.maps.event.addListener(marker_s, "click", function(e) {
 
                                  //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
                                  infoWindow.setContent(
@@ -1002,7 +962,7 @@
                      //     });
                      // });
                      (function(marker, m) {
-                         google.maps.event.addListener(marker_s, "mouseover", function(e) {
+                         google.maps.event.addListener(marker_s, "click", function(e) {
 
                              //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
                              infoWindow.setContent(
@@ -1015,67 +975,70 @@
                  });
              }
          }
+
          function getcordinataddress() {
-            setTimeout(() => {
-                var value_city = $('#selectcity').val();
-                if (value_city != "") {
-                    var geocoder = new google.maps.Geocoder();
-                    geocoder.geocode({
-                        'address': value_city
-                    }, function(results, status) {
-                        if (status == google.maps.GeocoderStatus.OK) {
-                            var Lat = results[0].geometry.location.lat();
-                            var Lng = results[0].geometry.location.lng();
-                            $('#addresslat').val(Lat);
-                            $('#addresslon').val(Lng);
-                            document.getElementById('search_btn').disabled = false;
-                            
-                        } else {
-                            alert("Something got wrong " + status);
-                        }
-                    });
-                } else {
-                            $('#addresslat').val('');
-                            $('#addresslon').val('');
-                            document.getElementById('search_btn').disabled = true;
-                }
-            }, 500);
+             setTimeout(() => {
+                 var value_city = $('#selectcity').val();
+                 if (value_city != "") {
+                     var geocoder = new google.maps.Geocoder();
+                     geocoder.geocode({
+                         'address': value_city
+                     }, function(results, status) {
+                         if (status == google.maps.GeocoderStatus.OK) {
+                             var Lat = results[0].geometry.location.lat();
+                             var Lng = results[0].geometry.location.lng();
+                             $('#addresslat').val(Lat);
+                             $('#addresslon').val(Lng);
+                             document.getElementById('search_btn').disabled = false;
 
-        }
-        function getcordinataddresss() {
-            setTimeout(() => {
-                var value_city = $('#selectcitys').val();
-                if (value_city != "") {
-                    var geocoder = new google.maps.Geocoder();
-                    geocoder.geocode({
-                        'address': value_city
-                    }, function(results, status) {
-                        if (status == google.maps.GeocoderStatus.OK) {
-                            var Lat = results[0].geometry.location.lat();
-                            var Lng = results[0].geometry.location.lng();
-                            $('#addresslats').val(Lat);
-                            $('#addresslons').val(Lng);
-                            document.getElementById('search_btns').disabled = false;
-                            
-                        } else {
-                            alert("Something got wrong " + status);
-                        }
-                    });
-                } else {
-                            $('#addresslats').val('');
-                            $('#addresslons').val('');
-                            document.getElementById('search_btns').disabled = true;
-                }
-            }, 500);
+                         } else {
+                             console.log("Something got wrong " + status);
+                         }
+                     });
+                 } else {
+                     $('#addresslat').val('');
+                     $('#addresslon').val('');
+                     document.getElementById('search_btn').disabled = true;
+                 }
+             }, 500);
 
-        }
+         }
+
+         function getcordinataddresss() {
+             setTimeout(() => {
+                 var value_city = $('#selectcitys').val();
+                 if (value_city != "") {
+                     var geocoder = new google.maps.Geocoder();
+                     geocoder.geocode({
+                         'address': value_city
+                     }, function(results, status) {
+                         if (status == google.maps.GeocoderStatus.OK) {
+                             var Lat = results[0].geometry.location.lat();
+                             var Lng = results[0].geometry.location.lng();
+                             $('#addresslats').val(Lat);
+                             $('#addresslons').val(Lng);
+                             document.getElementById('search_btns').disabled = false;
+
+                         } else {
+                             console.log("Something got wrong " + status);
+                         }
+                     });
+                 } else {
+                     $('#addresslats').val('');
+                     $('#addresslons').val('');
+                     document.getElementById('search_btns').disabled = true;
+                 }
+             }, 500);
+
+         }
+
          function shoemodeldate(id) {
              event.preventDefault();
              $('#orderdetail_modal').appendTo('body').modal('show');
              $('#select_engrid').val(id);
          }
      </script>
-      <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry,places"
-      async></script>
+     <script
+         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry,places"
+         async></script>
  @endpush
