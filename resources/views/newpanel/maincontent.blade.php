@@ -405,6 +405,18 @@
                             <div class="form-group search-info">
                                 <input type="text" class="form-control" id="eng_type" name="date"
                                     value="{{ old('date') }}" placeholder="Select Engineer">
+                                  
+                                    @if(session()->has('engr_cat'))
+                                    <div class="bg-info p-1 mt-1" style="color: white;border-radius:5px" id="cate_hide">Please Select Correct Category Name!!</div>
+                                    @php
+                                        session()->forget('engr_cat');
+                                    @endphp
+                                    <script>
+                                        setTimeout(() => {
+                                            $('#cate_hide').hide();
+                                        }, 3000);
+                                    </script>
+                                    @endif
                                 @error('date')
                                     <div class="alert alert-danger" id="datediv_hide">This Field is Required.</div>
                                     <script>
@@ -1015,7 +1027,7 @@
                     var distance = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(
                         latitude1, longitude1), new google.maps.LatLng(latitude2, longitude2));
                     var distance_km = distance / 1000;
-                    console.log(distance_km);
+                  
                     if (distance_km < 1) {
                         distance_boolean.push('no');
                     } else {

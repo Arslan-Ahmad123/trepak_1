@@ -513,7 +513,7 @@
                     <span class="d-inline-block average-rating">(17)</span>
                 </div> --}}
                 <div class="clinic-details">
-                    <p class="doc-location"><i class="fas fa-map-marker-alt"></i> ${v.address}</p>
+                    <p class="doc-location"><i class="fas fa-map-marker-alt"></i> ${v.city+' '+v.state+', '+v.country}</p>
                     {{-- <ul class="clinic-gallery">
                         <li>
                             <a href="{{ asset('newpanel/assets/img/features/feature-01.jpg') }}" data-fancybox="gallery">
@@ -823,19 +823,7 @@
              var checkuserlogin = {{ Auth::user() ? '1' : '0' }};
              console.warn(checkuserlogin);
              if (checkuserlogin == 1 || $('#lat_cur').val() != "") {
-                 new google.maps.Marker({
-                     position: new google.maps.LatLng(latitude_cur, longitude_cur),
-                     shape: shape,
-                     title: 'Current location',
-                     label: {
-                         text: 'U',
-                         color: "black",
-                         fontSize: "15px",
-                         fontWeight: "bold"
-                     },
-                     map: map,
-
-                 });
+                
 
 
                  var style_s = [{
@@ -859,6 +847,7 @@
                  //   map.setOptions({ styles: styles["hide"] });
 
                  let infoWindow = new google.maps.InfoWindow();
+                 var distance_boolean = [];
                  $.each(allengr, function(i, m) {
                      //  var latLngA = {'lat':32.1877,'lng':74.1945};
                      //  var latLngB = {'lat':m.lan,'lng':m.lng};
@@ -866,24 +855,16 @@
                      var longitude1 = longitude_cur;
                      var latitude2 = m.latitude;
                      var longitude2 = m.longitude;
-                     new google.maps.Marker({
-                         position: new google.maps.LatLng(latitude1, longitude1),
-                         shape: shape,
-                         title: 'Current location',
-                         label: {
-                             text: 'U',
-                             color: "black",
-                             fontSize: "15px",
-                             fontWeight: "bold"
-                         },
-                         map: map,
-
-                     });
+                    
                      var distance = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(
                          latitude1, longitude1), new google.maps.LatLng(latitude2, longitude2));
                      var distance_km = distance / 1000;
 
-
+                     if (distance_km < 1) {
+                        distance_boolean.push('no');
+                    } else {
+                        distance_boolean.push('yes');
+                    }
                      if (distance_km < 100) {
                          // var idfetch =  m.id;
                          // var url = '{{ route('fetchcategorynamemap', ':id') }}';
@@ -949,6 +930,23 @@
 
                      }
                  });
+                 if (distance_boolean.includes('no')) {
+                   
+                } else {
+                    new google.maps.Marker({
+                         position: new google.maps.LatLng(latitude_cur, longitude_cur),
+                         shape: shape,
+                         title: 'Current location',
+                         label: {
+                             text: 'U',
+                             color: "black",
+                             fontSize: "15px",
+                             fontWeight: "bold"
+                         },
+                         map: map,
+
+                     });
+                }
              } else {
                  let infoWindow = new google.maps.InfoWindow();
                  $.each(allengr, function(i, m) {

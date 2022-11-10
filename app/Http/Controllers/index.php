@@ -101,11 +101,16 @@ class index extends Controller
         $address_ex =  explode(',',$res->cityname);
         
         $categoryid = engCategory::where('engrcategory',$res->date)->get('id')->toArray();
-        // dd($categoryid);
-        $resultSearchEngineer = $this->clientservices->searchEngineraddressWise($categoryid[0]['id'], $address_ex[0],$res->addresslat,$res->addresslon);
+        if($categoryid == null){
+            session()->put('engr_cat','Please Select Correct Category Name!!');
+           return redirect()->back();
+        }else{
+            $resultSearchEngineer = $this->clientservices->searchEngineraddressWise($categoryid[0]['id'], $address_ex[0],$res->addresslat,$res->addresslon);
         // dd($resultSearchEngineer);
        
         return view('searchengineerbar.searchengineerview')->with($resultSearchEngineer);
+        }
+       
         // $categoryid = engCategory::where('engrcategory',$res->date)->get('id')->toArray();
         // $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise($categoryid[0]['id']);
         // return view('searchengineer.searchengineerview')->with($resultSearchEngineer);
@@ -127,6 +132,7 @@ class index extends Controller
                 session()->forget('search_client_lon');
                 session()->forget('category_id');
                 session()->forget('city_name');
+                session()->put('engr_cat','Please Select Correct Category Name!!');
                 return redirect(RouteServiceProvider::INDEXPAGE);
 
             }

@@ -174,13 +174,12 @@ target="_blank"><img src="{{asset('newpanel/assets/img/app-store-button.png') }}
 		}
 	};
 })();
-    // previous page should be reloaded when user navigate through browser navigation
-    // for mozilla
-    // window.onunload = function() {};
-    // // for chrome
-    // if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
-    //     location.reload();
-    // }
+ 
+    window.onunload = function() {};
+    // for chrome
+    if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+        location.reload();
+    }
 </script>
 @stack('customjscode')
 <script>
