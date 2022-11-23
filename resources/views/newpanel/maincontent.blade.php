@@ -805,7 +805,7 @@
                         'lng': 74.181595,
                     },
                     mapTypeControl: false,
-                    zoom: 10,
+                    zoom: 13,
                     gestureHandling: 'greedy',
                     draggable: true,
                 });
@@ -886,15 +886,15 @@
                         anchor: new google.maps.Point(15, 30),
                     };
                     var image = {
-                        url: "{{ asset('engrphoto/demo.png') }}",
-                        size: new google.maps.Size(71, 71),
-                        origin: new google.maps.Point(0, 0),
-                        anchor: new google.maps.Point(17, 34),
-                        scaledSize: new google.maps.Size(25, 25)
+                        url: "{{ asset('engrphoto/googlemap2.png') }}",
+                        size: new google.maps.Size(80, 81),
+                             origin: new google.maps.Point(0, 0),
+                             anchor: new google.maps.Point(20, 40),
+                             scaledSize: new google.maps.Size(40, 39)
                     };
                     let marker_s = new google.maps.Marker({
                         position: new google.maps.LatLng(latitude2, longitude2),
-                        shape: shape,
+                       
                         title: m.fname,
                         map: map,
                         icon: image
@@ -973,7 +973,7 @@
                         'lng': longitude_cur,
                     },
                     mapTypeControl: false,
-                    zoom: 8,
+                    zoom: 13,
                     gestureHandling: 'greedy',
                     draggable: true,
                 });
@@ -1065,7 +1065,7 @@
 
 
 
-                    if (distance_km < 100) {
+                    if (distance_km < 80) {
                         // var idfetch =  m.id;
                         // var url = '{{ route('fetchcategorynamemap', ':id') }}';
                         // url = url.replace(':id', idfetch );
@@ -1095,17 +1095,17 @@
                             anchor: new google.maps.Point(15, 30),
                         };
                         var image = {
-                            url: "{{ asset('engrphoto/demo.png') }}",
-                            size: new google.maps.Size(71, 71),
-                            origin: new google.maps.Point(0, 0),
-                            anchor: new google.maps.Point(17, 34),
-                            scaledSize: new google.maps.Size(25, 25)
+                            url: "{{ asset('engrphoto/googlemap2.png') }}",
+                            size: new google.maps.Size(80, 81),
+                             origin: new google.maps.Point(0, 0),
+                             anchor: new google.maps.Point(20, 40),
+                             scaledSize: new google.maps.Size(40, 39)
                         };
 
 
                         let marker_s = new google.maps.Marker({
                             position: new google.maps.LatLng(latitude2, longitude2),
-                            shape: shape,
+                           
                             title: m.fname,
                             label: {
                                 text: parseFloat(distance_km).toFixed(1) + 'KM',

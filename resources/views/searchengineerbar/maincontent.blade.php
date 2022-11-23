@@ -1,4 +1,64 @@
  <style>
+         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+.pagination ul {
+
+    display: flex;
+    flex-wrap: wrap;
+    background: #fff;
+    position: relative;
+    left: 35%;
+    padding: 8px;
+    border-radius: 50px;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.pagination ul li {
+    color: #20B2AA;
+    list-style: none;
+    line-height: 45px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s ease;
+}
+
+.pagination ul li.numb {
+    list-style: none;
+    height: 45px;
+    width: 45px;
+    margin: 0 3px;
+    line-height: 45px;
+    border-radius: 50%;
+}
+
+.pagination ul li.numb.first {
+    margin: 0px 3px 0 -5px;
+}
+
+.pagination ul li.numb.last {
+    margin: 0px -5px 0 3px;
+}
+
+.pagination ul li.dots {
+    font-size: 22px;
+    cursor: default;
+}
+
+.pagination ul li.btn {
+    padding: 0 20px;
+    border-radius: 50px;
+}
+
+.pagination li.active,
+.pagination ul li.numb:hover,
+.pagination ul li:first-child:hover,
+.pagination ul li:last-child:hover {
+    color: #fff;
+    background: #20B2AA;
+} 
      .alink {
          display: inline-block;
          text-align: center;
@@ -332,7 +392,17 @@
 
              </div>
 
-             <div class="col-md-12 col-lg-8 col-xl-9" id="all_engr_show">
+             <div class="col-md-12 col-lg-8 col-xl-9">
+                <div class="row">
+                    <div class="col-md-12" id="all_engr_show">
+ 
+                    </div>
+                    <div class="col-md-12">
+                       <div class="pagination">
+                        <ul> <!--pages or li are comes from javascript --> </ul>
+                       </div>
+                 </div>
+                 </div>
 
                  {{-- @include('searchengineer.searchengrpage')
  {!! $engr->links() !!} --}}
@@ -467,6 +537,12 @@
      <script src="{{ asset('js/app.js') }}"></script>
      <script>
          //  ============function for show map and clients=================
+           //  ============function for  clients with pagination=================
+           var totalPages = 0;
+         var allengr_array;
+         var page = 1;
+         var element_pagination = document.querySelector(".pagination ul");
+         //  ============function for show map and clients=================
 
          //  ============function for show map and clients=================
          $(document).ready(function() {
@@ -479,109 +555,13 @@
                  var output = "";
                  $('#all_engr_show').html('');
                  if (res.length > 0) {
-                     $.each(res, function(i, v) {
-
-                         if (v.signupoption == 1) {
-                             var image = v.pic;
-                         } else {
-                             var image = `{{ asset('engrphoto/${v.pic}') }}`;
-
-                         }
-                         $('#all_engr_show').append(`<div class="card">
-    
-             <div class="doctor-widget searchcard">
-        <div class="doc-info-left">
-            <div class="doctor-img">
-                {{-- <a href="doctor-profile.html"> --}}
-                   
-                    <img src="${image }"  alt="Engr Image" style="width: 100%;height: 100px;" >
-                {{-- </a> --}}
-            </div>
-            <div class="doc-info-cont">
-                <h4 class="doc-name"><a href="javascript:void(0)">${v.fname }</a></h4>
-                <p class="doc-speciality">${v.categoryname}</p>
-                <div id="specilizationfield">
-                    <h5 class="doc-department" style="text-align: left"><img src="{{ asset('newpanel/assets/img/specialities/specialities-05.png') }}"  alt="Speciality">AUTO CAD</h5>
-                </div>
-                <div id="client_engr_chat_box">
-                    <h5 class="doc-department" style="text-align: left;"><a href="javascript:void(0)" style="font-size: 14px;color: #757575;" ><i class="far fa-comment"></i> Chat</a></h5>
-                </div>
-                {{-- <div class="rating">
-                    <i class="fas fa-star filled"></i>
-                    <i class="fas fa-star filled"></i>
-                    <i class="fas fa-star filled"></i>
-                    <i class="fas fa-star filled"></i>
-                    <i class="fas fa-star"></i>
-                    <span class="d-inline-block average-rating">(17)</span>
-                </div> --}}
-                <div class="clinic-details">
-                    <p class="doc-location"><i class="fas fa-map-marker-alt"></i> ${v.city+' '+v.state+', '+v.country}</p>
-                    {{-- <ul class="clinic-gallery">
-                        <li>
-                            <a href="{{ asset('newpanel/assets/img/features/feature-01.jpg') }}" data-fancybox="gallery">
-                                <img src="{{ asset('newpanel/assets/img/features/feature-01.jpg') }}" alt="Feature">
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ asset('newpanel/assets/img/features/feature-02.jpg') }}" data-fancybox="gallery">
-                                <img  src="{{ asset('newpanel/assets/img/features/feature-02.jpg') }}" alt="Feature">
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ asset('newpanel/assets/img/features/feature-03.jpg') }}" data-fancybox="gallery">
-                                <img src="{{ asset('newpanel/assets/img/features/feature-03.jpg') }}" alt="Feature">
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ asset('newpanel/assets/img/features/feature-04.jpg') }}" data-fancybox="gallery">
-                                <img src="{{ asset('newpanel/assets/img/features/feature-04.jpg') }}" alt="Feature">
-                            </a>
-                        </li>
-                    </ul> --}}
-                </div>
-                {{-- <div class="clinic-services">
-                    <span>3D Graph</span>
-                    <span>Artitect</span>
-                </div> --}}
-                <div id="showhideactionbtn" class="mt-3">
-                    <div class="clinic-booking">
-                        <form method="post">
-                            @csrf
-                            <input type="text" name="userid" value="${v.id}" hidden>
-                            <input type="text" name="bookingid" value="${v.id}" hidden>
-                            <button class="btn-info p-0 px-2 btn w-45" type="submit" formaction="{{ route('viewprofileeng') }}"><i class="fa fa-eye" aria-hidden="true"></i>Profile</button>
-                            <button class="btn-info p-0 px-2 btn w-45" type="submit"  onclick="shoemodeldate(${v.id})" ><i class="fa fa-check" aria-hidden="true"></i>Book</button>
-                        </form>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-        <div class="doc-info-right">
-            <div class="clini-infos">
-                <ul>
-                    <li><i class="far fa-thumbs-up"></i> 98%</li>
-                    <li><a href="javascript:void(0)"><i class="far fa-comment"></i> Chat</a></li>
-                    {{-- <li><i class="fas fa-map-marker-alt"></i> Florida, USA</li> --}}
-                    {{-- <li><i class="far fa-money-bill-alt"></i> $300 - $1000 <i class="fas fa-info-circle" data-toggle="tooltip" title="Lorem Ipsum"></i> </li> --}}
-                </ul>
-            </div>
-            <div class="clinic-booking">
-                <form method="post">
-                    @csrf
-                    <input type="text" name="userid" value="${v.id}" hidden>
-                    <input type="text" name="bookingid" value="${v.id}" hidden>
-                    <button class="btn-info p-0 px-2 btn w-45" type="submit" formaction="{{ route('viewprofileeng') }}"><i class="fa fa-eye" aria-hidden="true"></i>Profile</button>
-                    <button class="btn-info p-0 px-2 btn w-45" type="submit"  onclick="shoemodeldate(${v.id})" ><i class="fa fa-check" aria-hidden="true"></i>Book</button>
-                </form>
-                {{-- <a class="apt-btn" href="{{ route('booking',['id'=>$engr->id]) }}"><i class="fa fa-check" aria-hidden="true"></i>Book</a> --}}
-            </div>
-        </div>
-    </div>
-
-</div>`);
-
-                     });
+                    let gettotalpage = Math.ceil(res.length / 5);
+                    
+                    totalPages = gettotalpage;
+                  
+                    allengr_array = res;
+                    showEngineer(allengr_array,page);
+                    createPagination(totalPages, page,element_pagination);
                  } else {
                      $('#all_engr_show').html('No Engineer Found!!');
                  }
@@ -816,7 +796,7 @@
                      lng: longitude_cur,
                  },
                  mapTypeControl: false,
-                 zoom: 8,
+                 zoom: 13,
              });
              const shape = {
                  coords: [1, 1, 1, 20, 18, 20, 18, 1],
@@ -885,7 +865,7 @@
                     } else {
                         distance_boolean.push('yes');
                     }
-                     if (distance_km < 100) {
+                     if (distance_km < 80) {
                          // var idfetch =  m.id;
                          // var url = '{{ route('fetchcategorynamemap', ':id') }}';
                          // url = url.replace(':id', idfetch );
@@ -913,20 +893,20 @@
                              anchor: new google.maps.Point(15, 30),
                          };
                          var image = {
-                             url: "{{ asset('engrphoto/demo.png') }}",
-                             size: new google.maps.Size(71, 71),
+                            url: "{{ asset('engrphoto/googlemap2.png') }}",
+                             size: new google.maps.Size(80, 81),
                              origin: new google.maps.Point(0, 0),
-                             anchor: new google.maps.Point(17, 34),
-                             scaledSize: new google.maps.Size(25, 25)
+                             anchor: new google.maps.Point(20, 40),
+                             scaledSize: new google.maps.Size(40, 39)
                          };
 
 
                          let marker_s = new google.maps.Marker({
                              position: new google.maps.LatLng(latitude2, longitude2),
-                             shape: shape,
+                             
                              title: m.fname,
                              label: {
-                                 text: parseFloat(distance_km).toFixed(1) + 'KM',
+                                 text: parseFloat(distance_km).toFixed(0) + 'KM',
                                  color: "red",
                                  fontSize: "15px",
                                  fontWeight: "bold"
@@ -1014,17 +994,17 @@
                          anchor: new google.maps.Point(15, 30),
                      };
                      var image = {
-                         url: "{{ asset('engrphoto/demo.png') }}",
-                         size: new google.maps.Size(71, 71),
-                         origin: new google.maps.Point(0, 0),
-                         anchor: new google.maps.Point(17, 34),
-                         scaledSize: new google.maps.Size(25, 25)
+                         url: "{{ asset('engrphoto/googlemap2.png') }}",
+                         size: new google.maps.Size(80, 81),
+                             origin: new google.maps.Point(0, 0),
+                             anchor: new google.maps.Point(20, 40),
+                             scaledSize: new google.maps.Size(40, 39)
                      };
 
 
                      let marker_s = new google.maps.Marker({
                          position: new google.maps.LatLng(latitude2, longitude2),
-                         shape: shape,
+                        
                          title: m.fname,
 
                          map: map,
@@ -1129,6 +1109,219 @@
              $('#orderdetail_modal').appendTo('body').modal('show');
              $('#select_engrid').val(id);
          }
+
+
+         function createPagination(totalPages, page, element) {
+
+showEngineer(allengr_array, page);
+
+let liTag = '';
+let active;
+let beforePage = page > 1 ? page - 1 : 1;
+let afterPage = page > 1 ? page + 1 : 1;
+console.warn('tlpage:' + totalPages);
+
+
+if (page > 1) { //show the next button if the page value is greater than 1
+    liTag +=
+        `<li class="btn prev" onclick="createPagination(totalPages, ${page - 1},element_pagination)"><span><i class="fas fa-angle-left"></i> Prev</span></li>`;
+    console.log('test1')
+
+}
+
+if (page > 2) { //if page value is less than 2 then add 1 after the previous button
+    liTag +=
+        `<li class="first numb" onclick="createPagination(totalPages, 1,element_pagination)"><span>1</span></li>`;
+    console.log('test2')
+    if (page > 3) { //if page value is greater than 3 then add this (...) after the first li or page
+        liTag += `<li class="dots"><span>...</span></li>`;
+        console.log('test3')
+    }
+}
+
+// how many pages or li show before the current li
+if (page == totalPages) {
+    // beforePage = beforePage - 2;
+} else if (page == totalPages - 1) {
+    beforePage = beforePage - 1;
+
+}
+// how many pages or li show after the current li
+if (page == 1) {
+    afterPage = afterPage + 2;
+} else if (page == 2) {
+    afterPage = afterPage + 1;
+}
+console.warn('before[age no]:' + beforePage);
+console.warn('afterpage[age no]:' + afterPage);
+for (var plength = beforePage; plength <= afterPage; plength++) {
+    if (plength > totalPages) { //if plength is greater than totalPage length then continue
+        continue;
+    }
+    if (plength == 0) { //if plength is 0 than add +1 in plength value
+        plength = plength + 1;
+    }
+    if (page == plength) { //if page is equal to plength than assign active string in the active variable
+        active = "active";
+    } else { //else leave empty to the active variable
+        active = "";
+    }
+    if (totalPages == 1) {
+        liTag += `<li class="numb ${active}" ><span>${plength}</span></li>`;
+    } else {
+        liTag +=
+            `<li class="numb ${active}" onclick="createPagination(totalPages, ${plength},element_pagination)"><span>${plength}</span></li>`;
+    }
+
+}
+
+if (page < totalPages - 1) { //if page value is less than totalPage value by -1 then show the last li or page
+    if (page < totalPages -
+        2) { //if page value is less than totalPage value by -2 then add this (...) before the last li or page
+        liTag += `<li class="dots"><span>...</span></li>`;
+    }
+    liTag +=
+        `<li class="last numb" onclick="createPagination(totalPages, ${totalPages},element_pagination)"><span>${totalPages}</span></li>`;
+    console.log('test5')
+}
+
+if (page < totalPages) { //show the next button if the page value is less than totalPage(20)
+    liTag +=
+        `<li class="btn next" onclick="createPagination(totalPages, ${page + 1},element_pagination)"><span>Next <i class="fas fa-angle-right"></i></span></li>`;
+}
+
+element.innerHTML = liTag; //add li tag inside ul tag
+return liTag; //reurn the li tag
+}
+// pagination with js
+
+function showEngineer(v, page) {
+// console.log('ispage no  is asijas' + page);
+var perpageshow = 5;
+var last_index_page = 4;
+if (page == 1) {
+    var startindex = 0;
+    var endindex = last_index_page;
+} else {
+    let calnopre = page - 1;
+    let calno = page * perpageshow;
+    var startindex = 0 + (calnopre * perpageshow);
+    var endindex = last_index_page + (calno - 1);
+
+}
+console.log('ispage no  is asijas' + startindex);
+console.log('ispage no  is asijas' + endindex);
+$('#all_engr_show').html('');
+for (let k = startindex; k <= endindex; k++) {
+    if (v.length == k) {
+        break;
+    }
+    console.log(v[k].fname);
+
+    if (v[k].signupoption == 1) {
+        var image = v[k].pic;
+    } else {
+        var image = `{{ asset('engrphoto/${v[k].pic}') }}`;
+
+    }
+    $('#all_engr_show').append(`<div class="card">
+
+      <div class="doctor-widget searchcard">
+<div class="doc-info-left">
+<div class="doctor-img">
+   {{-- <a href="doctor-profile.html"> --}}
+      
+       <img src="${image }"  alt="Engr Image" style="width: 100%;height: 100px;" >
+   {{-- </a> --}}
+</div>
+<div class="doc-info-cont">
+   <h4 class="doc-name"><a href="javascript:void(0)">${v[k].fname }</a></h4>
+   <p class="doc-speciality">${v[k].categoryname}</p>
+   <div id="specilizationfield">
+       <h5 class="doc-department" style="text-align: left"><img src="{{ asset('newpanel/assets/img/specialities/specialities-05.png') }}"  alt="Speciality">AUTO CAD</h5>
+   </div>
+   <div id="client_engr_chat_box">
+       <h5 class="doc-department" style="text-align: left;"><a href="javascript:void(0)" style="font-size: 14px;color: #757575;" ><i class="far fa-comment"></i> Chat</a></h5>
+   </div>
+   {{-- <div class="rating">
+       <i class="fas fa-star filled"></i>
+       <i class="fas fa-star filled"></i>
+       <i class="fas fa-star filled"></i>
+       <i class="fas fa-star filled"></i>
+       <i class="fas fa-star"></i>
+       <span class="d-inline-block average-rating">(17)</span>
+   </div> --}}
+   <div class="clinic-details">
+       <p class="doc-location"><i class="fas fa-map-marker-alt"></i> ${v[k].city+' '+v[k].state+', '+v[k].country}</p>
+       {{-- <ul class="clinic-gallery">
+           <li>
+               <a href="{{ asset('newpanel/assets/img/features/feature-01.jpg') }}" data-fancybox="gallery">
+                   <img src="{{ asset('newpanel/assets/img/features/feature-01.jpg') }}" alt="Feature">
+               </a>
+           </li>
+           <li>
+               <a href="{{ asset('newpanel/assets/img/features/feature-02.jpg') }}" data-fancybox="gallery">
+                   <img  src="{{ asset('newpanel/assets/img/features/feature-02.jpg') }}" alt="Feature">
+               </a>
+           </li>
+           <li>
+               <a href="{{ asset('newpanel/assets/img/features/feature-03.jpg') }}" data-fancybox="gallery">
+                   <img src="{{ asset('newpanel/assets/img/features/feature-03.jpg') }}" alt="Feature">
+               </a>
+           </li>
+           <li>
+               <a href="{{ asset('newpanel/assets/img/features/feature-04.jpg') }}" data-fancybox="gallery">
+                   <img src="{{ asset('newpanel/assets/img/features/feature-04.jpg') }}" alt="Feature">
+               </a>
+           </li>
+       </ul> --}}
+   </div>
+   {{-- <div class="clinic-services">
+       <span>3D Graph</span>
+       <span>Artitect</span>
+   </div> --}}
+   <div id="showhideactionbtn" class="mt-3">
+       <div class="clinic-booking">
+           <form method="post">
+               @csrf
+               <input type="text" name="userid" value="${v[k].id}" hidden>
+               <input type="text" name="bookingid" value="${v[k].id}" hidden>
+             
+               <button class="btn-info p-0 px-2 btn w-45" type="submit" formaction="{{ route('viewprofileeng') }}"><i class="fa fa-eye" aria-hidden="true"></i>Profile</button>
+               <button class="btn-info p-0 px-2 btn w-45" type="submit" onclick="shoemodeldate(${v.id})" ><i class="fa fa-check" aria-hidden="true"></i>Book</button>
+           </form>
+       </div>
+   </div>
+   
+</div>
+</div>
+<div class="doc-info-right">
+<div class="clini-infos">
+   <ul>
+       <li><i class="far fa-thumbs-up"></i> 98%</li>
+       <li><a href="javascript:void(0)" ><i class="far fa-comment"></i> Chat</a></li>
+       {{-- <li><i class="fas fa-map-marker-alt"></i> Florida, USA</li> --}}
+       {{-- <li><i class="far fa-money-bill-alt"></i> $300 - $1000 <i class="fas fa-info-circle" data-toggle="tooltip" title="Lorem Ipsum"></i> </li> --}}
+   </ul>
+</div>
+<div class="clinic-booking">
+   <form method="post">
+       @csrf
+       <input type="text" name="userid" value="${v[k].id}" hidden>
+       <input type="text" name="bookingid" value="${v[k].id}" hidden>
+      
+       <button class="btn-info p-0 px-2 btn w-45" type="submit" formaction="{{ route('viewprofileeng') }}"><i class="fa fa-eye" aria-hidden="true"></i>Profile</button>
+       <button class="btn-info p-0 px-2 btn w-45" type="submit" onclick="shoemodeldate(${v[k].id})" ><i class="fa fa-check" aria-hidden="true"></i>Book</button>
+   </form>
+   {{-- <a class="apt-btn" href="{{ route('booking',['id'=>$engr->id]) }}"><i class="fa fa-check" aria-hidden="true"></i>Book</a> --}}
+</div>
+</div>
+</div>
+
+</div>`);
+}
+
+}
      </script>
      <script
          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry,places"

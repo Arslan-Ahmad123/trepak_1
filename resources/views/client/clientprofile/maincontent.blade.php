@@ -210,7 +210,7 @@
 																</tr>
 															</thead>
 															<tbody>
-																@if($order)
+																@if(count($order) > 0)
 																
 																@foreach ($order as $orders)
 																
@@ -286,9 +286,15 @@
 																</tr>
 															</thead>
 															<tbody>
+																@php
+																	$checkallpending = true;
+																@endphp
 																@foreach ($order as $orders)
+																
 																@if ($orders->clientstatus == 0)
-																	
+																@php
+																$checkallpending = false;
+															    @endphp
 																
 																<tr>
 																	<td>
@@ -317,6 +323,11 @@
 																</tr>
 																@endif
 																@endforeach
+																@if ($checkallpending)
+																<tr>
+																	<td colspan="6" style="text-align:center;color:black;font-weight: 600">No Appoinment Found!</td>
+																</tr>
+																@endif
 																
 																
 																
@@ -345,8 +356,15 @@
 																</tr>
 															</thead>
 															<tbody>
+																@php
+																$checkallcom = true;
+															    @endphp
 																@foreach ($order as $orders)
+																
 																@if ($orders->clientstatus == 1)
+																@php
+																$checkallcom = false;
+															    @endphp
 																<tr>
 																	<td>
 																		<h2 class="table-avatar">
@@ -376,6 +394,11 @@
 																
 																@endif
 																@endforeach
+																@if ($checkallcom)
+																<tr>
+																	<td colspan="6" style="text-align:center;color:black;font-weight: 600">No Appoinment Found!</td>
+																</tr>
+																@endif
 																
 																
 																
