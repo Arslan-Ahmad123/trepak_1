@@ -1,4 +1,10 @@
 <style>
+    #both_s_o{
+        font-size:15px;
+    }
+    #both_s_o:hover{
+        color:white;
+    }
     @media only screen and (max-width: 575.98px) {
         .navbrand_logo {
             position: relative;
@@ -139,7 +145,7 @@
 
                                                 <!--    {{ __('Sign in') }}-->
                                                 <!--</x-button>-->
-                                                <button style="background-color: #15558d !important;color:white;"
+                                                <button style="background-color: #15558d !important;color:white;width: 45%;margin-bottom: -49px;"
                                                     type="submit" id="login_btn" formaction="{{ route('login') }}"
                                                     class="btn bg-success btn-block  mt-2">Login</button>
                                             </div>
@@ -148,11 +154,16 @@
 
                                 </x-guest-layout>
                             </div>
+                            <div style="text-align: center;background-color: #15558d !important;color:white;border-radius:4px;padding: 7px 0px;width:45%" class="mt-2">
+                                <a href="{{ route('clienteng_register_page') }}" id="both_s_o">Sign Up</a>
+                            </div>
                             <div id="or">
 
                                 or
 
                             </div>
+                           
+                           
                             <div class="fb-hint center" style="text-align:center;color: #000000;">Login with Facebook &
                                 Google</div>
                             <div class="fb-hint center" style="text-align:center;padding:25px">

@@ -67,7 +67,7 @@ Version      : 1.0
     
     font-weight: normal;
     font-style: normal;
-    font-size: 24px;
+    font-size: 17px;
     display: inline-block;
     line-height: 1;
     text-transform: none;
@@ -967,7 +967,9 @@ button.bg-danger:hover {
 .form-group {
     margin-bottom: 1.25rem;
 }
-
+.chat-window .chat-cont-left {
+    left: 0%;
+}
 /*-----------------
 	4. Avatar
 -----------------------*/
@@ -2255,6 +2257,9 @@ html.menu-opened body {
     margin: 0;
     padding: 0;
     text-align: right;
+}
+#back_btn_chatoption{
+    display:none;
 }
 .policy-menu li {
     display: inline-block;
@@ -4207,7 +4212,7 @@ html.menu-opened body {
     font-size: 0.875rem;
     font-weight: 500;
     color: #272b41;
-    text-transform: capitalize;
+  
 }
 .patient-info ul li + li {
     margin-top: 15px;
@@ -6212,6 +6217,16 @@ display:none;
         margin-bottom: 0;
         list-style: none;
     }
+    
+    #back_btn_chatoption{
+        display:block;
+        position: absolute;
+        right: 3%;
+        cursor: pointer;
+    }
+    .material-icons{
+        display: none;
+    }
     .main-nav li.login-link {
         display: block;
     }
@@ -6374,8 +6389,9 @@ display:none;
         margin-left: auto;
     }
     .chat-window.chat-slide .chat-cont-left {
-        left: -100%;
+        left: -120%;
     }
+
     .chat-window.chat-slide .chat-cont-right {
         right: 0;
         opacity: 1;
@@ -6541,9 +6557,7 @@ display:none;
         .user-last-chat {
         max-width: 250px;
     }
-    .chat-window .chat-cont-right .chat-header .media .media-body {
-        display: none;
-    }
+  
     .banner-wrapper .banner-header h1 {
         font-size: 2rem;
     }

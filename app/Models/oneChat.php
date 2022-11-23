@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use Carbon\Carbon;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
@@ -16,5 +17,10 @@ class oneChat extends Model
         'reciverid',
         'message',
     ];
+
+    public function getcreatedAtAttribute($res){
+        // return $res->diffForHumans();
+        return Carbon::parse($res)->format('M-d-Y g:i A');
+    }
     
 }

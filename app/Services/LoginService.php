@@ -14,6 +14,7 @@ class LoginService
 {
     public function storeSignupdata($request)
     {
+       
         $email_code = rand(111111, 999999);
         $longitude = $request->longitude;
         $latitude = $request->latitude;

@@ -38,6 +38,7 @@ class engineerController extends Controller
     }
      public function engclient(){
         $app = appointmentInfo::where('engrid',Auth::user()->id)->distinct()->get(['clientid']);
+        
         return view('engineerclient.engclientviewpage')->with(['data'=>$app]);
     }
      public function engclientprofile(){
@@ -171,11 +172,27 @@ class engineerController extends Controller
     }
     public function getchatuser(){
         $userid = oneChat::where('engrid',Auth::user()->id)->distinct()->get('clientid');
+        
         $clientarray = [];
-        $admin = User::where('role','admin')->get();
-        $clientarray[] = $admin[0]; 
+
+        $admin = User::where('role','admin')->get()->toArray();
+      if(count($admin) > 0){
+        $imageuser = asset('engrphoto/'.$admin[0]['pic']);
+        $admin[0]['user_img'] = $imageuser;
+        $clientarray[] = $admin[0];
+      }
+        
         foreach($userid as $result){
-            $clientarray[] = User::find($result->clientid);
+            $user_d = User::where('id',$result->clientid)->get()->toArray();
+        
+            if($user_d[0]['signupoption'] == 1){
+                $imageuser = $user_d[0]['pic'];
+            }else{
+                $imageuser = asset('engrphoto/'.$user_d[0]['pic']);
+            }
+        
+            $user_d[0]['user_img'] = $imageuser;
+            $clientarray[] =  $user_d[0]; 
         }
         return response()->json($clientarray);
     }

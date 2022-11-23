@@ -1,4 +1,24 @@
 <style>
+    @media only screen and (min-width: 992px) {
+        .footer_pc {
+            position: fixed;
+            bottom: 0%;
+            width: 100%;
+        }
+        .footer_lp {
+            position: static;
+            bottom: 0%;
+            width: 100%;
+        }
+        
+
+        .topsection {
+            margin-top: 0px;
+            box-sizing: border-box;
+            padding-top: 120px;
+        }
+    }
+
     @media only screen and (max-width: 575.98px) {
         .navbrand_logo {
             position: relative;
@@ -66,8 +86,7 @@
                             <!--	<img src="{{ asset('newpanel/assets/img/login-banner.jpg') }}" class="img-fluid" alt="Doccure Login">	-->
                             <!--</div>-->
                             <div class="col-md-12 col-lg-6 login-right"
-                                style="box-shadow: 0px 0px 15px 0px rgb(0 0 0 / 50%); margin-bottom: 100px;margin-top: 40px;
-">
+                                style="box-shadow: 0px 0px 15px 0px rgb(0 0 0 / 50%); margin-bottom: 100px;margin-top: 40px;">
                                 <div class="login-header" style="text-align:center;font-size:25px;font-weight:500">
                                     <h2>Select Role</h2>
 
@@ -99,7 +118,9 @@
                                             </div>
                                             <div class="form-group" id="showselectcitydiv" style="display:none">
                                                 <label for="select_city">Select City</label>
-                                                <input class="form-control"  onblur="getcordinataddress()" required type="text" id="select_city" name="select_city" style="border-radius:6px">
+                                                <input class="form-control" onblur="getcordinataddress()" required
+                                                    type="text" id="select_city" name="select_city"
+                                                    style="border-radius:6px">
                                             </div>
                                             <input type="hidden" name="lon" id="lon">
                                             <input type="hidden" name="lat" id="lat">
@@ -158,47 +179,60 @@
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&v=weekly&channel=2&libraries=geometry,places&callback=initMap"
             async></script>
         <script>
-            function initMap(){
-                if(document.getElementById('select_city')){
+            function initMap() {
+                if (document.getElementById('select_city')) {
                     var input = document.getElementById('select_city');
-                const options = {
-                    fields: ["address_components", "geometry", "icon", "name"],
-                    strictBounds: false,
-                };
-                var autocomplete = new google.maps.places.Autocomplete(input, options);
+                    const options = {
+                        fields: ["address_components", "geometry", "icon", "name"],
+                        strictBounds: false,
+                    };
+                    var autocomplete = new google.maps.places.Autocomplete(input, options);
                 }
             }
+           
+            if(window.innerHeight > 715){
+                var footer_class =  document.getElementById('footer').classList;
+                footer_class.remove('footer_lp');
+                footer_class.add('footer_pc');
+            }else{
+                var footer_class =  document.getElementById('footer').classList;
+                footer_class.remove('footer_pc');
+                footer_class.add('footer_lp');
+            }
+          
+
             function initMaps() {
                 const geocoder = new google.maps.Geocoder();
                 geocodeLatLng(geocoder);
             }
-            function getcordinataddress() {
-            setTimeout(() => {
-                var value_city = $('#select_city').val();
-                if (value_city != "") {
-                    var geocoder = new google.maps.Geocoder();
-                    geocoder.geocode({
-                        'address': value_city
-                    }, function(results, status) {
-                        if (status == google.maps.GeocoderStatus.OK) {
-                            var Lat = results[0].geometry.location.lat();
-                            var Lng = results[0].geometry.location.lng();
-                            $('#lat').val(Lat);
-                            $('#lon').val(Lng);
-                            const geocoder = new google.maps.Geocoder();
-                            geocodeLatLng(geocoder);
-                            
-                            
-                        } else {
-                            alert("Something got wrong " + status);
-                        }
-                    });
-                } else {
-                   console.log('please fill all the field');
-                }
-            }, 500);
 
-        }
+            function getcordinataddress() {
+                setTimeout(() => {
+                    var value_city = $('#select_city').val();
+                    if (value_city != "") {
+                        var geocoder = new google.maps.Geocoder();
+                        geocoder.geocode({
+                            'address': value_city
+                        }, function(results, status) {
+                            if (status == google.maps.GeocoderStatus.OK) {
+                                var Lat = results[0].geometry.location.lat();
+                                var Lng = results[0].geometry.location.lng();
+                                $('#lat').val(Lat);
+                                $('#lon').val(Lng);
+                                const geocoder = new google.maps.Geocoder();
+                                geocodeLatLng(geocoder);
+
+
+                            } else {
+                                alert("Something got wrong " + status);
+                            }
+                        });
+                    } else {
+                        console.log('please fill all the field');
+                    }
+                }, 500);
+
+            }
 
             function geocodeLatLng(geocoder) {
 
@@ -266,14 +300,14 @@
             }
             const error = () => {
                 $('#showselectcitydiv').show('slow');
-                
+
                 // var element = $('.toast')[0];
                 // var myToast = new bootstrap.Toast(element, {
                 //     autohide: false
                 // });
                 // myToast.show();
-               
-               
+
+
 
             }
 

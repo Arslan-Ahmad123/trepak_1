@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use App\Events\conformemail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\index;
+use App\Models\appointmentInfo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -127,6 +128,11 @@ Route::get('/fetchallrangeengr', function () {
         ->get()->toArray();
     return response()->json($getuser);
 });
+Route::get('/fetchallrangeengrdfl', function () {
+    $getuser = User::with('category')->where('role', 'enge')->where('country','pakistan')
+        ->get()->toArray();
+    return response()->json($getuser);
+});
 Route::get('/logingoogle', function (Request $request) {
     return Socialite::driver('google')->redirect();
 })->name('logingoogle');
@@ -184,8 +190,17 @@ Route::get('/google/callback', function () {
     } else {
         $user = Socialite::driver('google')->stateless()->user();
         $users       =   User::where(['email' => $user->email])->first();
+       
         event(new Registered($users));
         if ($users) {
+            if($users->signupoption == 0){
+                User::where(['email' => $user->email])->update([
+                    'pic' => $user->avatar,
+                    'fname' => $user->name,
+                    'password' => Hash::make('null12345'),
+                    'signupoption' => 1,
+                ]);
+            }
             Auth::login($users);
             if (Auth::user()->role == 'enge') {
                 if ($users->adminengr == 1) {
@@ -312,6 +327,14 @@ Route::get('/facebook/callback', function () {
         $users       =   User::where(['email' => $user->email])->first();
         event(new Registered($users));
         if ($users) {
+            if($users->signupoption == 0){
+                User::where(['email' => $user->email])->update([
+                'pic' => $user->avatar,
+                'fname' => $user->name,
+                'password' => Hash::make('null12345'),
+                'signupoption' => 1,
+            ]);
+            }
             Auth::login($users);
             if (Auth::user()->role == 'enge') {
                 if ($users->adminengr == 1) {
@@ -504,6 +527,55 @@ Route::post('getuserlanlog', function (Request $res) {
     $new_latitude = $res->lat;
     $engr_array = [];
     $user = User::where('role', 'enge')->get()->toArray();
+
+    foreach ($user as $users) {
+        $category = engCategory::find($users['engrcategoryid']);
+        $old_longitude = $users['longitude'];
+        $old_latitude = $users['latitude'];
+        $dLat = deg2rad($new_latitude - $old_latitude);
+        $dLon = deg2rad($new_longitude - $old_longitude);
+        $radius = 6371;
+        $a = sin($dLat / 2) * sin($dLat / 2) +
+            cos(deg2rad($old_latitude)) * cos(deg2rad($new_latitude)) *
+            sin($dLon / 2) * sin($dLon / 2);
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+        $d = $radius * $c; // Distance in km
+        if ($d <= 100) {
+
+            // array_push($users, $d);
+            // array_push($users,$categoryname->engrcategory);
+            $users['distance'] = $d;
+            $users['category'] = $category;
+            $engr_array[] = $users;
+        }
+    }
+    return response()->json($engr_array);
+    // if (session()->has('all_engrs')) {
+    //     session()->forget('all_engrs');
+    //     session()->push('all_engrs', $engr_array);
+    // } else {
+    //     session()->push('all_engrs', $engr_array);
+    // }
+});
+Route::get('clienteng_register_page',function(){
+    if(Auth::check()){
+        return redirect()->route('home');
+    }else{
+        return view('registerpage.registerpageview');
+    }
+})->name('clienteng_register_page');
+
+Route::get('complaintcell',function(){
+    $data = appointmentInfo::where('clientid',Auth::user()->id)->distinct()->get(['engrid']);
+   
+    return view('client.complaintcell.complaintcell')->with( ['data'=>$data]);
+
+})->name('complaintcell');
+Route::post('getuserlanlog_cn', function (Request $res) {
+    $new_longitude =  $res->lon;
+    $new_latitude = $res->lat;
+    $engr_array = [];
+    $user = User::where('role', 'enge')->where('country',$res->country)->get()->toArray();
 
     foreach ($user as $users) {
         $category = engCategory::find($users['engrcategoryid']);

@@ -2166,6 +2166,27 @@ module.exports = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
+
+function scrollToBottom() {
+  var messages = document.getElementsByClassName('chatbody')[0];
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function scrollToBottoms() {
+  var messages = document.getElementsByClassName('chat_scroll_one')[0];
+  messages.scrollTop = messages.scrollHeight;
+}
+
+var d = new Date();
+var hour = d.getHours();
+var minute = d.getMinutes();
+hour = hour % 12 || 12;
+var suffix = hour >= 12 ? "PM" : "AM";
+var monthname = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+var month = d.getMonth();
+var year = d.getFullYear();
+var date = d.getDate();
+var c_date = monthname[month] + '-' + date + '-' + year + ' ' + hour + ":" + minute + ' ' + suffix;
 $(document).ready(function () {
   $(document).on('click', '#submitmsg', function (e) {
     e.preventDefault();
@@ -2221,11 +2242,13 @@ $(document).ready(function () {
                   console.log(data);
 
                   if (data == 'user') {
-                    var app_s = "<div class='outgoing'>" + "<div class='bubble'>" + "<p>" + message + "</p>" + "</div>" + "</div>";
+                    var app_s = "<div class='outgoing'>" + "<span  style='font-size:12px;'>" + c_date + "</span>" + "<br>" + "<div class='bubble'>" + "<p>" + message + "</p>" + "</div>" + "</div>";
                     $('#chatbox' + reciverid).append(app_s);
+                    scrollToBottom();
                   } else {
-                    var app_s = "<li class=\"media sent\">\n                                                               \n                                                <div class=\"media-body\">\n                                                    <div class=\"msg-box\">\n                                                        <div>\n                                                            <p>".concat(message, "</p>\n                                                           \n                                                            <ul class=\"chat-msg-info\">\n                                                                <li>\n                                                                    <div class=\"chat-time\">\n                                                                        <span>8:35 AM</span>\n                                                                    </div>\n                                                                </li>\n                                                            </ul>\n                                                        </div>\n                                                    </div>\n                                                  </div>  \n                                                  \n                                            </li>");
+                    var app_s = "<li class=\"media sent\">\n                                                               \n                                                <div class=\"media-body\">\n                                                    <div class=\"msg-box\">\n                                                        <div>\n                                                            <p>".concat(message, "</p>\n                                                           \n                                                            <ul class=\"chat-msg-info\">\n                                                                <li>\n                                                                    <div class=\"chat-time\">\n                                                                        <span  style=\"font-size:12px;\">").concat(c_date, "</span>\n                                                                    </div>\n                                                                </li>\n                                                            </ul>\n                                                        </div>\n                                                    </div>\n                                                  </div>  \n                                                  \n                                            </li>");
                     $('#chatbox' + reciverid).append(app_s);
+                    scrollToBottoms();
                   }
                 }
               });
@@ -2254,11 +2277,13 @@ $(document).ready(function () {
           console.log(data);
 
           if (data == 'user') {
-            var app_s = "<div class='incoming'>" + "<div class='bubble'>" + "<p>" + e.sendmes + "</p>" + "</div>" + "</div>";
+            var app_s = "<div class='incoming'>" + "<span  style='font-size:12px;'>" + c_date + "</span>" + "<br>" + "<div class='bubble'>" + "<p>" + e.sendmes + "</p>" + "</div>" + "</div>";
             $('#chatbox' + e.senderid).append(app_s);
+            scrollToBottom();
           } else {
-            var app_s = "<li class=\"media received\">\n                                       \n                        <div class=\"media-body\">\n                            <div class=\"msg-box\">\n                                <div>\n                                    <p>".concat(e.sendmes, "</p>\n                                   \n                                    <ul class=\"chat-msg-info\">\n                                        <li>\n                                            <div class=\"chat-time\">\n                                                <span>8:35 AM</span>\n                                            </div>\n                                        </li>\n                                    </ul>\n                                </div>\n                            </div>\n                          </div>  \n                          \n                    </li>");
+            var app_s = "<li class=\"media received\">\n                                       \n                        <div class=\"media-body\">\n                            <div class=\"msg-box\">\n                                <div>\n                                    <p>".concat(e.sendmes, "</p>\n                                   \n                                    <ul class=\"chat-msg-info\">\n                                        <li>\n                                            <div class=\"chat-time\">\n                                                <span style=\"font-size:13px;\">").concat(c_date, "</span>\n                                            </div>\n                                        </li>\n                                    </ul>\n                                </div>\n                            </div>\n                          </div>  \n                          \n                    </li>");
             $('#chatbox' + e.senderid).append(app_s);
+            scrollToBottoms();
           }
         }
       });

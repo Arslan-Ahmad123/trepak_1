@@ -1,3 +1,23 @@
+<style>
+    @media only screen and (min-width: 992px) {
+        .footer_pc {
+            position: fixed;
+            bottom: 0%;
+            width: 100%;
+        }
+        .footer_lp {
+            position: static;
+            bottom: 0%;
+            width: 100%;
+        }
+		.topsection{
+            box-sizing: border-box;
+            margin-top: 78px;
+            padding-bottom: 15px;
+		}
+	}
+  
+</style>
 <!-- Page Content -->
 <div class="content topsection">
     <div class="container-fluid">
@@ -30,5 +50,18 @@
     </div>
 
 </div>
-<br><br><br><br><br><br><br><br><br>><br><br><br>
+@push('customjscode')
+    <script>
+         if(window.innerHeight > 715){
+                var footer_class =  document.getElementById('footer').classList;
+                footer_class.remove('footer_lp');
+                footer_class.add('footer_pc');
+            }else{
+                var footer_class =  document.getElementById('footer').classList;
+                footer_class.remove('footer_pc');
+                footer_class.add('footer_lp');
+            }    
+    </script>
+@endpush
+
 <!-- /Page Content -->

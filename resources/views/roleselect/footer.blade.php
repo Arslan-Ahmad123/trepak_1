@@ -52,7 +52,7 @@ target="_blank"><img src="{{asset('newpanel/assets/img/app-store-button.png') }}
    </div>
 <div id="motto-image"></div>
 </section> --}}
-<footer id="footer" class="footer">
+<footer  class="footer" id="footer" >
     <div class="containerlogin mx-auto">
         <div id="footer-wrapper">
             <nav id="footer-navigation">

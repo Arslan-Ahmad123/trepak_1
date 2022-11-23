@@ -262,9 +262,10 @@
                              <div class="filter-widget">
                                  <div class="form-group">
                                      Select City
-                                     <input type="text" onblur="getcordinataddress()" class="form-control"
+                                     <input type="text" onfocus="checkerror()"  onblur="getcordinataddress()" class="form-control"
                                          name="cityname" id="selectcity" placeholder="Select City"
                                          style="position:relative;border:1px solid rgb(180, 177, 177)">
+                                         <span id="error_msg_show" style="color:red;font-weight: 600;font-size:15px;display:none">Select Correct City Name!!</span>
                                      <input type="hidden" name="addresslat" id="addresslat">
                                      <input type="hidden" name="addresslon" id="addresslon">
                                  </div>
@@ -312,9 +313,10 @@
                              <div class="filter-widget">
                                  <div class="form-group">
                                      Select City
-                                     <input type="text" onblur="getcordinataddresss()" class="form-control"
+                                     <input type="text" onfocus="checkerror_sm()" onblur="getcordinataddresss()" class="form-control"
                                          name="cityname" id="selectcitys" placeholder="Select City"
                                          style="position:relative;border:1px solid rgb(180, 177, 177)">
+                                         <span id="error_msg_show_sm" style="color:red;font-weight: 600;font-size:15px;display:none">Select Correct City Name!!</span>
                                      <input type="hidden" name="addresslat" id="addresslats">
                                      <input type="hidden" name="addresslon" id="addresslons">
                                  </div>
@@ -548,7 +550,7 @@
                             <input type="text" name="userid" value="${v.id}" hidden>
                             <input type="text" name="bookingid" value="${v.id}" hidden>
                             <button class="btn-info p-0 px-2 btn w-45" type="submit" formaction="{{ route('viewprofileeng') }}"><i class="fa fa-eye" aria-hidden="true"></i>Profile</button>
-                            <button class="btn-info p-0 px-2 btn w-45" type="submit"  onclick="shoemodeldate(${v.id})" ><i class="fa fa-check" aria-hidden="true"></i>Booked</button>
+                            <button class="btn-info p-0 px-2 btn w-45" type="submit"  onclick="shoemodeldate(${v.id})" ><i class="fa fa-check" aria-hidden="true"></i>Book</button>
                         </form>
                     </div>
                 </div>
@@ -570,9 +572,9 @@
                     <input type="text" name="userid" value="${v.id}" hidden>
                     <input type="text" name="bookingid" value="${v.id}" hidden>
                     <button class="btn-info p-0 px-2 btn w-45" type="submit" formaction="{{ route('viewprofileeng') }}"><i class="fa fa-eye" aria-hidden="true"></i>Profile</button>
-                    <button class="btn-info p-0 px-2 btn w-45" type="submit"  onclick="shoemodeldate(${v.id})" ><i class="fa fa-check" aria-hidden="true"></i>Booked</button>
+                    <button class="btn-info p-0 px-2 btn w-45" type="submit"  onclick="shoemodeldate(${v.id})" ><i class="fa fa-check" aria-hidden="true"></i>Book</button>
                 </form>
-                {{-- <a class="apt-btn" href="{{ route('booking',['id'=>$engr->id]) }}"><i class="fa fa-check" aria-hidden="true"></i>Booked</a> --}}
+                {{-- <a class="apt-btn" href="{{ route('booking',['id'=>$engr->id]) }}"><i class="fa fa-check" aria-hidden="true"></i>Book</a> --}}
             </div>
         </div>
     </div>
@@ -848,13 +850,31 @@
 
                  let infoWindow = new google.maps.InfoWindow();
                  var distance_boolean = [];
+                 var lon_s = [];
+                var lat_s = [];
                  $.each(allengr, function(i, m) {
                      //  var latLngA = {'lat':32.1877,'lng':74.1945};
                      //  var latLngB = {'lat':m.lan,'lng':m.lng};
                      var latitude1 = latitude_cur;
                      var longitude1 = longitude_cur;
-                     var latitude2 = m.latitude;
-                     var longitude2 = m.longitude;
+                //    ================== 
+                if (lon_s.includes(m.longitude) && lat_s.includes(m.latitude)) {
+                        function randomInRange(min, max) {
+                            return Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math
+                                .random() * (max - min) + min);
+                        }
+                        let variation = randomInRange(0.1, 5) / 500;
+
+                        var latitude2 = (m.latitude * 1)  + variation;
+                        var longitude2 = (m.longitude * 1)  + variation;
+                    } else {
+                        var latitude2 = m.latitude ;
+                        var longitude2 = m.longitude ;
+                    }
+                    lon_s.push(m.longitude);
+                    lat_s.push(m.latitude);
+
+                //    ================== 
                     
                      var distance = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(
                          latitude1, longitude1), new google.maps.LatLng(latitude2, longitude2));
@@ -922,7 +942,7 @@
 
                                  //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
                                  infoWindow.setContent(
-                                     `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`
+                                     `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.categoryname}</h6><h6>Address: ${m.city+', '+m.state+', '+m.short_country}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Book</button></div><form>`
                                  );
                                  infoWindow.open(map, marker);
                              });
@@ -977,7 +997,7 @@
                                 <h6>Engineer Type: ${m.categoryname}</h6>
                                 Date:   <input class="form-controll" type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br>
                                 <input type="text"  name="engr_id" value='${m.id}' hidden>
-                                <button class='btn w-100 btn-primary p-0'>Booked</button>
+                                <button class='btn w-100 btn-primary p-0'>Book</button>
                                 </div>
                                 <form>`;
 
@@ -1023,7 +1043,7 @@
 
                              //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
                              infoWindow.setContent(
-                                 `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`
+                                 `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.categoryname}</h6><h6>Address: ${m.city+', '+m.state+', '+m.short_country}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Book</button></div><form>`
                              );
                              infoWindow.open(map, marker);
                          });
@@ -1036,6 +1056,7 @@
          function getcordinataddress() {
              setTimeout(() => {
                  var value_city = $('#selectcity').val();
+                 console.log('the name of city is: '+ value_city);
                  if (value_city != "") {
                      var geocoder = new google.maps.Geocoder();
                      geocoder.geocode({
@@ -1049,6 +1070,10 @@
                              document.getElementById('search_btn').disabled = false;
 
                          } else {
+                            $('#error_msg_show').show('slow');
+                            $('#addresslat').val('');
+                            $('#addresslon').val('');
+                            document.getElementById('search_btn').disabled = true;
                              console.log("Something got wrong " + status);
                          }
                      });
@@ -1077,6 +1102,10 @@
                              document.getElementById('search_btns').disabled = false;
 
                          } else {
+                            $('#error_msg_show_sm').show('slow');
+                            $('#addresslats').val('');
+                            $('#addresslons').val('');
+                            document.getElementById('search_btns').disabled = true;
                              console.log("Something got wrong " + status);
                          }
                      });
@@ -1088,7 +1117,13 @@
              }, 500);
 
          }
-
+         function checkerror(){
+          
+            $('#error_msg_show').hide('slow');
+         }
+         function checkerror_sm(){
+          $('#error_msg_show_sm').hide('slow');
+       }
          function shoemodeldate(id) {
              event.preventDefault();
              $('#orderdetail_modal').appendTo('body').modal('show');

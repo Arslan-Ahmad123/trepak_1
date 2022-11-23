@@ -169,229 +169,108 @@
 							{{-- ============later nav bar profile======================== --}}
 						</div>
 						<!-- / Profile Sidebar -->
+						<!-- /Complaint Cell-->
+						<div class="modal fade" id="complaint_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+							  <div class="modal-content">
+								<div class="modal-header">
+								  <h5 class="modal-title" style="font-size: 18px;    font-weight: 600;" id="exampleModalLabel">Complaint Cell</h5>
+								  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								  </button>
+								</div>
+								<div class="modal-body">
+								  <form>
+									<div class="form-group">
+									  <label for="recipient-name" class="col-form-label">Token No:</label>
+									  <input type="text" class="form-control" id="recipient-name" value='CT_0001' readonly>
+									</div>
+									<div class="form-group">
+									  <label for="message-text" class="col-form-label">Engineer Name:</label>
+									  <input  class="form-control" id="engineerName" name="engineerName" readonly>
+									  <input type="hidden" id="engineerId" name="engineerId">
+									</div>
+									<div class="form-group">
+										<label for="message-text" class="col-form-label">Engineer Category:</label>
+										<input class="form-control" id="engrCategoryname" name="engrCategoryname" readonly>
+									  </div>
+									<div class="form-group">
+										<label for="message-text" class="col-form-label">Complaint:</label>
+										<textarea class="form-control" id="complaintText" name="complaintText" placeholder="Please enter your complaint"></textarea>
+									</div>
+									<div class="form-group">
+										<label for="message-text" class="col-form-label">Date:</label>
+										<input type="date"    class="form-control" value="<?php echo date('Y-m-d');?>" min="<?php echo date('Y-m-d');?>"  id="complaintDate" name="complaintDate">
+									</div>
+								 
+								</div>
+								<div class="modal-footer">
+								  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+								  <button type="button" class="btn btn-info">Send Complaint</button>
+								</div>
+							</form>
+							  </div>
+							</div>
+						  </div>
+						<!-- / Complaint Cell -->
 						
 						<div class="col-md-12 col-lg-8 col-xl-9">
-							<div class="card">
-								<div class="card-body pt-0">
-								
-									<!-- Tab Menu -->
-									<nav class="user-tabs mb-4">
-										<ul class="nav nav-tabs nav-tabs-bottom nav-justified">
-											<li class="nav-item">
-												<a class="nav-link active" href="#pat_appointments" data-toggle="tab">Appointments</a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" href="#pat_medical_records" data-toggle="tab"><span class="med-records">Pending</span></a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" href="#pat_billing" data-toggle="tab">Completed</a>
-											</li>
-										</ul>
-									</nav>
-									<!-- /Tab Menu -->
-									
-									<!-- Tab Content -->
-									<div class="tab-content pt-0">
-										
-										<!-- Appointment Tab -->
-										<div id="pat_appointments" class="tab-pane fade show active">
-											<div class="card card-table mb-0">
-												<div class="card-body">
-													<div class="table-responsive">
-														<table class="table table-hover table-center mb-0">
-															<thead>
-																<tr>
-																	<th>Engineer</th>
-																	<th>Booking Date</th>
-																	<th>Amount</th>
-																	<th>Engineer Status</th>
-																	<th>Client Status</th>
-																	<th>Action</th>
-																</tr>
-															</thead>
-															<tbody>
-																@if($order)
-																
-																@foreach ($order as $orders)
-																
-																<tr>
-																	@php
-																		$engrinfo = getuser($orders->engrid);
-																		
-																		if($engrinfo->signupoption == 1){
-																			$engrimg = $engrinfo->pic;
-																		}else{
-																			$engrimg = asset('engrphoto/'.$engrinfo->pic);
-																		}
-																	@endphp
-																	<td>
-																		<h2 class="table-avatar">
-																			<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
+														<div class="row">
+								@if(count($data) > 0)
+							
+								@foreach ($data as $datas)
 
-																				<img class="avatar-img rounded-circle" src="{{ $engrimg }}" alt="User Image">
-																			</a>
-
-
-																			<a href="doctor-profile.html"> {{ getuser($orders->engrid)->fname }} <span> {{ getcategoryname(getuser($orders->engrid)->engrcategoryid)  }}</span></a>
-																		</h2>
-																	</td>
-																	<td>{{ $orders->meetingdate }}</td>
-																	<td>{{ $orders->tlprice }}</td>
-																	<td><span class="badge badge-pill bg-{{($orders->engrstatus == 0)?'light':'success'  }}">{{ ($orders->engrstatus == 0)?'Pending':'Conform' }}</span></td>
-																	<td><span class="badge badge-pill bg-{{($orders->clientstatus == 0)?'light':'success'  }}">{{ ($orders->clientstatus == 0)?'Un Completed':'Completed' }}</span></td>
-																	
-																	<td class="text-right">
-																		<div class="table-action">
-																			
-																			<button onclick="showorderinfo({{ $orders->id }})" class="btn btn-sm bg-info-light">
-																				<i class="far fa-eye"></i> View
-																			</button>
-																		</div>
-																	</td>
-																</tr>
-																@endforeach
-																@else
-																<tr>
-																	<td colspan="6" style="text-align:center;color:black;font-weight: 600">No Appoinment Found!</td>
-																</tr>
+								@php
+							$clientdata = getuser($datas->engrid);
+							
+								if($clientdata->signupoption == 1)
+								{
+									$clientimg = $clientdata->pic;
+								}else{
+									$clientimg = asset('engrphoto/'.$clientdata->pic);
+								}
+							@endphp
+								<div class="col-md-4 col-sm-6 col-10 mx-auto">
+									<div class="card widget-profile pat-widget-profile">
+										<div class="card-body">
+											<div class="pro-widget-content">
+												<div class="profile-info-widget">
+													<a href="#" class="booking-doc-img">
+														<img src="{{ $clientimg }}" alt="User Image">
+													</a>
+													<div class="profile-det-info">
+														<h3><a href="#">{{ $clientdata->fname }}</a></h3>
 														
-																@endif
-																
-																
-																
-															</tbody>
-														</table>
+														<div class="patient-details">
+															<h5><b>Engineer Category :</b>{{ getcategoryname($clientdata->engrcategoryid) }}</h5>
+															<h5 class="mb-0"><i class="fas fa-map-marker-alt"></i>{{ $clientdata->city.', '.$clientdata->country }}</h5>
+														</div>
 													</div>
 												</div>
 											</div>
-										</div>
-										<!-- /Appointment Tab -->
-										
-										
-											
-										<!-- Pending -->
-										<div id="pat_medical_records" class="tab-pane fade">
-											<div class="card card-table mb-0">
-												<div class="card-body">
-													<div class="table-responsive">
-														<table class="table table-hover table-center mb-0">
-															<thead>
-																<tr>
-																	<th>Engineer</th>
-																	<th>Booking Date</th>
-																	<th>Amount</th>
-																	<th>Engineer Status</th>
-																	<th>Client Status</th>
-																	<th>Action</th>
-																</tr>
-															</thead>
-															<tbody>
-																@foreach ($order as $orders)
-																@if ($orders->clientstatus == 0)
-																	
-																
-																<tr>
-																	<td>
-																		<h2 class="table-avatar">
-																			<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
-																				<img class="avatar-img rounded-circle" src="{{$engrimg }}" alt="User Image">
-																			</a>
-
-																			
-																			<a href="doctor-profile.html"> {{ getuser($orders->engrid)->fname }} <span> {{ getcategoryname(getuser($orders->engrid)->engrcategoryid)  }}</span></a>
-																		</h2>
-																	</td>
-																	<td>{{ $orders->meetingdate }}</td>
-																	<td>{{ $orders->tlprice }}</td>
-																	<td><span class="badge badge-pill bg-{{($orders->engrstatus == 0)?'light':'success'  }}">{{ ($orders->engrstatus == 0)?'Pending':'Conform' }}</span></td>
-																	<td><span class="badge badge-pill bg-{{($orders->clientstatus == 0)?'light':'success'  }}">{{ ($orders->clientstatus == 0)?'Pending':'Completed' }}</span></td>
-																	
-																	<td class="text-right">
-																		<div class="table-action">
-																			
-																			<button onclick="showorderinfo({{ $orders->id }})" class="btn btn-sm bg-info-light">
-																				<i class="far fa-eye"></i> View
-																			</button>
-																		</div>
-																	</td>
-																</tr>
-																@endif
-																@endforeach
-																
-																
-																
-																
-															</tbody>
-														</table>
-													</div>
-												</div>
+											<div class="patient-info">
+												<ul>
+													<li>Phone <span>{{ $clientdata->mobile }}</span></li>
+													<li>Email <span>{{ $clientdata->email  }}</span></li>
+													<button class="btn btn-danger p-2 mt-1 w-md-50 w-sm-75 w-100" onclick="showComplaintM({{ $clientdata->id }},'{{$clientdata->fname}}','{{ getcategoryname($clientdata->engrcategoryid) }}')">Complaint</button>
+												</ul>
 											</div>
 										</div>
-										<!-- Pending -->
-										
-										<!-- Completed -->
-										<div id="pat_billing" class="tab-pane fade">
-											<div class="card card-table mb-0">
-												<div class="card-body">
-													<div class="table-responsive">
-														<table class="table table-hover table-center mb-0">
-															<thead>
-																<tr>
-																	<th>Engineer</th>
-																	<th>Booking Date</th>
-																	<th>Amount</th>
-																	<th>Client Status</th>
-																	<th>Action</th>
-																</tr>
-															</thead>
-															<tbody>
-																@foreach ($order as $orders)
-																@if ($orders->clientstatus == 1)
-																<tr>
-																	<td>
-																		<h2 class="table-avatar">
-																			<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
-																				<img class="avatar-img rounded-circle" src="{{ $engrimg }}" alt="User Image">
-																			</a>
-
-
-																			<a href="doctor-profile.html"> {{ getuser($orders->engrid)->fname }} <span> {{ getcategoryname(getuser($orders->engrid)->engrcategoryid)  }}</span></a>
-																		</h2>
-																	</td>
-																	<td>{{ $orders->meetingdate }}</td>
-																	<td>{{ $orders->tlprice }}</td>
-																	
-																	<td><span class="badge badge-pill bg-{{($orders->clientstatus == 0)?'light':'success'  }}">{{ ($orders->clientstatus == 0)?'Un Completed':'Completed' }}</span></td>
-																	
-																	<td class="text-right">
-																		<div class="table-action">
-																			
-																			<button onclick="showorderinfo({{ $orders->id }})" class="btn btn-sm bg-info-light">
-																				<i class="far fa-eye"></i> View
-																			</button>
-																		</div>
-																	</td>
-																</tr>
-																@else
-																
-																@endif
-																@endforeach
-																
-																
-																
-																
-															</tbody>
-														</table>
-													</div>
-												</div>
-											</div>
-										</div>
-										<!-- Completed -->
-										
 									</div>
-									<!-- Tab Content -->
-									
 								</div>
+								@endforeach
+								@else
+								<div class="col-lg-4 col-md-6 col-sm-4 col-12">
+									<div class="card widget-profile pat-widget-profile">
+										<div class="card-body">
+													<p>No Clients Found!!</p>
+										</div>
+									</div>
+								</div>
+								
+								@endif
+								
+								
 							</div>
 						</div>
 					</div>
@@ -477,6 +356,11 @@
 								}
 							});
 						}
-					
+					function showComplaintM(id,name,categoryName){
+						$('#engineerId').val(id);
+						$('#engineerName').val(name);
+						$('#engrCategoryname').val(categoryName);
+						$('#complaint_modal').appendTo("body").modal('show');
+					}
 				</script>
 			  @endpush

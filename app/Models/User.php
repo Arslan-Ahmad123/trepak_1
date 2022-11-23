@@ -74,6 +74,9 @@ class User extends Authenticatable
     public function category(){
         return $this->belongsTo(engCategory::class,'engrcategoryid');
     }
+    public function getshortCountryAttribute($res){
+        return ucwords($res);
+    }
  
     
 }

@@ -137,8 +137,7 @@
         margin-left: 5px;
     }
 
-    .modal__btn:hover,
-    .modal__btn:focus {
+    .modal__btn:hover{
         border-color: hsla(0, 0%, 100%, 0.6);
         transform: translateY(-0.2rem);
     }
@@ -253,6 +252,9 @@
         width: 340px;
       
     }
+    .modal__btn {
+    padding: 0.3rem 0.7rem;
+}
     .search-box form {
     /* display: -webkit-box; */
     display: inline;
@@ -305,7 +307,7 @@
             <div class="intoimg">
                 <img src="{{ asset('newpanel/assets/img/S3.png') }}" />
             </div>
-            <p class="modal__text1">Booked Engineer</p>
+            <p class="modal__text1">Book Engineer</p>
         </div>
         <div class="step step5" style="display:none">
             <label class="modal__text" for="step1"> Step 5: </label>
@@ -366,9 +368,9 @@
 <div class="top-header mt-5 pt-5 text-center">
     <h4>Find and Book the Best Engineers</h4>
 </div>
-<section class="section mt-0 pt-0">
+<section class="section mt-0 pt-0" >
     <div class="container topsection category_container">
-        <div class="banner-wrapper">
+        <div class="banner-wrapper" style="margin-top:-52px">
             <div class="row">
                 <div class="col-12">
                     @isset($status)
@@ -389,7 +391,7 @@
                             <div class="form-group search-location">
                                 <input type="text" class="form-control" id="search" name="cityname"
                                     placeholder="Location"
-                                    onblur="getcordinataddress()">
+                                    onblur="getcordinataddress()" required>
                                 @error('cityname')
                                     <div class="alert alert-danger" id="cityname_div">This Field is Required.</div>
                                     <script>
@@ -404,7 +406,7 @@
                             </div>
                             <div class="form-group search-info">
                                 <input type="text" class="form-control" id="eng_type" name="date"
-                                    value="{{ old('date') }}" placeholder="Select Engineer">
+                                    value="{{ old('date') }}" placeholder="Select Engineer" required>
                                   
                                     @if(session()->has('engr_cat'))
                                     <div class="bg-info p-1 mt-1" style="color: white;border-radius:5px" id="cate_hide">Please Select Correct Category Name!!</div>
@@ -512,11 +514,11 @@
                     @if (Auth::check())
                         <div id="authuser">
                             <input id="current_location_btn_db" type="radio" name="select_type"
-                                value="databaseloc" onchange="select_val_radio()"><label>&nbsp;&nbsp;Database
+                                value="databaseloc" onchange="select_val_radio()" ><label for="current_location_btn_db" style="cursor: pointer">&nbsp;&nbsp;Database
                                 Location</label>
 
                             <input id="current_location_btn" style="display:none" type="radio" name="select_type"
-                                value="currentloc" onchange="select_val_radio()"><label>&nbsp;&nbsp;Current
+                                value="currentloc" onchange="select_val_radio()"><label for="current_location_btn" style="cursor: pointer">&nbsp;&nbsp;Current
                                 Location</label>
 
                         </div>
@@ -548,6 +550,8 @@
                 <input type="text" id="lat_cur" hidden>
                 <input type="text" id="lon_cur" hidden>
                 <input type="text" id="countryshortname" hidden>
+                <input type="text" id="countryname" hidden>
+                <input type="text" id="clientaddress" hidden>
 
             </div>
 
@@ -664,12 +668,15 @@
                 })
                 .then((response) => {
                     if (response.results[0]) {
-
+                       
                         for (var i = 0; i < response.results[0].address_components.length; i++) {
                             if (response.results[0].address_components[i].types[0] == "country") {
                                 country = response.results[0].address_components[i];
+                               
                                 // console.log('short name ioof dipaosj dansdkl a:'+country.short_name);
                                 $('#countryshortname').val(country.short_name);
+                                $('#countryname').val(country.long_name);
+                                $('#clientaddress').val(response.results[0].formatted_address);
 
                             }
                         }
@@ -774,12 +781,12 @@
 
         }
 
-        function make_map(snc, lat_client, lon_client,currentlocationfetch = 'no') {
+        function make_map(snc,lnc, lat_client, lon_client,currentlocationfetch = 'no') {
             if (lat_client == "" && lon_client == "") {
                 console.log('yes yor are offline and you only see the people of pakistan');
                 var allengr = [];
                 $.ajax({
-                    url: 'fetchallrangeengr',
+                    url: 'fetchallrangeengrdfl',
                     type: 'get',
                     async: false,
                     success: function(data) {
@@ -798,7 +805,7 @@
                         'lng': 74.181595,
                     },
                     mapTypeControl: false,
-                    zoom: 8,
+                    zoom: 10,
                     gestureHandling: 'greedy',
                     draggable: true,
                 });
@@ -848,8 +855,8 @@
                         return Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math.random() * (max - min) + min);
                         }
                     let variation = randomInRange(0.1, 5) / 500;
-                    var latitude2 = m.latitude + variation;
-                    var longitude2 = m.longitude  + variation;
+                    var latitude2 = (m.latitude * 1)  + variation;
+                        var longitude2 = (m.longitude * 1)  + variation;
                     // var idfetch =  m.id;
                     // var url = '{{ route('fetchcategorynamemap', ':id') }}';
                     // url = url.replace(':id', idfetch );
@@ -864,7 +871,8 @@
                     // });
                     // console.log(m.category.engrcategory);
                     const message =
-                        `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6>   <span style="font-weight:bold">Date:</span>   <input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`;
+                        `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6> <h6>Address: ${m.city} </h6>  <span style="font-weight:bold">Date:</span>   <input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Book</button></div><form>`;
+                           
                     const infowindow = new google.maps.InfoWindow({
                         content: message,
                     });
@@ -895,7 +903,7 @@
                         google.maps.event.addListener(marker_s, "click", function(e) {
                             //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
                             infoWindow.setContent(
-                                `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`
+                                `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6><h6>Address: ${m.city+','+m.state+ ', '+m.short_country} </h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Book</button></div><form>`
                             );
                             infoWindow.open(map, marker);
                         });
@@ -913,10 +921,10 @@
                 var allengr = [];
                 if(currentlocationfetch ==  'yes'){
                     $.ajax({
-                    url: 'getuserlanlog',
+                    url: 'getuserlanlog_cn',
                     type: 'post',
                     async: false,
-                    data:{lat:lat_client,lon:lon_client,"_token":"{{ csrf_token() }}"},
+                    data:{lat:lat_client,lon:lon_client,country:lnc,"_token":"{{ csrf_token() }}"},
                     success: function(data) {   
                         $.each(data, function(index, value) {
                             allengr[index] = value;
@@ -925,16 +933,14 @@
                 });
                 }else{
                     $.ajax({
-                    url: 'fetchallrangeengr',
-                    type: 'get',
+                    url: 'getuserlanlog_cn',
+                    type: 'post',
                     async: false,
-                    success: function(data) {
-                        console.log('fetch all user :' + data.length)
-                        console.log(data);
+                    data:{lat:lat_client,lon:lon_client,country:lnc,"_token":"{{ csrf_token() }}"},
+                    success: function(data) {   
                         $.each(data, function(index, value) {
                             allengr[index] = value;
                         });
-
                     }
                 });
                 }
@@ -1012,8 +1018,8 @@
                         }
                         let variation = randomInRange(0.1, 5) / 500;
 
-                        var latitude2 = m.latitude  + variation;
-                        var longitude2 = m.longitude  + variation;
+                        var latitude2 = (m.latitude * 1)  + variation;
+                        var longitude2 = (m.longitude * 1)  + variation;
                     } else {
                         var latitude2 = m.latitude ;
                         var longitude2 = m.longitude ;
@@ -1023,6 +1029,26 @@
 
                     var latitude1 = latitude_cur;
                     var longitude1 = longitude_cur;
+                    // ================distance matrix======================
+                    // var origin  = $('#clientaddress').val();
+                    // var destination  = m.address;
+                  
+                    // var service = new google.maps.DistanceMatrixService();
+                    // service.getDistanceMatrix(
+                    //     {
+                    //         origins: [origin],
+                    //         destinations: ['Gujranwala'],
+                    //         travelMode: 'DRIVING',
+                    //         unitSystem: google.maps.UnitSystem.IMPERIAL,
+                    //     }, (res)=>{
+                    //         let dis_km = res.rows[0].elements[0].distance.value / 1000;
+                    //         if(dis_km > 80){
+                                
+                    //         }
+                    //     });
+
+                       
+                    // ================distance matrix======================
 
                     var distance = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(
                         latitude1, longitude1), new google.maps.LatLng(latitude2, longitude2));
@@ -1054,8 +1080,8 @@
                         // });
                        
                         const message =
-                            `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`;
-                       
+                            `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6><h6>Address: ${m.city+', '+m.state}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Book</button></div><form>`;
+                      
                         const infowindow = new google.maps.InfoWindow({
                             content: message,
                         });
@@ -1102,7 +1128,7 @@
                             google.maps.event.addListener(marker_s, "click", function(e) {
                                 //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
                                 infoWindow.setContent(
-                                    `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`
+                                    `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6><h6>Address: ${m.city+', '+m.state+', '+m.short_country}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Book</button></div><form>`
                                 );
                                 infoWindow.open(map, marker);
                             });
@@ -1178,8 +1204,9 @@
                     $res = geocodeLatLng(geocoder, latitudeclient, longitudeclient);
                     setTimeout(() => {
                         let sn_con = $('#countryshortname').val();
+                        let ln_con = $('#countryname').val();
 
-                        make_map(sn_con, latitudeclient, longitudeclient);
+                        make_map(sn_con,ln_con, latitudeclient, longitudeclient);
                     }, 1500);
 
                 } else {
@@ -1190,8 +1217,9 @@
                     $res = geocodeLatLng(geocoder, latitudeclient, longitudeclient);
                     setTimeout(() => {
                         let sn_con = $('#countryshortname').val();
+                        let ln_con = $('#countryname').val();
 
-                        make_map(sn_con, latitudeclient, longitudeclient,'yes');
+                        make_map(sn_con,ln_con, latitudeclient, longitudeclient,'yes');
                     }, 1500);
 
                 }
@@ -1206,14 +1234,15 @@
                     $res = geocodeLatLng(geocoder, latitudeclient, longitudeclient);
                     setTimeout(() => {
                         let sn_con = $('#countryshortname').val();
+                        let ln_con = $('#countryname').val();
 
-                        make_map(sn_con, latitudeclient, longitudeclient,'yes');
+                        make_map(sn_con,ln_con, latitudeclient, longitudeclient,'yes');
                     }, 1500);
                 } else {
                     console.log('no access you');
                     var longitudeclient = "";
-                    var latitudeclient = '';
-                    make_map("", latitudeclient, longitudeclient);
+                    var latitudeclient = "";
+                    make_map("","Pakistan",latitudeclient, longitudeclient);
 
 
                 }
@@ -1224,8 +1253,9 @@
 
         function select_val_radio() {
             var val_login_status = $('input[name="select_type"]:checked').val();
+           
             if (val_login_status == 'databaseloc') {
-
+                document.getElementById('current_location_btn').disabled = true;
                 var longitudeclient = '{{ Auth::check() ? Auth::user()->longitude  : '' }}';
                 var latitudeclient = '{{ Auth::check() ? Auth::user()->latitude  : '' }}';
                 console.log(longitudeclient + ' , lat :' + latitudeclient);
@@ -1233,15 +1263,18 @@
                 $res = geocodeLatLng(geocoder, latitudeclient, longitudeclient);
                 setTimeout(() => {
                     let sn_con = $('#countryshortname').val();
+                    let ln_con = $('#countryname').val();
 
-                    make_map(sn_con, latitudeclient, longitudeclient);
+                    make_map(sn_con, ln_con,latitudeclient, longitudeclient);
+                    document.getElementById('current_location_btn').disabled = false;
                 }, 1500);
 
             } else {
+                document.getElementById('current_location_btn_db').disabled = true;
                 navigator.permissions.query({
                     name: 'geolocation'
                 }).then(function(result) {
-                    console.log(result);
+                   
                     if (result.state == 'granted') {
                         var longitudeclient = $('#lon_cur').val();
                         var latitudeclient = $('#lat_cur').val();
@@ -1249,11 +1282,14 @@
                         $res = geocodeLatLng(geocoder, latitudeclient, longitudeclient);
                         setTimeout(() => {
                             let sn_con = $('#countryshortname').val();
+                            let ln_con = $('#countryname').val();
 
-                            make_map(sn_con, latitudeclient, longitudeclient,'yes');
+                            make_map(sn_con,ln_con, latitudeclient, longitudeclient,'yes');
+                            document.getElementById('current_location_btn_db').disabled = false;
                         }, 1500);
                     } else {
                         console.log('Please Allow Your Current Location');
+                        document.getElementById('current_location_btn_db').disabled = false;
                     }
                 });
             }

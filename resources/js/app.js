@@ -1,5 +1,23 @@
 import './bootstrap';
-
+function scrollToBottom() {
+    const messages = document.getElementsByClassName('chatbody')[0];
+    messages.scrollTop = messages.scrollHeight;
+ }
+ function scrollToBottoms() {
+   
+   const messages = document.getElementsByClassName('chat_scroll_one')[0];
+   messages.scrollTop = messages.scrollHeight;
+}
+ const d = new Date();
+var hour = d.getHours();
+var minute = d.getMinutes();
+hour = (hour % 12) || 12;
+var suffix = hour >= 12 ? "PM":"AM";
+var monthname = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+var month = d.getMonth();
+var year = d.getFullYear();
+var date = d.getDate();
+var c_date = monthname[month]+'-'+date+'-'+year+' '+hour + ":" + minute +' '+ suffix  ;
 $(document).ready(function(){
     $(document).on('click', '#submitmsg', function(e){ 
     
@@ -55,12 +73,14 @@ $(document).ready(function(){
                                             console.log(data);
                                             if(data == 'user'){
                                                 var app_s ="<div class='outgoing'>"+
+                                                "<span  style='font-size:12px;'>"+c_date+"</span>"+"<br>"+
                                                 "<div class='bubble'>"+
                                                   "<p>"+message+"</p>"+
                                                 "</div>"+
                                               "</div>";
                                                
                                                 $('#chatbox'+reciverid).append(app_s);
+                                                scrollToBottom();
                                              }else{
                                                 var app_s = `<li class="media sent">
                                                                
@@ -72,7 +92,7 @@ $(document).ready(function(){
                                                             <ul class="chat-msg-info">
                                                                 <li>
                                                                     <div class="chat-time">
-                                                                        <span>8:35 AM</span>
+                                                                        <span  style="font-size:12px;">${c_date}</span>
                                                                     </div>
                                                                 </li>
                                                             </ul>
@@ -82,6 +102,8 @@ $(document).ready(function(){
                                                   
                                             </li>`;
                                             $('#chatbox'+reciverid).append(app_s);
+                                            scrollToBottoms();
+                                            
                                              }
                                         }
                                          });
@@ -113,12 +135,14 @@ $(document).ready(function(){
                     console.log(data);
                     if(data == 'user'){
                         var app_s ="<div class='incoming'>"+
+                        "<span  style='font-size:12px;'>"+c_date+"</span>"+"<br>"+
                         "<div class='bubble'>"+
                           "<p>"+e.sendmes+"</p>"+
                         "</div>"+
                       "</div>";
                        
                         $('#chatbox'+e.senderid).append(app_s);
+                        scrollToBottom();
                      }else{
                         var app_s = `<li class="media received">
                                        
@@ -130,7 +154,7 @@ $(document).ready(function(){
                                     <ul class="chat-msg-info">
                                         <li>
                                             <div class="chat-time">
-                                                <span>8:35 AM</span>
+                                                <span style="font-size:13px;">${c_date}</span>
                                             </div>
                                         </li>
                                     </ul>
@@ -140,6 +164,7 @@ $(document).ready(function(){
                           
                     </li>`;
                     $('#chatbox'+e.senderid).append(app_s);
+                    scrollToBottoms();
                      }
                 }
                  });

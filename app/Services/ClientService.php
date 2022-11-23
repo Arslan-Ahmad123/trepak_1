@@ -50,14 +50,15 @@ class ClientService
     }
     public function searchEnginerCategoryWise($id)
     {
-        $categoryname = engCategory::find($id);
+        $categoryname = engCategory::find($id);   
+        $new_longitude =  Auth::user()->longitude;
+        $new_latitude = Auth::user()->latitude;
+        $countryname = Auth::user()->country;
+        $engr_array = [];
+        $user = User::where('role', 'enge')->where('engrcategoryid', $id)->where('country',$countryname)->get()->toArray();
         $engr = User::where('role', 'enge')->where('engrcategoryid', $id)->paginate(10);
         $allengr = User::where('role', 'enge')->where('engrcategoryid', $id)->get();
         $totalengr = User::where('role', 'enge')->count();
-        $new_longitude =  Auth::user()->longitude;
-        $new_latitude = Auth::user()->latitude;
-        $engr_array = [];
-        $user = User::where('role', 'enge')->where('engrcategoryid', $id)->get()->toArray();
 
         foreach ($user as $users) {
 
@@ -98,6 +99,7 @@ class ClientService
     }
     public function searchEngineraddressWise($id, $city, $lat, $lon)
     {
+       
 
         $categoryname = engCategory::find($id);
         $engr = User::where('role', 'enge')->where('engrcategoryid', $id)->paginate(10);
@@ -107,7 +109,8 @@ class ClientService
         $new_latitude = $lat;
         $engr_array = [];
         $client_array = [];
-        $user = User::where('role', 'enge')->where('engrcategoryid', $id)->get()->toArray();
+        $countryname = Auth::user()->country;
+        $user = User::where('role', 'enge')->where('engrcategoryid', $id)->where('country',$countryname)->get()->toArray();
 
         if (count($user) > 0) {
             foreach ($user as $users) {
@@ -141,7 +144,9 @@ class ClientService
                 }
             }
            
+          
             if (count($engr_array) > 0) {
+               
                 if (session()->has('search_client_address')) {
                     session()->forget('search_client_address');
                 }
@@ -166,6 +171,9 @@ class ClientService
                 }
             }
         } else {
+            if (session()->has('all_engrs')) {
+                session()->forget('all_engrs');
+            }
             $client_array['client_lon'] = $lon;
             $client_array['client_lat'] = $lat;
             if (session()->has('search_client_address')) {
@@ -175,7 +183,7 @@ class ClientService
                 session()->push('search_client_address', $client_array);
             }
         }
-      
+     
         return ['engr' => $engr, 'tlengr' => $totalengr, 'cate_name' => $categoryname, 'category_id' => $id, 'allengr' => json_encode($allengr)];
     }
     public function logoutClient()

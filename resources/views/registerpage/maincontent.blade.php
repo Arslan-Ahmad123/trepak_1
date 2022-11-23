@@ -33,8 +33,10 @@
                         <div class="login-header" style="text-align:center;font-size:25px;font-weight:500">
                             @if ($currentURL == 'user_register' || $currentURL == 'user_regis')
                                 <h2>User Register</h2>
-                            @else
+                            @elseif ($currentURL == 'engregister')
                                 <h2>Engineer Register</h2>
+                            @else
+                            <h2>Register</h2>
                             @endif
 
                         </div>
@@ -71,7 +73,7 @@
                                     @php
                                         $routename = Route::current()->getName();
                                     @endphp
-                                    @if ($routename == 'user_regis')
+                                    @if ($routename == 'user_regis' || $routename == 'clienteng_register_page')
                                     @else
                                         <div class="mt-4">
                                             <x-label for="engrcategory" style="margin-bottom:5px" :value="__('Engineer Category')" />
@@ -88,6 +90,33 @@
                                             </select>
                                         </div>
                                     @endif
+                                    @if($routename == 'clienteng_register_page')
+                                     <x-label for="role" :value="__('Role')" />
+                                    <select class="block mt-1 w-full border-gray-300 rounded-md" name="role"
+                                    id="role" onchange="role_select()">
+                                   
+                                        <option value="user">User</option>
+                                  
+                                        <option value="enge">Engineer</option>
+                                   
+                                </select>
+                                    <div class="mt-4" id="show_all_id" style="display:none">
+                                        <x-label for="engrcategory" style="margin-bottom:5px" :value="__('Engineer Category')" />
+                                        <select class="block mt-1 w-full border-gray-300 rounded-md"
+                                            name="engrcategory" id="engrcategory">
+                                           
+                                            @php
+                                                $category = App\Models\engCategory::get();
+                                            @endphp
+                                            @foreach ($category as $category)
+                                                <option value="{{ $category->id }}">
+                                                    {{ $category->engrcategory }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    @endif
+                                   
 
                                     <!--Mobile -->
                                     <div class="mt-4">
@@ -137,6 +166,7 @@
                                     {{-- -- Role -- --}}
                                     <div class="mt-4">
                                         {{-- <x-label for="role" :value="__('Role')" /> --}}
+                                        @if($currentURL == 'user_register' || $currentURL == 'user_regis' || $currentURL == 'engregister')
                                         <select class="block mt-1 w-full border-gray-300 rounded-md" name="role"
                                             id="role" hidden>
                                             @if ($currentURL == 'user_register' || $currentURL == 'user_regis')
@@ -145,6 +175,7 @@
                                                 <option value="enge">Engineer</option>
                                             @endif
                                         </select>
+                                        @endif
                                     </div>
 
                                     <!-- longitude and latitude -->
@@ -514,6 +545,14 @@ new google.maps.places.Autocomplete(input, options);
                     }
                 })
 
+        }
+        function role_select(){
+            var role_value = $('#role').val();
+            if(role_value == 'user'){
+                $('#show_all_id').hide('slow');
+            }else{
+                $('#show_all_id').show('slow');
+            }
         }
     </script>
 

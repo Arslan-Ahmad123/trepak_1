@@ -1,3 +1,23 @@
+<style>
+    @media only screen and (min-width: 992px) {
+    .footer_pc{
+            position: fixed;
+            bottom: 0%;
+            width: 100%;
+    }
+    .footer_lp{
+            position: static;
+            bottom: 0%;
+            width: 100%;
+    }
+    .topsection{
+    margin-top:0px;
+        box-sizing:border-box;
+        padding-top:120px;
+        padding-bottom:15px;
+    }
+}
+</style>
 <div class="breadcrumb-bar topsection">
     <div class="container-fluid">
         <div class="row align-items-center">
@@ -46,3 +66,16 @@
         
     </div>
 </div>
+@push('childscript')
+    <script>
+         if(window.innerHeight > 715){
+                var footer_class =  document.getElementById('footer').classList;
+                footer_class.remove('footer_lp');
+                footer_class.add('footer_pc');
+            }else{
+                var footer_class =  document.getElementById('footer').classList;
+                footer_class.remove('footer_pc');
+                footer_class.add('footer_lp');
+            }    
+    </script>
+@endpush

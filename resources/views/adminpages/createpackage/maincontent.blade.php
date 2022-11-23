@@ -38,29 +38,17 @@
 								<div class="card-body">
 									<form action="{{ route('savepackage') }}" method="post" >
 										@csrf
-										<div class="form-group row">
-											<label class="col-lg-3 col-form-label" style="font-weight:bold">Package Name</label>
-											<div class="col-lg-9">
-												<input type="text" class="form-control" name="packagename"  placeholder="Enter Package Name">
-												 @error('packagename')
-                                        <div class="alert alert-danger" id="pkgname_div">This Field is Required.</div>
-                                        <script>
-                                        setTimeout(() => {
-                                            $('#pkgname_div').hide();
-                                        }, 3000);
-                                        </script>
-                                        @enderror
-											</div>
-										</div>
+										
 										<div class="form-group row">
 											<label class="col-lg-3 col-form-label" style="font-weight:bold">Package Type</label>
 											<div class="col-lg-9">
 												<select name="packagetype" class="form-control">
 													<option value="">Please Select Package</option>
+													<option value="enterprize">Free</option>
 													<option value="starter">Starter</option>
 													<option value="professional">Professional</option>
 													<option value="business">Business</option>
-													<option value="enterprize">Enterprise</option>
+													
 												</select>
 												
 												 @error('packagetype')
@@ -73,6 +61,22 @@
                                         @enderror
 											</div>
 										</div>
+
+										{{-- <div class="form-group row">
+											<label class="col-lg-3 col-form-label" style="font-weight:bold">Package Name</label>
+											<div class="col-lg-9">
+												<input type="text" class="form-control" name="packagename"  placeholder="Enter Package Name">
+												 @error('packagename')
+                                        <div class="alert alert-danger" id="pkgname_div">This Field is Required.</div>
+                                        <script>
+                                        setTimeout(() => {
+                                            $('#pkgname_div').hide();
+                                        }, 3000);
+                                        </script>
+                                        @enderror
+											</div>
+										</div> --}}
+
 										<div class="form-group row">
 											<label class="col-lg-3 col-form-label" style="font-weight:bold">Package Price</label>
 											<div class="col-lg-9">
@@ -102,9 +106,11 @@
 											</div>
 										</div>
 										<div class="form-group row">
+											
 											<label class="col-lg-3 col-form-label" style="font-weight:bold">Package Specification</label>
 											<div class="col-lg-9">
-												<input type="text" class="form-control" name="packagespecification"  placeholder="Enter Package Specification">
+												<input type="text" class="form-control mb-2" name="packagespecification"  placeholder="Enter Package Specification">
+												{{-- <span class="px-3 py-1 mt-3 bg-danger" style="border-radius:10px;color:white">Use only coma(,) for sepration of list </span> --}}
 												 @error('packagespecification')
                                         <div class="alert alert-danger" id="pkgspec_div">{{ $message }}</div>
                                         <script>

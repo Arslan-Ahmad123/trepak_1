@@ -1,4 +1,18 @@
 <style>
+    @media only screen and (min-width: 992px) {
+		#footer{
+			    position: static;
+                bottom: 0%;
+                transform: translateY(12px);
+                width: 100%;
+		}
+		.topsection{
+		margin-top:0px;
+			box-sizing:border-box;
+			padding-top:120px;
+			padding-bottom:15px;
+		}
+	}
     @media only screen and (max-width: 575.98px) {
      .navbrand_logo {
         position: relative;

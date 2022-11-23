@@ -216,7 +216,7 @@ a {
 					<li>
 						<form action="{{ route('engineerlogout') }}" method="post">
 							@csrf
-							<button class="btn  form-control my-1 " style="border:none;text-align:left;font-size:13px;border-top: 0.5px solid #ebe6e6;" onmouseover="fntonm(this)" onmouseout="fntoutm(this)">Logout</button>
+							<button class="btn  form-control my-1 " style="border:none;text-align:left;font-size:14px;color: #383737;font-weight:600;border-top: 0.5px solid #ebe6e6;" onmouseover="fntonm(this)" onmouseout="fntoutm(this)">Logout</button>
 							{{-- <input type="submit" value="Engineer Logout"  style="border:none;background-color:none;margin-left:10px" /> --}}
 							
 						</form>
@@ -245,7 +245,7 @@ a {
 					<li>
 						<form action="{{ route('engineerlogout') }}" method="post">
 							@csrf
-							<button class="btn  form-control  pl-4" style="border:none;font-size:13px;text-align:left;color:white;margin-left:6px;"  >Logout</button>
+							<button class="btn  form-control  pl-4" style="border:none;font-size:14px;text-align:left;font-weight: 600;color: #383737;margin-left:6px;"  >Logout</button>
 							{{-- <input type="submit" value="Engineer Logout"  style="border:none;background-color:none;margin-left:10px" /> --}}
 						</form>
 						<script>
@@ -253,7 +253,7 @@ a {
 								$(thisv).css({'color':'#09dca4','margin-left':'6px','transition':'all 0.5s ease'})
 							}
 							function fntoutm(thisv){
-								$(thisv).css({'color':'black','margin-left':'0px','transition':'all 0.5s ease'})
+								$(thisv).css({'color':'#383737','margin-left':'0px','transition':'all 0.5s ease'})
 							}
 						</script>
 					</li>

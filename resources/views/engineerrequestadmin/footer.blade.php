@@ -55,6 +55,40 @@
 
 <!-- Custom JS -->
 <script src="{{ asset('newpanel/assets/js/script.js') }}"></script>
+<script>
+    (function () {
+	window.onpageshow = function(event) {
+		if (event.persisted) {
+			window.location.reload();
+		}
+	};
+})();
+    // previous page should be reloaded when user navigate through browser navigation
+    // for mozilla
+    window.onunload = function() {};
+    // for chrome
+    if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+        location.reload();
+    }
+</script>
+@stack('customjscode')
+<script>
+    function showbtn(id) {
+        if (id == 'loginbtn') {
+            $('#engrbtn').hide('slow');
+            $('#clientbtn').hide('slow');
+            $('#loginbtn').toggle('slow');
+        } else if (id == 'engrbtn') {
+            $('#engrbtn').toggle('slow');
+            $('#clientbtn').hide('slow');
+            $('#loginbtn').hide('slow');
+        } else {
+            $('#engrbtn').hide('slow');
+            $('#clientbtn').toggle('slow');
+            $('#loginbtn').hide('slow');
+        }
+    }
+</script>
 
 
 </body>

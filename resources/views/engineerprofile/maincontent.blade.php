@@ -1,5 +1,8 @@
 
 <style>
+	#footer{
+		transform: translateY(110px);
+	}
 	.alink {
 	  display: inline-block;
 	  text-align: center;
@@ -360,6 +363,8 @@
 											<div class="widget about-widget">
 												<h3 class="widget-title">About Me</h3>
 												<p>{{ $engr->about }}.</p>
+												<a href="{{ asset('engr_cv/'.$engr->cv) }}" tabindex="-1" >Download CV</a>
+												
 											</div>
 											<!-- /About Details -->
 										

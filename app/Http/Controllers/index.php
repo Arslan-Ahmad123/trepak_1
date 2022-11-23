@@ -91,7 +91,8 @@ class index extends Controller
     }
     
     public function searchbarengineer(Request $res){
-     
+        
+    //  dd($res);
         $res->validate([
             'cityname' => 'required',
             'date' => 'required',
@@ -106,6 +107,7 @@ class index extends Controller
            return redirect()->back();
         }else{
             $resultSearchEngineer = $this->clientservices->searchEngineraddressWise($categoryid[0]['id'], $address_ex[0],$res->addresslat,$res->addresslon);
+           
         // dd($resultSearchEngineer);
        
         return view('searchengineerbar.searchengineerview')->with($resultSearchEngineer);
@@ -340,7 +342,7 @@ class index extends Controller
         return response()->json( $dataarray);
     }
      public function clientprofile(){ 
-        $order = appointmentInfo::paginate(10);
+        $order = appointmentInfo::where('clientid',Auth::user()->id)->paginate(10);
     
         return view('client.clientprofile.clientprofile')->with('order',$order);
     }

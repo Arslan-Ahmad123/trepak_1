@@ -216,6 +216,7 @@
 								@foreach ($data as $datas)
 								@php
 							$clientdata = getuser($datas->clientid);
+							
 								if($clientdata->signupoption == 1)
 								{
 									$clientimg = $clientdata->pic;

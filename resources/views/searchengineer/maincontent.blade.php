@@ -1,10 +1,63 @@
  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+.pagination ul{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  background: #fff;
+  padding: 8px;
+  border-radius: 50px;
+  box-shadow: 0px 10px 15px rgba(0,0,0,0.1);
+}
+.pagination ul li{
+  color: #20B2AA;
+  list-style: none;
+  line-height: 45px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+}
+.pagination ul li.numb{
+  list-style: none;
+  height: 45px;
+  width: 45px;
+  margin: 0 3px;
+  line-height: 45px;
+  border-radius: 50%;
+}
+.pagination ul li.numb.first{
+  margin: 0px 3px 0 -5px;
+}
+.pagination ul li.numb.last{
+  margin: 0px -5px 0 3px;
+}
+.pagination ul li.dots{
+  font-size: 22px;
+  cursor: default;
+}
+.pagination ul li.btn{
+  padding: 0 20px;
+  border-radius: 50px;
+}
+.pagination li.active,
+.pagination ul li.numb:hover,
+.pagination ul li:first-child:hover,
+.pagination ul li:last-child:hover{
+  color: #fff;
+  background: #20B2AA;
+}
      .alink {
          display: inline-block;
          text-align: center;
          cursor: pointer;
      }
-
+     .pac-container{
+      margin-top: -90px;
+      }
      input[type="text"],
      button {
          padding: 4px 8px;
@@ -86,6 +139,8 @@
      .chatbody {
          flex-grow: 1;
          background-color: #eee;
+         height: 400px;
+         overflow-y: auto;
      }
 
      .chatbody .bubble {
@@ -100,6 +155,9 @@
          font-size: 14px;
          text-align: left;
          line-height: 0.6;
+         padding: 4px;
+         margin-bottom: 0px;
+         margin-top: 0px;
      }
 
      .chatbody .incoming {
@@ -223,55 +281,54 @@
              <div class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar">
 
                  <!-- Search Filter -->
-                 <div class="card search-filter" id="filter_start">
-                     <div class="card-header">
-                         <h4 class="card-title mb-0">Search Filter</h4>
-                     </div>
-                     <div class="card-body">
-                         <form action="{{ route('searchbarengineer') }}" method="post">
-                             @csrf
+                <!-- Search Filter -->
+                <div class="card search-filter" id="filter_start">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">Search Filter</h4>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{ route('searchbarengineer') }}" method="post">
+                            @csrf
+                            <div class="slidecontainer">
+                                Price Range
+                                <input type="range" min="500" max="5000" value="500" step="500"
+                                    class="slider" id="myRange">
+                                <p>Value: <span id="demo"></span></p>
+                            </div>
 
-                             <div class="slidecontainer">
-                                 Price Range
-                                 <input type="range" min="500" max="5000" value="500" step="500"
-                                     class="slider" id="myRange">
-                                 <p>Value: <span id="demo"></span></p>
-                             </div>
-                             <style>
-                                 .pac-container {
-                                     margin-top: -95px;
-                                 }
-                             </style>
 
-                             <div class="filter-widget">
-                                 <h4>Select Specialist</h4>
-                                 <select id="engrcategory" class="form-control" name="date">
-                                     @php
-                                         $res = getallcategory();
-                                     @endphp
-                                     @foreach ($res as $res)
-                                         <option value="{{ $res->engrcategory }}"
-                                             {{ $res->id == $category_id ? 'selected' : '' }}>
-                                             {{ $res->engrcategory }}</option>
-                                     @endforeach
-                                 </select>
-                             </div>
-                             <div class="filter-widget">
-                                 <div class="form-group">
-                                     Select City
-                                     <input type="text" style="border:1px solid grey" onblur="getcordinataddress()"
-                                         class="form-control" name="cityname" id="selectcity" placeholder="Select City"
-                                         style="position:relative">
-                                     <input type="hidden" name="addresslat" id="addresslat" value="">
-                                     <input type="hidden" name="addresslon" id="addresslon" value="">
-                                 </div>
-                             </div>
-                             <div class="btn-search">
-                                 <button type="submit" id="search_btn" disabled class="btn btn-block">Search</button>
-                             </div>
-                         </form>
-                     </div>
-                 </div>
+                            <div class="filter-widget">
+                                <h4>Select Specialist</h4>
+                                <select id="engrcategory" class="form-control" name="date">
+                                    @php
+                                        $res = getallcategory();
+                                    @endphp
+                                    @foreach ($res as $res)
+                                        <option value="{{ $res->engrcategory }}"
+                                            {{ $res->id == $category_id ? 'selected' : '' }}>
+                                            {{ $res->engrcategory }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="filter-widget">
+                                <div class="form-group">
+                                    Select City
+                                    <input type="text" onfocus="checkerror()"  onblur="getcordinataddress()" class="form-control"
+                                        name="cityname" id="selectcity" placeholder="Select City"
+                                        style="position:relative;border:1px solid rgb(180, 177, 177)">
+                                        <span id="error_msg_show" style="color:red;font-weight: 600;font-size:15px;display:none">Select Correct City Name!!</span>
+                                    <input type="hidden" name="addresslat" id="addresslat">
+                                    <input type="hidden" name="addresslon" id="addresslon">
+                                </div>
+                            </div>
+                            <div class="btn-search">
+                                <button type="submit" id="search_btn" disabled class="btn btn-block">Search</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+                <!-- /Search Filter -->
                  <!-- /Search Filter -->
 
                  <!-- Search show Filter -->
@@ -287,6 +344,9 @@
                  {{-- @include('searchengineer.searchengrpage')
  {!! $engr->links() !!} --}}
              </div>
+             {{-- <div class="pagination">
+                <ul> <!--pages or li are comes from javascript --> </ul>
+              </div> --}}
 
          </div>
 
@@ -393,10 +453,10 @@
                  @csrf
                  <input type="text" name="message" id="message" class="msg"
                      placeholder="Type a message..." />
-                 <input type="text" name="senderid" id="senderid"
+                 <input type="hidden" name="senderid" id="senderid"
                      value="{{ Auth::check() ? Auth::user()->id : '' }}" />
-                 <input type="text" name="reciverid" id="reciverid" />
-                 <input type="text" name="_token" id="token_res" value={{ csrf_token() }}>
+                 <input type="hidden" name="reciverid" id="reciverid" />
+                 <input type="hidden" name="_token" id="token_res" value={{ csrf_token() }}>
                  <button id="submitmsg" style="position: absolute;right:2%;"><i
                          class="fas fa-paper-plane"></i></button>
              </form>
@@ -422,7 +482,9 @@
          async></script> --}}
      <script>
          //  ============function for show map and clients=================
-
+         var totalPages = 0;
+        var page = 1;
+        var element_pagination = document.querySelector(".pagination ul");
          //  ============function for show map and clients=================
          $(document).ready(function() {
 
@@ -432,7 +494,12 @@
                  console.log('output res: ' + res);
                  var output = "";
                  $('#all_engr_show').html('');
+                 
                  if(res.length > 0){
+                    let gettotalpage = Math.ceil(res.length / 5);
+                    
+                    totalPages = gettotalpage;
+                    console.log('total page is :'+ totalPages);
                  $.each(res, function(i, v) {
 
                      if (v.signupoption == 1) {
@@ -505,7 +572,7 @@
                             <input type="text" name="bookingid" value="${v.id}" hidden>
                           
                             <button class="btn-info p-0 px-2 btn w-45" type="submit" formaction="{{ route('viewprofileeng') }}"><i class="fa fa-eye" aria-hidden="true"></i>Profile</button>
-                            <button class="btn-info p-0 px-2 btn w-45" type="submit" onclick="shoemodeldate(${v.id})" ><i class="fa fa-check" aria-hidden="true"></i>Booked</button>
+                            <button class="btn-info p-0 px-2 btn w-45" type="submit" onclick="shoemodeldate(${v.id})" ><i class="fa fa-check" aria-hidden="true"></i>Book</button>
                         </form>
                     </div>
                 </div>
@@ -516,7 +583,7 @@
             <div class="clini-infos">
                 <ul>
                     <li><i class="far fa-thumbs-up"></i> 98%</li>
-                    <li><a href="javascript:void(0)"><i class="far fa-comment"></i> Chat</a></li>
+                    <li><a href="javascript:void(0)" ><i class="far fa-comment"></i> Chat</a></li>
                     {{-- <li><i class="fas fa-map-marker-alt"></i> Florida, USA</li> --}}
                     {{-- <li><i class="far fa-money-bill-alt"></i> $300 - $1000 <i class="fas fa-info-circle" data-toggle="tooltip" title="Lorem Ipsum"></i> </li> --}}
                 </ul>
@@ -528,9 +595,9 @@
                     <input type="text" name="bookingid" value="${v.id}" hidden>
                    
                     <button class="btn-info p-0 px-2 btn w-45" type="submit" formaction="{{ route('viewprofileeng') }}"><i class="fa fa-eye" aria-hidden="true"></i>Profile</button>
-                    <button class="btn-info p-0 px-2 btn w-45" type="submit" onclick="shoemodeldate(${v.id})" ><i class="fa fa-check" aria-hidden="true"></i>Booked</button>
+                    <button class="btn-info p-0 px-2 btn w-45" type="submit" onclick="shoemodeldate(${v.id})" ><i class="fa fa-check" aria-hidden="true"></i>Book</button>
                 </form>
-                {{-- <a class="apt-btn" href="{{ route('booking',['id'=>$engr->id]) }}"><i class="fa fa-check" aria-hidden="true"></i>Booked</a> --}}
+                {{-- <a class="apt-btn" href="{{ route('booking',['id'=>$engr->id]) }}"><i class="fa fa-check" aria-hidden="true"></i>Book</a> --}}
             </div>
         </div>
     </div>
@@ -538,8 +605,19 @@
 </div>`);
 
                  })
+                 
+       
+
+//calling function with passing parameters and adding inside element which is ul tag
+// createPagination(totalPages, page,element_pagination);
                 }else{
                     $('#all_engr_show').html('No Record Found!');
+//                     const element = document.querySelector(".pagination ul");
+//         let totalPages = 10;
+//         let page = 1;
+
+// //calling function with passing parameters and adding inside element which is ul tag
+// element.innerHTML = createPagination(totalPages, page,element);
                 }
              });
              if (jQuery(window).width() > 767) {
@@ -636,13 +714,19 @@
                          $('#chatbox' + engrid).html('');
                          $.each(data, function(res, value) {
                              if (value.senderid == clientid) {
-                                 var app_s = "<div class='outgoing'>" +
+                                 var app_s =
+                                 
+                                 "<div class='outgoing'>" +
+                                    "<span style='font-size:12px'> "    + value.created_at+      "</span>"+"<br>"+
                                      "<div class='bubble'>" +
                                      "<p>" + value.message + "</p>" +
+                                     
                                      "</div>" +
                                      "</div>";
                              } else {
-                                 var app_s = "<div class='incoming'>" +
+                                 var app_s =   
+                                 "<div class='incoming'>" +
+                                    "<span style='font-size:12px'> "    + value.created_at+      "</span>"+"<br>"+
                                      "<div class='bubble'>" +
                                      "<p>" + value.message + "</p>" +
                                      "</div>" +
@@ -652,6 +736,7 @@
 
                              $('#chatbox' + engrid).append(app_s);
                          });
+                         scrollToBottom();
 
                      } else {
                          alert("Not reciver online");
@@ -791,13 +876,30 @@
 
                  var infoWindow = new google.maps.InfoWindow();
                  var distance_boolean = [];
+                 var lon_s = [];
+                var lat_s = [];
                  $.each(allengr, function(i, m) {
                      //  var latLngA = {'lat':32.1877,'lng':74.1945};
                      //  var latLngB = {'lat':m.lan,'lng':m.lng};
                      var latitude1 = latitude_cur;
                      var longitude1 = longitude_cur;
-                     var latitude2 = m.latitude;
-                     var longitude2 = m.longitude;
+                    // ========================= 
+                    if (lon_s.includes(m.longitude) && lat_s.includes(m.latitude)) {
+                        function randomInRange(min, max) {
+                            return Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math
+                                .random() * (max - min) + min);
+                        }
+                        let variation = randomInRange(0.1, 5) / 500;
+
+                        var latitude2 = (m.latitude * 1)  + variation;
+                        var longitude2 = (m.longitude * 1)  + variation;
+                    } else {
+                        var latitude2 = m.latitude ;
+                        var longitude2 = m.longitude ;
+                    }
+                    lon_s.push(m.longitude);
+                    lat_s.push(m.latitude);
+                    // ========================= 
                     
                      var distance = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(
                          latitude1, longitude1), new google.maps.LatLng(latitude2, longitude2));
@@ -861,7 +963,7 @@
 
                                  //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
                                  infoWindow.setContent(
-                                     `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.categoryname}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`
+                                     `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.categoryname}</h6><h6>Address: ${m.city+', '+m.state+', '+m.short_country}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Book</button></div><form>`
                                  );
                                  infoWindow.open(map, marker);
                              });
@@ -964,7 +1066,7 @@
 
                              //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
                              infoWindow.setContent(
-                                 `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.categoryname}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Booked</button></div><form>`
+                                 `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.categoryname}</h6><h6>Address: ${m.city+', '+m.state+', '+m.short_country}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Book</button></div><form>`
                              );
                              infoWindow.open(map, marker);
                          });
@@ -990,10 +1092,15 @@
                              document.getElementById('search_btn').disabled = false;
 
                          } else {
+                            $('#error_msg_show').show('slow');
+                            $('#addresslats').val('');
+                            $('#addresslons').val('');
+                            document.getElementById('search_btns').disabled = true;
                              console.log("Something got wrong " + status);
                          }
                      });
                  } else {
+                    $('#error_msg_show').show('slow');
                      $('#addresslat').val('');
                      $('#addresslon').val('');
                      document.getElementById('search_btn').disabled = true;
@@ -1035,6 +1142,99 @@
              $('#orderdetail_modal').appendTo('body').modal('show');
              $('#select_engrid').val(id);
          }
+         function checkerror(){
+          $('#error_msg_show').hide('slow');
+       }
+       function scrollToBottom() {
+           const messages = document.getElementsByClassName('chatbody')[0];
+           messages.scrollTop = messages.scrollHeight;
+        }
+
+        // pagination with js 
+       
+function createPagination(totalPages, page,element){
+  
+  let liTag = '';
+  let active;
+  let beforePage = page > 1 ? page - 1 : 1;
+  let afterPage = page > 1 ? page + 1 : 1;
+  console.warn('tlpage:' +totalPages );
+  
+ 
+  if(page > 1){ //show the next button if the page value is greater than 1
+    liTag += `<li class="btn prev" onclick="createPagination(totalPages, ${page - 1},element_pagination)"><span><i class="fas fa-angle-left"></i> Prev</span></li>`;
+    console.log('test1')
+    
+  }
+
+  if(page > 2){ //if page value is less than 2 then add 1 after the previous button
+    liTag += `<li class="first numb" onclick="createPagination(totalPages, 1,element_pagination)"><span>1</span></li>`;
+    console.log('test2')
+    if(page > 3){ //if page value is greater than 3 then add this (...) after the first li or page
+      liTag += `<li class="dots"><span>...</span></li>`;
+      console.log('test3')
+    }
+  }
+
+  // how many pages or li show before the current li
+  if (page == totalPages) {
+    // beforePage = beforePage - 2;
+  } else if (page == totalPages - 1) {
+    beforePage = beforePage - 1;
+   
+  }
+  // how many pages or li show after the current li
+  if (page == 1) {
+    afterPage = afterPage + 2;
+  } else if (page == 2) {
+    afterPage  = afterPage + 1;
+  }
+console.warn('before[age no]:'+beforePage);
+console.warn('afterpage[age no]:'+afterPage);
+  for (var plength = beforePage; plength <= afterPage; plength++) {
+    if (plength > totalPages) { //if plength is greater than totalPage length then continue
+      continue;
+    }
+    if (plength == 0) { //if plength is 0 than add +1 in plength value
+      plength = plength + 1;
+    }
+    if(page == plength){ //if page is equal to plength than assign active string in the active variable
+      active = "active";
+    }else{ //else leave empty to the active variable
+      active = "";
+    }
+    if(totalPages == 1){
+        liTag += `<li class="numb ${active}" ><span>${plength}</span></li>`;
+    }else{
+        liTag += `<li class="numb ${active}" onclick="createPagination(totalPages, ${plength},element_pagination)"><span>${plength}</span></li>`;
+    }
+   
+  }
+
+  if(page < totalPages - 1){ //if page value is less than totalPage value by -1 then show the last li or page
+    if(page < totalPages - 2){ //if page value is less than totalPage value by -2 then add this (...) before the last li or page
+      liTag += `<li class="dots"><span>...</span></li>`;
+    }
+    liTag += `<li class="last numb" onclick="createPagination(totalPages, ${totalPages},element_pagination)"><span>${totalPages}</span></li>`;
+    console.log('test5')
+  }
+
+  if (page < totalPages) { //show the next button if the page value is less than totalPage(20)
+    liTag += `<li class="btn next" onclick="createPagination(totalPages, ${page + 1},element_pagination)"><span>Next <i class="fas fa-angle-right"></i></span></li>`;
+  }
+
+  element.innerHTML = liTag; //add li tag inside ul tag
+  return liTag; //reurn the li tag
+}
+        // pagination with js
+
+        // function showEngineer(allEnge,start,end){
+            
+
+        // }
+        
+        
+         
      </script>
      <script
          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry,places"
