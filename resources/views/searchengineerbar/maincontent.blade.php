@@ -189,12 +189,21 @@
 
 
      @media screen and (max-width:520px) {
+        .pagination ul {
+
+
+width:100%;
+
+}
 
          .customchatbox {
              width: 315px;
              height: 70vh;
          }
      }
+     @media only screen and (max-width: 400px) {
+       
+    }
 
      .slidecontainer {
          width: 100%;
@@ -243,6 +252,7 @@
      .select2-container--default {
          display: none;
      }
+    
  </style>
 
  <!-- Breadcrumb -->

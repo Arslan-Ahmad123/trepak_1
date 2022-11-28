@@ -6,8 +6,7 @@
          display: flex;
          flex-wrap: wrap;
          background: #fff;
-         position: relative;
-         left: 35%;
+         margin: 0px auto;
          padding: 8px;
          border-radius: 50px;
          box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
@@ -204,6 +203,37 @@
              width: 315px;
              height: 70vh;
          }
+
+         /* .pagination ul {
+             width:100%;
+         } */
+         .pagination ul li.numb {
+         list-style: none;
+         height: 45px;
+         width: 35px;
+         margin: 0 2px;
+         line-height: 45px;
+         border-radius: 50%;
+     }
+     .pagination ul li.dots {
+         font-size: 17px;
+         
+     }
+
+     .pagination ul li.next{
+         font-size: 15px;
+         padding: 0 7px;
+         border-radius: 50px;
+        
+     }
+     .pagination ul li.prev{
+         font-size: 15px;
+         padding: 0 7px;
+         border-radius: 50px;
+        
+     }
+    
+
      }
 
      .slidecontainer {
@@ -244,6 +274,36 @@
      .linksstyle {
          position: relative;
          left: 30%;
+     }
+     @media screen and (max-width:430px) {
+        .pagination ul li.numb {
+         list-style: none;
+         font-size: 12px;
+         height: 45px;
+         width: 30px;
+         margin: 0 2px;
+         line-height: 45px;
+         border-radius: 45%;
+     }
+     .pagination ul li.dots {
+         font-size: 13px;
+         
+     }
+
+     .pagination ul li.next{
+         font-size: 13px;
+         padding: 0 7px;
+         border-radius: 35px;
+        
+     }
+     .pagination ul li.prev{
+         font-size: 13px;
+         padding: 0 7px;
+         border-radius: 35px;
+        
+     }
+    
+
      }
  </style>
 
@@ -964,9 +1024,9 @@
                      var image = {
                          url: "{{ asset('engrphoto/googlemap2.png') }}",
                          size: new google.maps.Size(80, 81),
-                             origin: new google.maps.Point(0, 0),
-                             anchor: new google.maps.Point(20, 40),
-                             scaledSize: new google.maps.Size(40, 39)
+                         origin: new google.maps.Point(0, 0),
+                         anchor: new google.maps.Point(20, 40),
+                         scaledSize: new google.maps.Size(40, 39)
                      };
 
 
@@ -1079,6 +1139,7 @@
          // pagination with js 
 
          function createPagination(totalPages, page, element) {
+             console.log(`total page is ${totalPages}`);
 
              showEngineer(allengr_array, page);
 
@@ -1097,9 +1158,14 @@
              }
 
              if (page > 2) { //if page value is less than 2 then add 1 after the previous button
-                 liTag +=
+                if(page == 3 && totalPages == 4){
+
+                }else{
+                    liTag +=
                      `<li class="first numb" onclick="createPagination(totalPages, 1,element_pagination)"><span>1</span></li>`;
-                 console.log('test2')
+
+                } 
+               
                  if (page > 3) { //if page value is greater than 3 then add this (...) after the first li or page
                      liTag += `<li class="dots"><span>...</span></li>`;
                      console.log('test3')
@@ -1116,26 +1182,33 @@
              // how many pages or li show after the current li
              if (page == 1) {
                  afterPage = afterPage + 2;
-             } else if (page == 2) {
+             } else if (page == 3) {
                  afterPage = afterPage + 1;
              }
              console.warn('before[age no]:' + beforePage);
              console.warn('afterpage[age no]:' + afterPage);
              for (var plength = beforePage; plength <= afterPage; plength++) {
                  if (plength > totalPages) { //if plength is greater than totalPage length then continue
+                     console.log('step1');
                      continue;
+
                  }
                  if (plength == 0) { //if plength is 0 than add +1 in plength value
+
                      plength = plength + 1;
                  }
                  if (page == plength) { //if page is equal to plength than assign active string in the active variable
+
                      active = "active";
+
                  } else { //else leave empty to the active variable
                      active = "";
                  }
                  if (totalPages == 1) {
+                     console.log('step5');
                      liTag += `<li class="numb ${active}" ><span>${plength}</span></li>`;
                  } else {
+                     console.log('step6' + plength);
                      liTag +=
                          `<li class="numb ${active}" onclick="createPagination(totalPages, ${plength},element_pagination)"><span>${plength}</span></li>`;
                  }
@@ -1143,21 +1216,32 @@
              }
 
              if (page < totalPages - 1) { //if page value is less than totalPage value by -1 then show the last li or page
-                 if (page < totalPages -
+                console.log('verify the numeber of page :' + page);
+                if (page < totalPages -
                      2) { //if page value is less than totalPage value by -2 then add this (...) before the last li or page
+                     console.log('step7');
                      liTag += `<li class="dots"><span>...</span></li>`;
                  }
-                 liTag +=
+                if((page == 1 && totalPages == 3) || (page == 3 && totalPages == 4) || (page == 3 && totalPages == 5)){
+
+                }else{
+                    liTag +=
                      `<li class="last numb" onclick="createPagination(totalPages, ${totalPages},element_pagination)"><span>${totalPages}</span></li>`;
-                 console.log('test5')
+
+                }
+
+               
+                 console.log(`step8:${totalPages}`);
              }
 
              if (page < totalPages) { //show the next button if the page value is less than totalPage(20)
+                 console.log('step9');
                  liTag +=
                      `<li class="btn next" onclick="createPagination(totalPages, ${page + 1},element_pagination)"><span>Next <i class="fas fa-angle-right"></i></span></li>`;
              }
 
              element.innerHTML = liTag; //add li tag inside ul tag
+             console.log(liTag);
              return liTag; //reurn the li tag
          }
          // pagination with js
@@ -1165,15 +1249,15 @@
          function showEngineer(v, page) {
              // console.log('ispage no  is asijas' + page);
              var perpageshow = 5;
-             var last_index_page = 4;
+            //  var last_index_page = 1;
              if (page == 1) {
                  var startindex = 0;
-                 var endindex = last_index_page;
+                 var endindex = 4;
              } else {
                  let calnopre = page - 1;
                  let calno = page * perpageshow;
                  var startindex = 0 + (calnopre * perpageshow);
-                 var endindex = last_index_page + (calno - 1);
+                 var endindex = 0 + (calno - 1);
 
              }
              console.log('ispage no  is asijas' + startindex);
@@ -1183,7 +1267,7 @@
                  if (v.length == k) {
                      break;
                  }
-                 console.log(v[k].fname);
+                
 
                  if (v[k].signupoption == 1) {
                      var image = v[k].pic;
