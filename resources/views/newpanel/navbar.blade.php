@@ -29,6 +29,10 @@
     transform: translate(0,0);
     line-height: 1; 
 }
+.main-nav li .goog-te-menu-value{
+	display: inline;
+	font-weight: 100;
+}
 
 a {
     background-color: transparent;
@@ -162,7 +166,7 @@ a {
     }
 }
 </style>			
-<nav class="navbar navbar-expand-lg fixed-top header-nav">
+<nav class="navbar navbar-expand-lg fixed-top header-nav" translate="no">
 	<div class="navbar-header">
 		<a id="mobile_btn" href="javascript:void(0);">
 			<span class="bar-icon">
@@ -275,6 +279,7 @@ a {
 					{{-- <li><a href="checkout.html">Checkout</a></li> --}}
 					{{-- <li><a href="{{ route('clientprofile') }}">Booking Success</a></li> --}}
 					<li><a href="{{ route('clientprofile') }}">Client Dashboard</a></li>
+					<li><a href="{{ route('clientvideoconsultant') }}">Video Consultant</a></li>
 					{{-- <li><a href="favourites.html">Favourites</a></li> --}}
 					{{-- <li><a href="chat.html">Chat</a></li> --}}
 					<li><a href="{{ route('clientprofilesetting') }}">Profile Settings</a></li>
@@ -290,6 +295,7 @@ a {
 					{{-- <li><a href="checkout.html">Checkout</a></li> --}}
 					{{-- <li><a href="{{ route('clientprofile') }}">Booking Success</a></li> --}}
 					<li><a href="{{ route('clientprofile') }}">Client Dashboard</a></li>
+					<li><a href="{{ route('clientvideoconsultant') }}">Video Consultant</a></li>
 					{{-- <li><a href="favourites.html">Favourites</a></li> --}}
 					{{-- <li><a href="chat.html">Chat</a></li> --}}
 					<li><a href="{{ route('clientprofilesetting') }}">Profile Settings</a></li>
@@ -306,7 +312,14 @@ a {
 			<li class="has-submenu">
 				<a href="#">About Us</a>
 			</li>
+			
 			@endif	
+			@if (Route::current()->getName() == 'indexpage' || Route::current()->getName()  == 'newengineerpanel')
+			<li class="has-submenu" id="google_translate_element" >
+				
+			</li>
+			@endif
+			
 			{{-- <li class="has-submenu">
 				<a href="#">Pages <i class="fas fa-chevron-down"></i></a>
 				<ul class="submenu">

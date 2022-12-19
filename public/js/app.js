@@ -2177,7 +2177,43 @@ function scrollToBottoms() {
   messages.scrollTop = messages.scrollHeight;
 }
 
+function timeSince(date) {
+  var seconds = Math.floor((new Date() - date) / 1000);
+  var interval = seconds / 31536000;
+
+  if (interval > 1) {
+    return Math.floor(interval) + " years";
+  }
+
+  interval = seconds / 2592000;
+
+  if (interval > 1) {
+    return Math.floor(interval) + " months";
+  }
+
+  interval = seconds / 86400;
+
+  if (interval > 1) {
+    return Math.floor(interval) + " days";
+  }
+
+  interval = seconds / 3600;
+
+  if (interval > 1) {
+    return Math.floor(interval) + " hours";
+  }
+
+  interval = seconds / 60;
+
+  if (interval > 1) {
+    return Math.floor(interval) + " minutes";
+  }
+
+  return Math.floor(seconds) + " seconds";
+}
+
 var d = new Date();
+var differhuman = timeSince(d);
 var hour = d.getHours();
 var minute = d.getMinutes();
 hour = hour % 12 || 12;
@@ -2186,7 +2222,7 @@ var monthname = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 
 var month = d.getMonth();
 var year = d.getFullYear();
 var date = d.getDate();
-var c_date = monthname[month] + '-' + date + '-' + year + ' ' + hour + ":" + minute + ' ' + suffix;
+var c_date = hour + ":" + minute + ' ' + suffix;
 $(document).ready(function () {
   $(document).on('click', '#submitmsg', function (e) {
     e.preventDefault();
@@ -2242,12 +2278,20 @@ $(document).ready(function () {
                   console.log(data);
 
                   if (data == 'user') {
+                    var ele_today_chat = document.getElementById('today_msg');
+
+                    if (ele_today_chat != null) {} else {
+                      var date_div = "<div id=\"today_msg\" style=\"text-align: center;margin: 0px auto;width: 30%;background-color: #a6afa6;padding: 4px 0px;border-radius: 4px;font-size: 14px;font-weight: bold;\"><span>Today</span></div>";
+                      $('#chatbox' + reciverid).append(date_div);
+                    }
+
                     var app_s = "<div class='outgoing'>" + "<span  style='font-size:12px;'>" + c_date + "</span>" + "<br>" + "<div class='bubble'>" + "<p>" + message + "</p>" + "</div>" + "</div>";
                     $('#chatbox' + reciverid).append(app_s);
                     scrollToBottom();
                   } else {
                     var app_s = "<li class=\"media sent\">\n                                                               \n                                                <div class=\"media-body\">\n                                                    <div class=\"msg-box\">\n                                                        <div>\n                                                            <p>".concat(message, "</p>\n                                                           \n                                                            <ul class=\"chat-msg-info\">\n                                                                <li>\n                                                                    <div class=\"chat-time\">\n                                                                        <span  style=\"font-size:12px;\">").concat(c_date, "</span>\n                                                                    </div>\n                                                                </li>\n                                                            </ul>\n                                                        </div>\n                                                    </div>\n                                                  </div>  \n                                                  \n                                            </li>");
                     $('#chatbox' + reciverid).append(app_s);
+                    console.log('new message add');
                     scrollToBottoms();
                   }
                 }
@@ -2261,12 +2305,14 @@ $(document).ready(function () {
     }
   });
   window.Echo["private"]('onechat').listen('oneChatevent', function (e) {
+    console.log('asaskas dadash doadasd d adiodoijwoie oiejqwesdasd');
     console.warn('reciver_id' + e.reciverid);
     console.warn('sender_id' + e.senderid);
     console.warn('sender_id' + e.sendmes);
     var innerDiv = document.getElementById('chatbody' + e.reciverid).querySelector('#chatbox' + e.senderid);
 
     if (innerDiv != null) {
+      console.log('user is active now');
       $.ajax({
         url: "http://127.0.0.1:8000/fetchrole",
         type: 'post',
@@ -2287,6 +2333,8 @@ $(document).ready(function () {
           }
         }
       });
+    } else {
+      console.log('no found div');
     } // $.ajax({
     //     url:'fetchspec',
     //     type:'post',
@@ -2456,11 +2504,12 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.Pusher = (pusher_js__WEBPACK_IMPORTED_MODULE_3___default());
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_2__["default"]({
   broadcaster: 'pusher',
-  key: "9bcc999106a406cafbaa",
+  key: "919f6cafe765234d0886",
   cluster: "ap2",
   forceTLS: true,
-  encypted: false
+  encypted: true
 });
+console.log("919f6cafe765234d0886");
 
 /***/ }),
 

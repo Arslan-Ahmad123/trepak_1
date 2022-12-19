@@ -7,6 +7,7 @@ use App\Models\Comment;
 use App\Models\oneChat;
 
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -77,6 +78,7 @@ class User extends Authenticatable
     public function getshortCountryAttribute($res){
         return ucwords($res);
     }
+  
  
     
 }

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
+
 use App\Models\User;
 use App\Events\conformemail;
 use Illuminate\Http\Request;
 use App\Services\ClientService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use App\Providers\RouteServiceProvider;
 use App\Http\Requests\Auth\LoginRequest;
 
@@ -37,13 +39,15 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-
+       
         $user = Auth::user();
         $users = Auth::user()->role;
         $userstatus = $user->status;
         if ($users == 'admin') {
             return redirect(RouteServiceProvider::ADMIN);
         } elseif ($users == 'enge') {
+           
+            Cache::put('userlogin'.Auth::user()->id,true);
             if ($user->adminengr == 1) {
                 User::where('id', $user->id)->update(['adminengr' => 2]);
                 if (Auth::user()->docsstatus == 0) {

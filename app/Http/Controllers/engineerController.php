@@ -8,11 +8,15 @@ use App\Models\Comment;
 use App\Models\oneChat;
 use App\Models\groupChat;
 use App\Models\groupInfo;
+
 use Illuminate\Http\Request;
 use App\Services\EngrService;
+use App\Events\sendVideoevent;
 use App\Models\appointmentInfo;
-use PhpParser\Node\Stmt\TryCatch;
+use App\Models\videoConsaltant;
+
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use App\Providers\RouteServiceProvider;
 use App\Http\Requests\engrDocumentation;
 
@@ -125,11 +129,15 @@ class engineerController extends Controller
     }
      public function destroy(Request $request)
     {
+        if(Cache::has('userlogin'.Auth::user()->id)){
+            Cache::pull('userlogin'.Auth::user()->id);
+        }
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+      
 
         return redirect('/');
     }
@@ -170,6 +178,59 @@ class engineerController extends Controller
             return redirect()->back();
        
     }
+    public function engrvideores(){
+        $resun =videoConsaltant::where('engr_id',Auth::user()->id)->where('engr_reply',NULL)->where('client_reply',NULL)->where('orderstatus',0)->paginate(10);
+        
+        $engr_reply =videoConsaltant::where('engr_id',Auth::user()->id)->where('orderstatus',0)->where('engr_reply','<>',NULL)->where('client_reply',NULL)->paginate(10);
+        $client_reply =videoConsaltant::where('engr_id',Auth::user()->id)->where('orderstatus',0)->where('engr_reply','<>',NULL)->where('client_reply','<>',NULL)->paginate(10);
+        
+        $rescon =videoConsaltant::where('engr_id',Auth::user()->id)->where('orderstatus',1)->paginate(10);
+        
+        return view('engineervideoconsul.engineervideoviewpage')->with(['res_un_c'=>$resun,'res_c'=>$rescon,'engr_reply'=>$engr_reply,'client_reply'=>$client_reply]);
+    }
+    public function engineerreplyvideo(Request $res){
+       if($res->video_response == 'done'){
+           $client_info = User::find($res->client_video_id)->toArray();
+           $engineer_info = Auth::user();
+           $order_in  = videoConsaltant::where('id',$res->db_row_id)->get()->toArray();
+           $order_info =  $order_in[0];
+          
+           videoConsaltant::find($res->db_row_id)->update([
+               'engr_reply'=>'Done',
+               'orderstatus'=>1
+            ]);
+           
+            // new sendVideoevent($client_info,$engineer_info,$order_info);
+            event(new sendVideoevent($client_info,$engineer_info,$order_info));
+            return redirect()->back();
+       }else{
+        $order_check  = videoConsaltant::where('id',$res->db_row_id)->get()->toArray();
+        if($order_check[0]['client_time'] == $res->engrtime && $order_check[0]['client_date'] == $res->engrdate){
+            $client_info = User::find($res->client_video_id)->toArray();
+           $engineer_info = Auth::user();
+           $order_in  = videoConsaltant::where('id',$res->db_row_id)->get()->toArray();
+           $order_info =  $order_in[0];
+          
+           videoConsaltant::find($res->db_row_id)->update([
+               'engr_reply'=>'Done',
+               'orderstatus'=>1
+            ]);
+           
+            // new sendVideoevent($client_info,$engineer_info,$order_info);
+            event(new sendVideoevent($client_info,$engineer_info,$order_info));
+            return redirect()->back();
+        }else{
+            // dd('time is  not match' . $order_check[0]['client_time']  .' : '.$res->engrtime);
+            $engrreply = $res->engrdate.','.$res->engrtime;
+            
+            videoConsaltant::find($res->db_row_id)->update([
+                'engr_reply'=>$engrreply
+             ]);
+             return redirect()->back();
+        }
+
+       }
+    }
     public function getchatuser(){
         $userid = oneChat::where('engrid',Auth::user()->id)->distinct()->get('clientid');
         
@@ -184,7 +245,7 @@ class engineerController extends Controller
         
         foreach($userid as $result){
             $user_d = User::where('id',$result->clientid)->get()->toArray();
-        
+            
             if($user_d[0]['signupoption'] == 1){
                 $imageuser = $user_d[0]['pic'];
             }else{

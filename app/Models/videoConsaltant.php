@@ -1,30 +1,26 @@
 <?php
 
 namespace App\Models;
-use Carbon\Carbon;
 
-use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class oneChat extends Model
+class videoConsaltant extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'clientid',
-        'engrid',
-        'senderid',
-        'reciverid',
-        'message',
+        'user_id',
+        'engr_id',
+        'client_phone',
+        'client_date',
+        'client_time',
+        'engr_reply',
+        'client_reply',
+        'orderstatus',
     ];
-
-    public function getcreatedAtAttribute($res){
-        // return $res->diffForHumans();
-        return Carbon::parse($res)->timezone('Asia/Karachi')->format('d-M-Y');
-    }
     public function getupdatedAtAttribute($res){
         // return $res->diffForHumans();
         return Carbon::parse($res)->timezone('Asia/Karachi')->format('g:i A');
     }
-    
 }

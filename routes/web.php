@@ -10,6 +10,7 @@ use App\Models\appointmentInfo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\Events\Registered;
 use App\Providers\RouteServiceProvider;
@@ -17,12 +18,58 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
 
-
+route::get('/timeformat',function(){
+$date= '17:00';
+$newDate = \Carbon\Carbon::createFromFormat('H:i',$date)->format('h:i A');
+dd($newDate);
+});
 Route::get('/', [index::class, 'showindex'])->name('home');
 Route::get('/indexpage', [index::class, 'showindex_page'])->name('indexpage');
 Route::get('/index_page', [index::class, 'showindex_page'])->name('index_page');
 // Route::view('/indexpage', [index::class,'showindex_page'])->name('indexpage');
 // ===================email ===========================
+Route::get('userstatusonline',function(){
+    if(Cache::has('userlogin'.Auth::user()->id)){
+       
+    }else{
+        Cache::put('userlogin'.Auth::user()->id,true);
+    }
+    return response()->json('yes make a new active status');
+});
+Route::get("getallonlineenge",function(){
+$getalluser = User::select('id')->where('role','enge')->get()->toArray();
+$online_engr = [];
+foreach($getalluser as $id_user){
+     if(Cache::has('userlogin'.$id_user['id'])){  
+            $online_engr[]=$id_user['id'];
+     }
+}
+return response()->json($online_engr);
+})->name('getallonlineenge');
+Route::post('onlineenge_arr',function(Request $res){
+    if(Cache::has('userlogin'.$res->engr_arr)){  
+        return response()->json('yes');
+    }else{
+        return response()->json('no');
+    }
+})->name('onlineenge_arr');
+Route::post("getallonlineenge_arr",function(Request $res){
+    $getalluser = $res->engr_arr;
+    $online_engr = [];
+    foreach($getalluser as $id_user){
+         if(Cache::has('userlogin'.$id_user)){  
+                $online_engr[]=$id_user;
+         }
+    }
+    return response()->json($online_engr);
+})->name('getallonlineenge_arr');
+Route::get('userstatusoffline',function(){
+    if(Cache::has('userlogin'.Auth::user()->id)){
+        Cache::pull('userlogin'.Auth::user()->id);
+    }
+    return response()->json('yes offline status');
+});
+
 Route::get('/conformemail', function () {
 
     if (Auth::check() && Auth::user()->role == 'enge') {
@@ -192,6 +239,7 @@ Route::get('/google/callback', function () {
         $users       =   User::where(['email' => $user->email])->first();
        
         event(new Registered($users));
+      
         if ($users) {
             if($users->signupoption == 0){
                 User::where(['email' => $user->email])->update([
@@ -229,6 +277,8 @@ Route::get('/google/callback', function () {
                         }
                     }
                 }
+               
+                Cache::put('userlogin'.Auth::user()->id,true);
             } elseif (Auth::user()->role == 'user') {
                 if (session()->has('search_id')) {
                     return redirect()->route('search_engineer');
@@ -326,6 +376,7 @@ Route::get('/facebook/callback', function () {
         $user = Socialite::driver('facebook')->stateless()->user();
         $users       =   User::where(['email' => $user->email])->first();
         event(new Registered($users));
+        session()->set('user_login','yes');
         if ($users) {
             if($users->signupoption == 0){
                 User::where(['email' => $user->email])->update([
@@ -364,6 +415,9 @@ Route::get('/facebook/callback', function () {
                         }
                     }
                 }
+              
+                Cache::put('userlogin'.Auth::user()->id,true);
+
             } elseif (Auth::user()->role == 'user') {
                 if (session()->has('search_id')) {
                     return redirect()->route('search_engineer');
@@ -589,7 +643,7 @@ Route::post('getuserlanlog_cn', function (Request $res) {
             sin($dLon / 2) * sin($dLon / 2);
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
         $d = $radius * $c; // Distance in km
-        if ($d <= 100) {
+        if ($d <= 80) {
 
             // array_push($users, $d);
             // array_push($users,$categoryname->engrcategory);

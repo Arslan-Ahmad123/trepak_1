@@ -50,7 +50,7 @@
 								<div class="dashboard-widget">
 									<nav class="dashboard-menu">
 										<ul>
-											<li class="active">
+											<li>
 												<a href="{{ route('newengineerpanel') }}">
 													<i class="fas fa-columns"></i>
 													<span>Dashboard</span>
@@ -68,7 +68,7 @@
 													<span>My Clients</span>
 												</a>
 											</li>
-											<li>
+											<li class="active">
 												<a href="{{ route('engrvideoconsult') }}">
 													<i class="fas fa-user-injured"></i>
 													<span>Video Consultant</span>
@@ -147,7 +147,7 @@
 								<div class="dashboard-widget">
 									<nav class="dashboard-menu">
 										<ul>
-											<li class="active">
+											<li>
 												<a href="{{ route('newengineerpanel') }}">
 													<i class="fas fa-columns"></i>
 													<span>Dashboard</span>
@@ -165,7 +165,7 @@
 													<span>My Clients</span>
 												</a>
 											</li>
-											<li>
+											<li class="active">
 												<a href="{{ route('engrvideoconsult') }}">
 													<i class="fas fa-user-injured"></i>
 													<span>Video Consultant</span>
@@ -231,80 +231,33 @@
 						
 						<div class="col-md-12 col-lg-8 col-xl-9">
 
-							<div class="row">
-								<div class="col-md-12">
-									<div class="card dash-card">
-										<div class="card-body">
-											<div class="row">
-												<div class="col-md-12 col-lg-6">
-													<div class="dash-widget dct-border-rht">
-														<div class="circle-bar circle-bar1">
-															<div class="circle-graph1" data-percent="75">
-																<img src="{{ asset('newpanel/assets/img/icon-01.png') }}" class="img-fluid" alt="patient">
-															</div>
-														</div>
-														<div class="dash-widget-info">
-															<h6>Total Clients</h6>
-															<h3>{{ (count($data) > 0)?count($data):'0' }}</h3>
-															<p class="text-muted">Till Today</p>
-														</div>
-													</div>
-												</div>
-												
-												<div class="col-md-12 col-lg-6">
-													<div class="dash-widget dct-border-rht">
-														<div class="circle-bar circle-bar2">
-															<div class="circle-graph2" data-percent="65">
-																<img src="{{ asset('newpanel/assets/img/icon-02.png') }}" class="img-fluid" alt="Patient">
-															</div>
-														</div>
-														<div class="dash-widget-info">
-															<h6>Today Client</h6>
-															<h3>{{ (count($todayclient) > 0 )?count($todayclient):'0' }}</h3>
-															<p class="text-muted">{{ Carbon\Carbon::today()->toDateString() }}</p>
-														</div>
-													</div>
-												</div>
-												
-												{{-- <div class="col-md-12 col-lg-4">
-													<div class="dash-widget">
-														<div class="circle-bar circle-bar3">
-															<div class="circle-graph3" data-percent="50">
-																<img src="{{ asset('newpanel/assets/img/icon-03.png') }}" class="img-fluid" alt="Patient">
-															</div>
-														</div>
-														<div class="dash-widget-info">
-															<h6>Appoinments</h6>
-															<h3>85</h3>
-															<p class="text-muted">06, Apr 2019</p>
-														</div>
-													</div>
-												</div> --}}
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+							
 							
 							<div class="row">
 								<div class="col-md-12">
-									<h4 class="mb-4">Client Appoinment</h4>
+									<h4 class="mb-4">Video Appoinment</h4>
 									<div class="appointment-tab">
 									
 										<!-- Appointment Tab -->
 										<ul class="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
 											<li class="nav-item">
-												<a class="nav-link active" href="#upcoming-appointments" data-toggle="tab">Upcoming</a>
+												<a class="nav-link active" href="#upcoming-appointments" data-toggle="tab">Un Conformed</a>
 											</li>
 											<li class="nav-item">
-												<a class="nav-link" href="#today-appointments" data-toggle="tab">Today</a>
+												<a class="nav-link" href="#engr_reply-appointments" data-toggle="tab">You Reply</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link " href="#client_reply-appointments" data-toggle="tab">Client Reply</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="#today-appointments" data-toggle="tab">Conformed</a>
 											</li> 
 										</ul>
 										<!-- /Appointment Tab -->
 										
 										<div class="tab-content">
 										
-											<!-- Upcoming Appointment Tab -->
+											<!-- unconformed Appointment Tab -->
 											<div class="tab-pane show active" id="upcoming-appointments">
 												<div class="card card-table mb-0">
 													<div class="card-body">
@@ -314,34 +267,40 @@
 																	<tr>
 																		<th>Client Name</th>
 																		<th>Appt Date</th>
+																		<th>Appt Time</th>
 																		{{-- <th>Purpose</th>
 																		<th>Type</th> --}}
-																		<th class="text-center">Paid Amount</th>
+																		<th class="text-center">Reply</th>
 																		{{-- <th></th> --}}
 																	</tr>
 																</thead>
 																<tbody>
-																	@if(count($upcomclient) > 0)
-																	@foreach ($upcomclient as $up_client)
+																	@if(count($res_un_c) > 0)
+																	@foreach ($res_un_c as $up_client)
+																	
 																	@php
-																	$clientup  = getuser($up_client->clientid);
+																
+																	$clientup  = getuser($up_client->user_id);
 																		if($clientup->signupoption == 1){
 																			$upclientimg = $clientup->pic;
 																		}else{
 																			$upclientimg = asset('engrphoto/'.$clientup->pic);
 																		}
+																		
 																	@endphp
+
 																	
 																	<tr>
 																		<td>
 																			<h2 class="table-avatar">
 																				<a href="#" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="{{$upclientimg }}" alt="User Image"></a>
-																				<a href="#">{{ getuser($up_client->clientid)->fname }} <span>#PT0006</span></a>
+																				<a href="#">{{ $clientup->fname }} <span>#PT0006</span></a>
 																			</h2>
 																		</td>
-																		<td>{{ $up_client->meetingdate }}</td>
+																		<td>{{ $up_client->client_date }}</td>
 																		
-																		<td class="text-center">{{'$'.$up_client->tlprice }}</td>
+																		<td >{{ \Carbon\Carbon::createFromFormat('H:i',$up_client->client_time)->format('h:i A') }}</td>
+																		<td class="center"><button class="btn btn-sm {{ $up_client->engr_reply != "" ?'btn-danger' :'btn-info' }}" onclick="showreplymodal({{ $up_client->id }},{{ $up_client->user_id }})">{{ $up_client->engr_reply != "" ?'Already Reply' :'Reply' }}</button></td>
 																		{{-- <td class="text-right">
 																			<div class="table-action">
 																				<a href="javascript:void(0);" class="btn btn-sm bg-info-light">
@@ -360,7 +319,7 @@
 																	@endforeach
 																	@else
 																	<tr>
-																		<td colspan="3" class="text-center">{{ 'No Upcomming Appointments!!' }}</td>
+																		<td colspan="4" class="text-center">{{ 'No Upcomming Appointments!!' }}</td>
 																	</tr>
 																	
 																	@endif
@@ -373,7 +332,159 @@
 												</div>
 											</div>
 											<!-- /Upcoming Appointment Tab -->
-									   
+											
+											<!-- Your Reply -->
+											<div class="tab-pane" id="engr_reply-appointments">
+												<div class="card card-table mb-0">
+													<div class="card-body">
+														<div class="table-responsive">
+															<table class="table table-hover table-center mb-0">
+																<thead>
+																	<tr>
+																		<th>Client Name</th>
+																		<th>Appt Date</th>
+																		<th>Appt Time</th>
+																		{{-- <th>Purpose</th>
+																		<th>Type</th> --}}
+																		<th class="text-center">Reply</th>
+																		{{-- <th></th> --}}
+																	</tr>
+																</thead>
+																<tbody>
+																	@if(count($engr_reply) > 0)
+																	@foreach ($engr_reply as $up_client)
+																	
+																	@php
+																
+																	$clientup  = getuser($up_client->user_id);
+																		if($clientup->signupoption == 1){
+																			$upclientimg = $clientup->pic;
+																		}else{
+																			$upclientimg = asset('engrphoto/'.$clientup->pic);
+																		}
+																		
+																	@endphp
+
+																	
+																	<tr>
+																		<td>
+																			<h2 class="table-avatar">
+																				<a href="#" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="{{$upclientimg }}" alt="User Image"></a>
+																				<a href="#">{{ $clientup->fname }} <span>#PT0006</span></a>
+																			</h2>
+																		</td>
+																		<td>{{ $up_client->client_date }}</td>
+																		
+																		<td >{{ \Carbon\Carbon::createFromFormat('H:i',$up_client->client_time)->format('h:i A') }}</td>
+																		<td class="center"><button class="btn btn-sm {{ $up_client->engr_reply != "" ?'btn-danger' :'btn-info' }}" onclick="showreplymodal({{ $up_client->id }},{{ $up_client->user_id }})">{{ $up_client->engr_reply != "" ?'Already Reply' :'Reply' }}</button></td>
+																		{{-- <td class="text-right">
+																			<div class="table-action">
+																				<a href="javascript:void(0);" class="btn btn-sm bg-info-light">
+																					<i class="far fa-eye"></i> View
+																				</a>
+																				
+																				<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
+																					<i class="fas fa-check"></i> Accept
+																				</a>
+																				<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
+																					<i class="fas fa-times"></i> Cancel
+																				</a>
+																			</div>
+																		</td> --}}
+																	</tr>
+																	@endforeach
+																	@else
+																	<tr>
+																		<td colspan="4" class="text-center">{{ 'No Upcomming Appointments!!' }}</td>
+																	</tr>
+																	
+																	@endif
+																	
+																	
+																</tbody>
+															</table>		
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- /Your Reply -->
+
+											<!-- Client Reply -->
+											<div class="tab-pane " id="client_reply-appointments">
+												<div class="card card-table mb-0">
+													<div class="card-body">
+														<div class="table-responsive">
+															<table class="table table-hover table-center mb-0">
+																<thead>
+																	<tr>
+																		<th>Client Name</th>
+																		<th>Appt Date</th>
+																		<th>Appt Time</th>
+																		{{-- <th>Purpose</th>
+																		<th>Type</th> --}}
+																		<th class="text-center">Reply</th>
+																		{{-- <th></th> --}}
+																	</tr>
+																</thead>
+																<tbody>
+																	@if(count($client_reply) > 0)
+																	@foreach ($client_reply as $up_client)
+																	
+																	@php
+																
+																	$clientup  = getuser($up_client->user_id);
+																		if($clientup->signupoption == 1){
+																			$upclientimg = $clientup->pic;
+																		}else{
+																			$upclientimg = asset('engrphoto/'.$clientup->pic);
+																		}
+																		
+																	@endphp
+
+																	
+																	<tr>
+																		<td>
+																			<h2 class="table-avatar">
+																				<a href="#" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="{{$upclientimg }}" alt="User Image"></a>
+																				<a href="#">{{ $clientup->fname }} <span>#PT0006</span></a>
+																			</h2>
+																		</td>
+																		<td>{{ $up_client->client_date }}</td>
+																		
+																		<td >{{ \Carbon\Carbon::createFromFormat('H:i',$up_client->client_time)->format('h:i A') }}</td>
+																		<td class="center"><button class="btn btn-sm {{ $up_client->engr_reply != "" ?'btn-danger' :'btn-info' }}" onclick="showreplymodal({{ $up_client->id }},{{ $up_client->user_id }})">{{ $up_client->engr_reply != "" ?'Already Reply' :'Reply' }}</button></td>
+																		{{-- <td class="text-right">
+																			<div class="table-action">
+																				<a href="javascript:void(0);" class="btn btn-sm bg-info-light">
+																					<i class="far fa-eye"></i> View
+																				</a>
+																				
+																				<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
+																					<i class="fas fa-check"></i> Accept
+																				</a>
+																				<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
+																					<i class="fas fa-times"></i> Cancel
+																				</a>
+																			</div>
+																		</td> --}}
+																	</tr>
+																	@endforeach
+																	@else
+																	<tr>
+																		<td colspan="4" class="text-center">{{ 'No Upcomming Appointments!!' }}</td>
+																	</tr>
+																	
+																	@endif
+																	
+																	
+																</tbody>
+															</table>		
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- /Client Reply -->
+
 											<!-- Today Appointment Tab -->
 											<div class="tab-pane" id="today-appointments">
 												<div class="card card-table mb-0">
@@ -384,16 +495,16 @@
 																	<tr>
 																		<th>Client Name</th>
 																		<th>Appt Date</th>
-																		
-																		<th class="text-center">Paid Amount</th>
+																		<th>Appt Time</th>
+																		<th class="text-center">Client No</th>
 																		{{-- <th></th> --}}
 																	</tr>
 																</thead>
 																<tbody>
-																	@if(count($todayclient) > 0)
-																	@foreach($todayclient as $t_client)
+																	@if(count($res_c) > 0)
+																	@foreach($res_c as $t_client)
 																	@php
-																	$clientt  = getuser($t_client->clientid);
+																	$clientt  = getuser($t_client->user_id);
 																		if($clientt->signupoption == 1){
 																			$tclientimg = $clientt->pic;
 																		}else{
@@ -404,12 +515,13 @@
 																		<td>
 																			<h2 class="table-avatar">
 																				<a href="#" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="{{ $tclientimg }}" alt="User Image"></a>
-																				<a href="#">{{ getuser($t_client->clientid)->fname }} <span>#PT0006</span></a>
+																				<a href="#">{{ $clientt->fname }} <span>#PT0006</span></a>
 																			</h2>
 																		</td>
-																		<td>{{ $t_client->meetingdate }}</td>
+																		<td>{{ $t_client->client_date }}</td>
 																		
-																		<td class="text-center">{{'$'.$t_client->tlprice }}</td>
+																		<td >{{\Carbon\Carbon::createFromFormat('H:i',$t_client->client_time)->format('h:i A')}}</td>
+																		<td class="center">{{ $t_client->client_phone}}</td>
 																		{{-- <td class="text-right">
 																			<div class="table-action">
 																				<a href="javascript:void(0);" class="btn btn-sm bg-info-light">
@@ -450,12 +562,52 @@
 				</div>
 
 			</div>	
-			{{ Route::current()->getName() }}	
+			{{-- ======================guideline====================== --}}
+			<div class="modal" tabindex="-1" role="dialog" id="replymodalengr">
+				<div class="modal-dialog" role="document">
+				  <div class="modal-content">
+					<div class="modal-header">
+					  <h5 class="modal-title">Engineer Reply</h5>
+					  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					  </button>
+					</div>
+					<form action="{{ route('engineerreplyvideo') }}" method="post">
+					@csrf
+					<div class="modal-body">
+						
+					<label for="video_response">Select Option</label>
+					  <select name="video_response" id="video_response" class="form-control" onchange="videoresponse()">
+						<option value="done">OK</option>
+						<option value="ch_plan">Change Plan</option>
+					  </select>
+					  <input type="hidden" id="engineer_video_id" name="engineer_video_id" value="{{ Auth::user()->id }}">
+					  <input type="hidden" id="client_video_id" name="client_video_id">
+					  <input type="hidden" id="db_row_id" name="db_row_id">
+					<div id="ch_plan_id" style="display:none">
+						<div class="form-group">
+							<label for="engrtime">Time</label>
+							<input type="time" id="engrtime" name="engrtime"  class="form-control" min="08:00:00" max="20:00:00">
+						</div>
+						<div class="form-group">
+							<label for="engrdate">Date</label>
+							<input type="date" id="engrdate" name="engrdate"  class="form-control" min="{{ date('Y-m-d') }}" value="{{ date('Y-m-d') }}">
+						</div>
+					</div>
+					</div>
+					<div class="modal-footer">
+					  <button type="submit" class="btn btn-primary">Save changes</button>
+					  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					</div>
+				</form>
+				  </div>
+				</div>
+			  </div>
+{{-- ======================guideline====================== --}}	
 			<!-- /Page Content -->
 			@push('childscript')
 			<script>
 				$(document).ready(function(){
-					
 					$.ajax({
 						url:'{{ url("userstatusonline") }}',
 						method:'get',
@@ -469,7 +621,7 @@
 			   $("#profilenavlater").slideToggle('slow');
 			});
 			window.onbeforeunload = function () {
-				 
+				  
 				$.ajax({
 						url:'{{ url("userstatusoffline") }}',
 						method:'get',
@@ -478,5 +630,18 @@
 						}
 					});
             };
+			function showreplymodal(rowid,clientid){
+				$('#client_video_id').val(clientid);
+				$('#db_row_id').val(rowid);
+				$('#replymodalengr').appendTo("body").modal('show');
+			}
+			function videoresponse(){
+				var plan_val = $('#video_response').val();
+				if(plan_val == 'done'){
+					$('#ch_plan_id').hide('slow');
+				}else{
+					$('#ch_plan_id').show('slow');
+				}
+			}
 			</script>
 			@endpush

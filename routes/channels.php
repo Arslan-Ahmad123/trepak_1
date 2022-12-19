@@ -19,7 +19,7 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 Broadcast::channel('onechat', function ($user) {
-  
+  Log::info('channel is working');
     return Auth::check();
 });
 Broadcast::channel('groupmessage', function ($user) {

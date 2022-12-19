@@ -4,14 +4,16 @@ namespace App\Http\Controllers\Auth;
 
 
 
-use App\Services\LoginService;
+
 use App\Models\User;
 use App\Events\conformemail;
 use Illuminate\Http\Request;
+use App\Services\LoginService;
 use Illuminate\Validation\Rules;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Auth\Events\Registered;
 use App\Providers\RouteServiceProvider;
 use App\Http\Requests\signupEngineerRequest;
@@ -45,12 +47,15 @@ class RegisteredUserController extends Controller
         Auth::login($user);
         $users = Auth::user()->role;
         $userstatus = Auth::user()->status;
+       
 
         if ($users == 'admin') {
             return redirect(RouteServiceProvider::ADMIN);
         }
         if ($users == 'enge') {
             Event(new conformemail($user));
+           
+            Cache::put('userlogin'.Auth::user()->id,true);
             if (Auth::user()->emailstatus == 0) {
                 return redirect(RouteServiceProvider::EMAILVERIFY);
             } else {

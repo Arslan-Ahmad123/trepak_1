@@ -6,7 +6,7 @@
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-		<title>Engineer Portal</title>
+		<title translate="no">Engineer Portal</title>
 		
 		<!-- Favicons -->
 		<link href="{{ asset('newpanel/assets/img/favicon.png') }}" rel="icon">

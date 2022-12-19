@@ -13,6 +13,10 @@
         margin-bottom: 15px !important;
 
     }
+    .pac-container {
+         margin-top: -50px;
+     }
+     
 
     #latlng {
         width: 225px;
@@ -137,7 +141,7 @@
         margin-left: 5px;
     }
 
-    .modal__btn:hover{
+    .modal__btn:hover {
         border-color: hsla(0, 0%, 100%, 0.6);
         transform: translateY(-0.2rem);
     }
@@ -226,51 +230,60 @@
     #previous_btn {
         position: absolute;
     }
+
     @media only screen and (max-width: 510px) {
-       
-    .search-box .search-location {
-    width: 43%;
-}
-.search-box .search-info {
-    width: 43%;
-}
-.search-box .search-btn {
-   
-    width: 10%;
-   
-}
+
+        .search-box .search-location {
+            width: 43%;
+        }
+
+        .search-box .search-info {
+            width: 43%;
+        }
+
+        .search-box .search-btn {
+
+            width: 10%;
+
+        }
     }
 
     @media only screen and (max-width: 479px) {
         .modal-container {
-        width: 400px;
-    }
+            width: 400px;
+        }
 
     }
+
     @media only screen and (max-width: 400px) {
         .modal-container {
-        width: 340px;
-      
-    }
-    .modal__btn {
-    padding: 0.3rem 0.7rem;
-}
-    .search-box form {
-    /* display: -webkit-box; */
-    display: inline;
-   
-}
-.search-box .search-location {
-    width: 100%;
-}
-.search-box .search-info {
-    width: 100%;
-}
-.search-box .search-btn {
-    position: relative;
-    width: 100%;
-    
-}
+            width: 340px;
+
+        }
+
+        .modal__btn {
+            padding: 0.3rem 0.7rem;
+        }
+
+        .search-box form {
+            /* display: -webkit-box; */
+            display: inline;
+
+        }
+
+        .search-box .search-location {
+            width: 100%;
+        }
+
+        .search-box .search-info {
+            width: 100%;
+        }
+
+        .search-box .search-btn {
+            position: relative;
+            width: 100%;
+
+        }
     }
 </style>
 {{-- ======================guideline====================== --}}
@@ -368,7 +381,7 @@
 <div class="top-header mt-5 pt-5 text-center">
     <h4>Find and Book the Best Engineers</h4>
 </div>
-<section class="section mt-0 pt-0" >
+<section class="section mt-0 pt-0">
     <div class="container topsection category_container">
         <div class="banner-wrapper" style="margin-top:-52px">
             <div class="row">
@@ -390,8 +403,7 @@
                             @csrf
                             <div class="form-group search-location">
                                 <input type="text" class="form-control" id="search" name="cityname"
-                                    placeholder="Location"
-                                    onblur="getcordinataddress()" required>
+                                    placeholder="Location" onblur="getcordinataddress()" required>
                                 @error('cityname')
                                     <div class="alert alert-danger" id="cityname_div">This Field is Required.</div>
                                     <script>
@@ -405,11 +417,24 @@
                                 <input type="text" id="addresslon" name="addresslon" hidden>
                             </div>
                             <div class="form-group search-info">
-                                <input type="text" class="form-control" id="eng_type" name="date"
-                                    value="{{ old('date') }}" placeholder="Select Engineer" required>
-                                  
-                                    @if(session()->has('engr_cat'))
-                                    <div class="bg-info p-1 mt-1" style="color: white;border-radius:5px" id="cate_hide">Please Select Correct Category Name!!</div>
+                                {{-- <input type="text" class="form-control" id="eng_type" name="date"
+                                    value="{{ old('date') }}" placeholder="Select Engineer" required> --}}
+                                {{-- ============================================== --}}
+                                <select id="eng_type" name="date" class="form-control" >
+                                    @php
+                                        $res = getallcategory();
+                                    @endphp
+                                    <option value="" style="background-color: aliceblue;">Please Select Engineer Category</option>
+                                    @foreach ($res as $res)
+                                        <option value="{{ $res->engrcategory }}" style="background-color: aliceblue;">
+                                            {{ $res->engrcategory }}</option>
+                                    @endforeach
+                                </select>
+                                {{-- ============================================== --}}
+
+                                @if (session()->has('engr_cat'))
+                                    <div class="bg-info p-1 mt-1" style="color: white;border-radius:5px"
+                                        id="cate_hide">Please Select Correct Category Name!!</div>
                                     @php
                                         session()->forget('engr_cat');
                                     @endphp
@@ -418,7 +443,7 @@
                                             $('#cate_hide').hide();
                                         }, 3000);
                                     </script>
-                                    @endif
+                                @endif
                                 @error('date')
                                     <div class="alert alert-danger" id="datediv_hide">This Field is Required.</div>
                                     <script>
@@ -447,7 +472,7 @@
 <!--	  <div class="top-header1">-->
 <!--						<h2>Find Engineers By Categories</h2>-->
 
- 
+
 <!--</div>-->
 
 <section class=" section-category mt-2 pt-2">
@@ -476,6 +501,30 @@
         </div>
     </div>
 </section>
+@if(session()->has('video_info'))
+<div id="shownotificationvideo"  style="    position: absolute;
+top: 5px;
+right: 5px;
+z-index: 999;
+padding: 20px;
+border-radius: 10px;
+text-align: center;
+background-color: silver;
+font-weight: bold;
+text-transform: capitalize;">
+<span >{{ session()->get('video_info') }}</span>
+</div>
+<script>
+    setTimeout(() => {
+        $('#shownotificationvideo').hide();
+    }, 1000);
+   
+</script>
+@endif
+<div>
+
+</div>
+<input type="hidden" id="current_lan" value="English">
 
 <!--========div for tutorial field======-->
 
@@ -514,11 +563,13 @@
                     @if (Auth::check())
                         <div id="authuser">
                             <input id="current_location_btn_db" type="radio" name="select_type"
-                                value="databaseloc" onchange="select_val_radio()" ><label for="current_location_btn_db" style="cursor: pointer">&nbsp;&nbsp;Database
+                                value="databaseloc" onchange="select_val_radio()"><label
+                                for="current_location_btn_db" style="cursor: pointer">&nbsp;&nbsp;Database
                                 Location</label>
 
                             <input id="current_location_btn" style="display:none" type="radio" name="select_type"
-                                value="currentloc" onchange="select_val_radio()"><label for="current_location_btn" style="cursor: pointer">&nbsp;&nbsp;Current
+                                value="currentloc" onchange="select_val_radio()"><label for="current_location_btn"
+                                style="cursor: pointer">&nbsp;&nbsp;Current
                                 Location</label>
 
                         </div>
@@ -668,11 +719,11 @@
                 })
                 .then((response) => {
                     if (response.results[0]) {
-                       
+
                         for (var i = 0; i < response.results[0].address_components.length; i++) {
                             if (response.results[0].address_components[i].types[0] == "country") {
                                 country = response.results[0].address_components[i];
-                               
+
                                 // console.log('short name ioof dipaosj dansdkl a:'+country.short_name);
                                 $('#countryshortname').val(country.short_name);
                                 $('#countryname').val(country.long_name);
@@ -683,7 +734,7 @@
 
                     } else {
                         return 'no';
-                       console.log("No results found");
+                        console.log("No results found");
                     }
                 })
 
@@ -703,7 +754,7 @@
                             $('#addresslat').val(Lat);
                             $('#addresslon').val(Lng);
                             document.getElementById('search_btn').disabled = false;
-                            
+
                         } else {
                             console.log("Something got wrong " + status);
                         }
@@ -781,7 +832,7 @@
 
         }
 
-        function make_map(snc,lnc, lat_client, lon_client,currentlocationfetch = 'no') {
+        function make_map(snc, lnc, lat_client, lon_client, currentlocationfetch = 'no') {
             if (lat_client == "" && lon_client == "") {
                 console.log('yes yor are offline and you only see the people of pakistan');
                 var allengr = [];
@@ -852,11 +903,12 @@
                     //  var latLngA = {'lat':32.1877,'lng':74.1945};
                     //  var latLngB = {'lat':m.lan,'lng':m.lng};
                     function randomInRange(min, max) {
-                        return Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math.random() * (max - min) + min);
-                        }
+                        return Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math.random() * (
+                            max - min) + min);
+                    }
                     let variation = randomInRange(0.1, 5) / 500;
-                    var latitude2 = (m.latitude * 1)  + variation;
-                        var longitude2 = (m.longitude * 1)  + variation;
+                    var latitude2 = (m.latitude * 1) + variation;
+                    var longitude2 = (m.longitude * 1) + variation;
                     // var idfetch =  m.id;
                     // var url = '{{ route('fetchcategorynamemap', ':id') }}';
                     // url = url.replace(':id', idfetch );
@@ -872,7 +924,7 @@
                     // console.log(m.category.engrcategory);
                     const message =
                         `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6> <h6>Address: ${m.city} </h6>  <span style="font-weight:bold">Date:</span>   <input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Book</button></div><form>`;
-                           
+
                     const infowindow = new google.maps.InfoWindow({
                         content: message,
                     });
@@ -888,13 +940,13 @@
                     var image = {
                         url: "{{ asset('engrphoto/googlemap2.png') }}",
                         size: new google.maps.Size(80, 81),
-                             origin: new google.maps.Point(0, 0),
-                             anchor: new google.maps.Point(20, 40),
-                             scaledSize: new google.maps.Size(40, 39)
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(20, 40),
+                        scaledSize: new google.maps.Size(40, 39)
                     };
                     let marker_s = new google.maps.Marker({
                         position: new google.maps.LatLng(latitude2, longitude2),
-                       
+
                         title: m.fname,
                         map: map,
                         icon: image
@@ -919,34 +971,44 @@
 
             } else {
                 var allengr = [];
-                if(currentlocationfetch ==  'yes'){
+                if (currentlocationfetch == 'yes') {
                     $.ajax({
-                    url: 'getuserlanlog_cn',
-                    type: 'post',
-                    async: false,
-                    data:{lat:lat_client,lon:lon_client,country:lnc,"_token":"{{ csrf_token() }}"},
-                    success: function(data) {   
-                        $.each(data, function(index, value) {
-                            allengr[index] = value;
-                        });
-                    }
-                });
-                }else{
+                        url: 'getuserlanlog_cn',
+                        type: 'post',
+                        async: false,
+                        data: {
+                            lat: lat_client,
+                            lon: lon_client,
+                            country: lnc,
+                            "_token": "{{ csrf_token() }}"
+                        },
+                        success: function(data) {
+                            $.each(data, function(index, value) {
+                                allengr[index] = value;
+                            });
+                        }
+                    });
+                } else {
                     $.ajax({
-                    url: 'getuserlanlog_cn',
-                    type: 'post',
-                    async: false,
-                    data:{lat:lat_client,lon:lon_client,country:lnc,"_token":"{{ csrf_token() }}"},
-                    success: function(data) {   
-                        $.each(data, function(index, value) {
-                            allengr[index] = value;
-                        });
-                    }
-                });
+                        url: 'getuserlanlog_cn',
+                        type: 'post',
+                        async: false,
+                        data: {
+                            lat: lat_client,
+                            lon: lon_client,
+                            country: lnc,
+                            "_token": "{{ csrf_token() }}"
+                        },
+                        success: function(data) {
+                            $.each(data, function(index, value) {
+                                allengr[index] = value;
+                            });
+                        }
+                    });
                 }
-               
 
-                
+
+
                 var map;
                 var input = document.getElementById('search');
                 const options = {
@@ -1018,11 +1080,11 @@
                         }
                         let variation = randomInRange(0.1, 5) / 500;
 
-                        var latitude2 = (m.latitude * 1)  + variation;
-                        var longitude2 = (m.longitude * 1)  + variation;
+                        var latitude2 = (m.latitude * 1) + variation;
+                        var longitude2 = (m.longitude * 1) + variation;
                     } else {
-                        var latitude2 = m.latitude ;
-                        var longitude2 = m.longitude ;
+                        var latitude2 = m.latitude;
+                        var longitude2 = m.longitude;
                     }
                     lon_s.push(m.longitude);
                     lat_s.push(m.latitude);
@@ -1032,7 +1094,7 @@
                     // ================distance matrix======================
                     // var origin  = $('#clientaddress').val();
                     // var destination  = m.address;
-                  
+
                     // var service = new google.maps.DistanceMatrixService();
                     // service.getDistanceMatrix(
                     //     {
@@ -1043,17 +1105,17 @@
                     //     }, (res)=>{
                     //         let dis_km = res.rows[0].elements[0].distance.value / 1000;
                     //         if(dis_km > 80){
-                                
+
                     //         }
                     //     });
 
-                       
+
                     // ================distance matrix======================
 
                     var distance = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(
                         latitude1, longitude1), new google.maps.LatLng(latitude2, longitude2));
                     var distance_km = distance / 1000;
-                  
+
                     if (distance_km < 1) {
                         distance_boolean.push('no');
                     } else {
@@ -1078,10 +1140,10 @@
                         //         message = 
                         //     }
                         // });
-                       
+
                         const message =
                             `<form action='{{ route('proceed') }}' method='post'> @csrf <div><h6>Engineer Name: ${m.fname}</h6><h6>Engineer Type: ${m.category.engrcategory}</h6><h6>Address: ${m.city+', '+m.state}</h6><span style="font-weight:bold">Date: &nbsp;&nbsp;</span><input type='date' name="engr_date" value='{{ date('Y-m-d') }}' min='{{ date('Y-m-d') }}'><br><br><input type="hidden" name="engr_id" value='${m.id}'><button class='btn w-100 btn-primary p-0'>Book</button></div><form>`;
-                      
+
                         const infowindow = new google.maps.InfoWindow({
                             content: message,
                         });
@@ -1097,15 +1159,15 @@
                         var image = {
                             url: "{{ asset('engrphoto/googlemap2.png') }}",
                             size: new google.maps.Size(80, 81),
-                             origin: new google.maps.Point(0, 0),
-                             anchor: new google.maps.Point(20, 40),
-                             scaledSize: new google.maps.Size(40, 39)
+                            origin: new google.maps.Point(0, 0),
+                            anchor: new google.maps.Point(20, 40),
+                            scaledSize: new google.maps.Size(40, 39)
                         };
 
 
                         let marker_s = new google.maps.Marker({
                             position: new google.maps.LatLng(latitude2, longitude2),
-                           
+
                             title: m.fname,
                             label: {
                                 text: parseFloat(distance_km).toFixed(1) + 'KM',
@@ -1149,7 +1211,7 @@
                 });
 
                 if (distance_boolean.includes('no')) {
-                   
+
                 } else {
                     var latitude1 = latitude_cur;
                     var longitude1 = longitude_cur;
@@ -1198,15 +1260,15 @@
                     console.log('userlogin and select access db');
                     var longitudeclient = '{{ Auth::check() ? Auth::user()->longitude : '' }}';
                     var latitudeclient = '{{ Auth::check() ? Auth::user()->latitude : '' }}';
-                    console.log('database url is :'+longitudeclient);
-                    console.log('database url is :'+latitudeclient);
+                    console.log('database url is :' + longitudeclient);
+                    console.log('database url is :' + latitudeclient);
                     const geocoder = new google.maps.Geocoder();
                     $res = geocodeLatLng(geocoder, latitudeclient, longitudeclient);
                     setTimeout(() => {
                         let sn_con = $('#countryshortname').val();
                         let ln_con = $('#countryname').val();
 
-                        make_map(sn_con,ln_con, latitudeclient, longitudeclient);
+                        make_map(sn_con, ln_con, latitudeclient, longitudeclient);
                     }, 1500);
 
                 } else {
@@ -1219,7 +1281,7 @@
                         let sn_con = $('#countryshortname').val();
                         let ln_con = $('#countryname').val();
 
-                        make_map(sn_con,ln_con, latitudeclient, longitudeclient,'yes');
+                        make_map(sn_con, ln_con, latitudeclient, longitudeclient, 'yes');
                     }, 1500);
 
                 }
@@ -1236,13 +1298,13 @@
                         let sn_con = $('#countryshortname').val();
                         let ln_con = $('#countryname').val();
 
-                        make_map(sn_con,ln_con, latitudeclient, longitudeclient,'yes');
+                        make_map(sn_con, ln_con, latitudeclient, longitudeclient, 'yes');
                     }, 1500);
                 } else {
                     console.log('no access you');
                     var longitudeclient = "";
                     var latitudeclient = "";
-                    make_map("","Pakistan",latitudeclient, longitudeclient);
+                    make_map("", "Pakistan", latitudeclient, longitudeclient);
 
 
                 }
@@ -1253,11 +1315,11 @@
 
         function select_val_radio() {
             var val_login_status = $('input[name="select_type"]:checked').val();
-           
+
             if (val_login_status == 'databaseloc') {
                 document.getElementById('current_location_btn').disabled = true;
-                var longitudeclient = '{{ Auth::check() ? Auth::user()->longitude  : '' }}';
-                var latitudeclient = '{{ Auth::check() ? Auth::user()->latitude  : '' }}';
+                var longitudeclient = '{{ Auth::check() ? Auth::user()->longitude : '' }}';
+                var latitudeclient = '{{ Auth::check() ? Auth::user()->latitude : '' }}';
                 console.log(longitudeclient + ' , lat :' + latitudeclient);
                 const geocoder = new google.maps.Geocoder();
                 $res = geocodeLatLng(geocoder, latitudeclient, longitudeclient);
@@ -1265,7 +1327,7 @@
                     let sn_con = $('#countryshortname').val();
                     let ln_con = $('#countryname').val();
 
-                    make_map(sn_con, ln_con,latitudeclient, longitudeclient);
+                    make_map(sn_con, ln_con, latitudeclient, longitudeclient);
                     document.getElementById('current_location_btn').disabled = false;
                 }, 1500);
 
@@ -1274,7 +1336,7 @@
                 navigator.permissions.query({
                     name: 'geolocation'
                 }).then(function(result) {
-                   
+
                     if (result.state == 'granted') {
                         var longitudeclient = $('#lon_cur').val();
                         var latitudeclient = $('#lat_cur').val();
@@ -1284,7 +1346,7 @@
                             let sn_con = $('#countryshortname').val();
                             let ln_con = $('#countryname').val();
 
-                            make_map(sn_con,ln_con, latitudeclient, longitudeclient,'yes');
+                            make_map(sn_con, ln_con, latitudeclient, longitudeclient, 'yes');
                             document.getElementById('current_location_btn_db').disabled = false;
                         }, 1500);
                     } else {
@@ -1294,8 +1356,64 @@
                 });
             }
         }
+
+        function googleTranslateElementInit() {
+            if(getCookie('googtrans') == '/en/en'){
+        document.cookie = "googtrans=;expires=Thu, 01 Jan 1970 00:00:00 GMT"
+                setCookie('googtrans', '/en/EN', 1);
+            }else{
+                setCookie('googtrans', '/en/en', 1);
+            }
+            new google.translate.TranslateElement({
+                pageLanguage: 'EN',
+                includedLanguages: 'en,ar,ur',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+            //    console.log($('.goog-te-menu-value span:first-child').text());
+
+        }
+
+        function setCookie(key, value, expiry) {
+
+            var expires = new Date();
+            expires.setTime(expires.getTime() + (expiry * 24 * 60 * 60 * 1000));
+            document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
+
+        }
+
+
+        //    $('.goog-te-menu2-item div').click(function(){
+        //     alert();
+        //     console.log('this');
+        //    });
+        // ($('html').attr('lang')).on('change',function(){
+        //     alert('Hello');
+        // })
+        setInterval(() => {
+            var firstlanguage = $('#current_lan').val();
+            console.log(firstlanguage);
+            var changelang = $('.goog-te-menu-value span:first-child').text();
+            console.log(changelang);
+            var firstlanguagesh = 'en'
+            var changelangsh = $('html').attr('lang');
+            if (firstlanguage == changelang) {
+                console.log('no change');
+               
+            } else {
+                $('#current_lan').val(changelang);
+                if(changelangsh == 'en'){
+                    setCookie('googtrans', '/en/EN', 1);
+                }else{
+                    setCookie('googtrans', `/en/${changelangsh}`, 1);
+                }
+
+            }
+
+        }, 2000);
     </script>
     <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry,places"
         async></script>
+    <script type="text/javascript" src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+    </script>
 @endpush

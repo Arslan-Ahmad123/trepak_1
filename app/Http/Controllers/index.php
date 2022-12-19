@@ -10,7 +10,9 @@ use PharIo\Manifest\Url;
 use App\Models\engCategory;
 use App\Events\oneChatevent;
 use Illuminate\Http\Request;
+use App\Events\sendVideoevent;
 use App\Models\appointmentInfo;
+use App\Models\videoConsaltant;
 use App\Services\ClientService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -197,10 +199,65 @@ class index extends Controller
         return redirect('/');
     }
     public function viewprofileeng(Request $res){
+       
         $engineerComment =  $this->clientservices->viewEngineerComment($res);
        
         return view('engineerprofile.engineerprofileview')->with(['engr'=>$engineerComment]);
     }
+    public function clientreplyvideo(Request $res){
+      
+        if($res->video_response == 'done'){
+            // $client_info = User::find($res->client_video_id)->toArray();
+            // $engineer_info = Auth::user();
+            $order_in  = videoConsaltant::where('id',$res->db_row_id)->get()->toArray();
+          $orderinfo = explode(',',$order_in[0]['engr_reply']);
+          
+            // $order_info =  $order_in[0];
+           
+            videoConsaltant::find($res->db_row_id)->update([
+                'client_date'=> $orderinfo[0],
+                'client_time'=> $orderinfo[1],
+                'orderstatus'=>1
+             ]);
+            
+             // new sendVideoevent($client_info,$engineer_info,$order_info);
+            //  event(new sendVideoevent($client_info,$engineer_info,$order_info));
+             return redirect()->back();
+        }else{
+        
+         $order_check  = videoConsaltant::where('id',$res->db_row_id)->get()->toArray();
+       
+         $order_i = explode(',',$order_check[0]['engr_reply']);
+        
+         if($order_i[1] == $res->engrtime && $order_i[0] == $res->engrdate){
+            
+            // $client_info = User::find($res->client_video_id)->toArray();
+            // $engineer_info = Auth::user();
+            $order_in  = videoConsaltant::where('id',$res->db_row_id)->get()->toArray();
+            // $order_info =  $order_in[0];
+           
+            videoConsaltant::find($res->db_row_id)->update([
+                'client_date'=> $order_i[0],
+                'client_time'=> $order_i[1],
+                'orderstatus'=>1
+             ]);
+            
+             // new sendVideoevent($client_info,$engineer_info,$order_info);
+            //  event(new sendVideoevent($client_info,$engineer_info,$order_info));
+             return redirect()->back();
+         }else{
+           
+             // dd('time is  not match' . $order_check[0]['client_time']  .' : '.$res->engrtime);
+             $engrreply = $res->engrdate.','.$res->engrtime;
+             
+             videoConsaltant::find($res->db_row_id)->update([
+                 'client_reply'=>$engrreply
+              ]);
+              return redirect()->back();
+         }
+ 
+        }
+     }
     public function viewp_rofileeng(){
         if(session()->has('indexengrid')){
         $engineerComment =  $this->clientservices->viewEngineerComment('test');
@@ -359,7 +416,8 @@ class index extends Controller
         return view('conform_email.conformemailpage');
     }
     public function onegetchatmsg(Request $res){
-        $getmessages = oneChat::where([['senderid',$res->senderid],['reciverid',$res->reciverid]])->orwhere([['reciverid',$res->senderid],['senderid',$res->reciverid]])->get();
+        $getmessages = oneChat::where([['senderid',$res->senderid],['reciverid',$res->reciverid]])->orwhere([['reciverid',$res->senderid],['senderid',$res->reciverid]])->orderBy('created_At', 'ASC')->get();
+        
         return response()->json($getmessages);
     }
     public function fetchrole(Request $res){

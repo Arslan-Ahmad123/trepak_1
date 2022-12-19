@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use App\Models\engCategory;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -73,7 +74,7 @@ class ClientService
             $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
             $d = $radius * $c; // Distance in km
 
-            if ($d <= 100) {
+            if ($d <= 80) {
                 // array_push($users, $d);
                 // array_push($users,$categoryname->engrcategory);
                 $users['distance'] = $d;
@@ -84,6 +85,11 @@ class ClientService
                 } else {
                     $users['user_id'] = asset('engrphoto/' . $users['pic']);
                 }
+                // $userid = $users['id'];
+                
+                   
+                
+                    (Cache::has('userlogin'.$users['id']))?$users['onlinestatus'] = '#5bc155':$users['onlinestatus'] = '#f13535';
                 $engr_array[] = $users;
             }
         }
@@ -125,7 +131,7 @@ class ClientService
                     sin($dLon / 2) * sin($dLon / 2);
                 $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
                 $d = $radius * $c; // Distance in km
-                if ($d <= 100) {
+                if ($d <= 80) {
                     // array_push($users, $d);
                     // array_push($users,$categoryname->engrcategory);
                     $users['distance'] = $d;
@@ -139,7 +145,8 @@ class ClientService
                     } else {
                         $users['user_id'] = asset('engrphoto/' . $users['pic']);
                     }
-
+                    
+                    (Cache::has('userlogin'.$users['id']))?$users['onlinestatus'] = '#5bc155':$users['onlinestatus'] = '#f13535';
                     $engr_array[] = $users;
                 }
             }
@@ -194,6 +201,7 @@ class ClientService
     }
     public function viewEngineerComment($res)
     {
+       
         if (session()->has('cmt_engrid')) {
             $engr_id = session()->get('cmt_engrid');
         } elseif (session()->has('indexroute')) {
@@ -201,13 +209,22 @@ class ClientService
         } else {
             $engr_id = $res->userid;
         }
+        
         // dd(User::where('id',$res->userid)->get());
         $value = Auth::user()->id;
         $engr = User::with(['comment' => function ($q) use ($value) {
             $q->where('clientid', '=', $value); // '=' is optional
-
         }])->where('id', $engr_id)->get()->toArray();
+        
+        // if($res->has('userid')){
 
+        // }
+        if(Cache::has('userlogin'.$engr[0]['id'])){  
+            $engr[0]['onlinestatus']='#5bc155';
+       }else{
+        $engr[0]['onlinestatus']='#f13535';
+       }
+      
         // dd(json_encode()); 
         $object = (object) $engr[0];
         return $object;

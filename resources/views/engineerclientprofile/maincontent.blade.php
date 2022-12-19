@@ -21,7 +21,7 @@
 				<div class="container-fluid">
 
 					<div class="row">
-						<div class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar dct-dashbd-lft">
+						<div class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar dct-dashbd-lft" translate="no">
 						
 							<!-- Profile Widget -->
 							<div class="p-2 mb-3" id="filter_eng" style="cursor:pointer">Sidebar Nav<i  class="fa fa-angle-down filtericon_cpro" aria-hidden="true"></i></div>

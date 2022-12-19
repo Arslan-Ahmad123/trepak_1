@@ -1,6 +1,6 @@
 			
 			<!-- Breadcrumb -->
-			<div class="breadcrumb-bar topsection">
+			<div class="breadcrumb-bar topsection" >
 				<div class="container-fluid">
 					<div class="row align-items-center">
 						<div class="col-md-12 col-12">
@@ -22,7 +22,7 @@
 				<div class="container-fluid">
 
 					<div class="row">
-						<div class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar">
+						<div class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar" translate="no">
 						
 						
 							<!-- Profile Sidebar -->

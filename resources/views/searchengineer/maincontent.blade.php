@@ -208,31 +208,33 @@
              width:100%;
          } */
          .pagination ul li.numb {
-         list-style: none;
-         height: 45px;
-         width: 35px;
-         margin: 0 2px;
-         line-height: 45px;
-         border-radius: 50%;
-     }
-     .pagination ul li.dots {
-         font-size: 17px;
-         
-     }
+             list-style: none;
+             height: 45px;
+             width: 35px;
+             margin: 0 2px;
+             line-height: 45px;
+             border-radius: 50%;
+         }
 
-     .pagination ul li.next{
-         font-size: 15px;
-         padding: 0 7px;
-         border-radius: 50px;
-        
-     }
-     .pagination ul li.prev{
-         font-size: 15px;
-         padding: 0 7px;
-         border-radius: 50px;
-        
-     }
-    
+         .pagination ul li.dots {
+             font-size: 17px;
+
+         }
+
+         .pagination ul li.next {
+             font-size: 15px;
+             padding: 0 7px;
+             border-radius: 50px;
+
+         }
+
+         .pagination ul li.prev {
+             font-size: 15px;
+             padding: 0 7px;
+             border-radius: 50px;
+
+         }
+
 
      }
 
@@ -275,34 +277,37 @@
          position: relative;
          left: 30%;
      }
-     @media screen and (max-width:430px) {
-        .pagination ul li.numb {
-         list-style: none;
-         font-size: 12px;
-         height: 45px;
-         width: 30px;
-         margin: 0 2px;
-         line-height: 45px;
-         border-radius: 45%;
-     }
-     .pagination ul li.dots {
-         font-size: 13px;
-         
-     }
 
-     .pagination ul li.next{
-         font-size: 13px;
-         padding: 0 7px;
-         border-radius: 35px;
-        
-     }
-     .pagination ul li.prev{
-         font-size: 13px;
-         padding: 0 7px;
-         border-radius: 35px;
-        
-     }
-    
+     @media screen and (max-width:430px) {
+         .pagination ul li.numb {
+             list-style: none;
+             font-size: 12px;
+             height: 45px;
+             width: 30px;
+             margin: 0 2px;
+             line-height: 45px;
+             border-radius: 45%;
+         }
+
+         .pagination ul li.dots {
+             font-size: 13px;
+
+         }
+
+         .pagination ul li.next {
+             font-size: 13px;
+             padding: 0 7px;
+             border-radius: 35px;
+
+         }
+
+         .pagination ul li.prev {
+             font-size: 13px;
+             padding: 0 7px;
+             border-radius: 35px;
+
+         }
+
 
      }
  </style>
@@ -419,7 +424,7 @@
 
                      </div>
                      <div class="col-md-12">
-                         <div class="pagination">
+                         <div class="pagination" translate=no>
                              <ul>
                                  <!--pages or li are comes from javascript -->
                              </ul>
@@ -499,11 +504,16 @@
      <div class="chat_box">
          <div class="head">
              <div class="user">
-                 <div class="avatar">
-                     <img src="{{ Auth::check() ? asset('engrphoto/' . Auth::user()->pic) : '' }}"
-                         id="picofreciver" />
+                 <div class="avatar" style="position: relative">
+                     <img id="picofreciver" />
+                     <i class="fa fa-circle showonline_status_engr"
+                         style="font-size:12px;position:absolute;right:3px;top:0px"></i>
                  </div>
-                 <div class="name" id="nameofreciver">{{ Auth::check() ? Auth::user()->fname : 'Test' }}</div>
+                 <div class="name" id="nameofreciver">
+                     <span id="name_engineer"></span>
+
+
+                 </div>
              </div>
              <ul class="bar_tool">
                  <li><span class="alink"><a href="javascript:void(0)" onclick="closeclientchatbox()"><i
@@ -666,7 +676,7 @@
              $("main-wrapper").removeClass("slide-nav");
          });
 
-         function clientchat_box(engrid, clientid) {
+         function clientchat_box(engrid, clientid, engr_name, engr_img, engr_status) {
 
              $('.customchatbox').hide('slow');
 
@@ -684,7 +694,11 @@
 
                  },
                  success: function(data) {
-                     console.log(data);
+                     $('#picofreciver').attr('src', engr_img);
+                     $('#name_engineer').text(engr_name);
+                     $('.showonline_status_engr').css('color', engr_status);
+                     $('.showonline_status_engr').attr('id', 'showonline_status_engr' + engrid);
+                     $('.showonline_status_engr').closest('div').attr('id', 'showonlinestatusupdate' + engrid);
                      $('.customchatbox').show('slow');
                      $('.customchatbox').attr('id', 'clientengr' + engrid + clientid);
                      $('.chatboxdiv').attr('id', 'chatbox' + engrid);
@@ -694,31 +708,130 @@
                          .querySelector('#chatbox' + engrid);
                      if (innerDiv != null) {
                          $('#chatbox' + engrid).html('');
+                         var index_msgs = 0;
+                         var date_msg_check = '';
                          $.each(data, function(res, value) {
-                             if (value.senderid == clientid) {
-                                 var app_s =
+                             let date_cur = new Date();
+                             var monthname = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug',
+                                 'Sep', 'Oct', 'Nov', 'Dec'
+                             ];
+                             let chk_month = date_cur.getMonth();
+                             let chk_year = date_cur.getFullYear();
+                             let chk_date = date_cur.getDate();
+                             let make_current_date = chk_date + '-' + monthname[chk_month] + '-' +
+                                 chk_year;
 
-                                     "<div class='outgoing'>" +
-                                     "<span style='font-size:12px'> " + value.created_at + "</span>" +
-                                     "<br>" +
-                                     "<div class='bubble'>" +
-                                     "<p>" + value.message + "</p>" +
+                             console.log(value.created_at)
 
-                                     "</div>" +
-                                     "</div>";
+                             if (index_msgs == 0) {
+                                 if (value.created_at == make_current_date) {
+                                     var date_div =
+                                         `<div id="today_msg" style="text-align: center;margin: 0px auto;width: 30%;background-color: #a6afa6;padding: 4px 0px;border-radius: 4px;font-size: 14px;font-weight: bold;"><span>Today</span></div>`;
+                                 } else {
+                                     var date_div =
+                                         `<div style="text-align: center;margin: 0px auto;width: 30%;background-color: #a6afa6;padding: 4px 0px;border-radius: 4px;font-size: 14px;font-weight: bold;"><span>${value.created_at}</span></div>`;
+                                 }
+
+                                 date_msg_check = value.created_at;
+                                 $('#chatbox' + engrid).append(date_div);
+
+                                 if (value.senderid == clientid) {
+                                     var app_s =
+
+                                         "<div class='outgoing'>" +
+                                         "<span style='font-size:12px'> " + value.updated_at +
+                                         "</span>" +
+                                         "<br>" +
+                                         "<div class='bubble'>" +
+                                         "<p>" + value.message + "</p>" +
+
+                                         "</div>" +
+                                         "</div>";
+                                 } else {
+                                     var app_s =
+                                         "<div class='incoming'>" +
+                                         "<span style='font-size:12px'> " + value.updated_at +
+                                         "</span>" +
+                                         "<br>" +
+                                         "<div class='bubble'>" +
+                                         "<p>" + value.message + "</p>" +
+                                         "</div>" +
+                                         "</div>";
+                                 }
+
+
+                                 $('#chatbox' + engrid).append(app_s);
                              } else {
-                                 var app_s =
-                                     "<div class='incoming'>" +
-                                     "<span style='font-size:12px'> " + value.created_at + "</span>" +
-                                     "<br>" +
-                                     "<div class='bubble'>" +
-                                     "<p>" + value.message + "</p>" +
-                                     "</div>" +
-                                     "</div>";
+
+                                 if (value.created_at == date_msg_check) {
+                                     if (value.senderid == clientid) {
+                                         var app_s =
+
+                                             "<div class='outgoing'>" +
+                                             "<span style='font-size:12px'> " + value.updated_at +
+                                             "</span>" +
+                                             "<br>" +
+                                             "<div class='bubble'>" +
+                                             "<p>" + value.message + "</p>" +
+
+                                             "</div>" +
+                                             "</div>";
+                                     } else {
+                                         var app_s =
+                                             "<div class='incoming'>" +
+                                             "<span style='font-size:12px'> " + value.updated_at +
+                                             "</span>" +
+                                             "<br>" +
+                                             "<div class='bubble'>" +
+                                             "<p>" + value.message + "</p>" +
+                                             "</div>" +
+                                             "</div>";
+                                     }
+
+
+                                     $('#chatbox' + engrid).append(app_s);
+                                 } else {
+                                     if (value.created_at == make_current_date) {
+                                         var date_div =
+                                             `<div id="today_msg" style="text-align: center;margin: 0px auto;width: 30%;background-color: #a6afa6;padding: 4px 0px;border-radius: 4px;font-size: 14px;font-weight: bold;"><span>Today</span></div>`;
+                                     } else {
+                                         var date_div =
+                                             `<div style="text-align: center;margin: 0px auto;width: 30%;background-color: #a6afa6;padding: 4px 0px;border-radius: 4px;font-size: 14px;font-weight: bold;"><span>${value.created_at}</span></div>`;
+                                     }
+                                     date_msg_check = value.created_at;
+                                     $('#chatbox' + engrid).append(date_div);
+                                     if (value.senderid == clientid) {
+                                         var app_s =
+
+                                             "<div class='outgoing'>" +
+                                             "<span style='font-size:12px'> " + value.updated_at +
+                                             "</span>" +
+                                             "<br>" +
+                                             "<div class='bubble'>" +
+                                             "<p>" + value.message + "</p>" +
+
+                                             "</div>" +
+                                             "</div>";
+                                     } else {
+                                         var app_s =
+                                             "<div class='incoming'>" +
+                                             "<span style='font-size:12px'> " + value.updated_at +
+                                             "</span>" +
+                                             "<br>" +
+                                             "<div class='bubble'>" +
+                                             "<p>" + value.message + "</p>" +
+                                             "</div>" +
+                                             "</div>";
+                                     }
+
+
+                                     $('#chatbox' + engrid).append(app_s);
+
+                                 }
+
+
                              }
-
-
-                             $('#chatbox' + engrid).append(app_s);
+                             index_msgs++;
                          });
                          scrollToBottom();
 
@@ -1139,7 +1252,7 @@
          // pagination with js 
 
          function createPagination(totalPages, page, element) {
-             console.log(`total page is ${totalPages}`);
+
 
              showEngineer(allengr_array, page);
 
@@ -1153,22 +1266,22 @@
              if (page > 1) { //show the next button if the page value is greater than 1
                  liTag +=
                      `<li class="btn prev" onclick="createPagination(totalPages, ${page - 1},element_pagination)"><span><i class="fas fa-angle-left"></i> Prev</span></li>`;
-                 console.log('test1')
+
 
              }
 
              if (page > 2) { //if page value is less than 2 then add 1 after the previous button
-                if(page == 3 && totalPages == 4){
+                 if (page == 3 && totalPages == 4) {
 
-                }else{
-                    liTag +=
-                     `<li class="first numb" onclick="createPagination(totalPages, 1,element_pagination)"><span>1</span></li>`;
+                 } else {
+                     liTag +=
+                         `<li class="first numb" onclick="createPagination(totalPages, 1,element_pagination)"><span>1</span></li>`;
+                     console.log('testtest');
+                 }
 
-                } 
-               
                  if (page > 3) { //if page value is greater than 3 then add this (...) after the first li or page
                      liTag += `<li class="dots"><span>...</span></li>`;
-                     console.log('test3')
+
                  }
              }
 
@@ -1216,21 +1329,22 @@
              }
 
              if (page < totalPages - 1) { //if page value is less than totalPage value by -1 then show the last li or page
-                console.log('verify the numeber of page :' + page);
-                if (page < totalPages -
+                 console.log('verify the numeber of page :' + page);
+                 if (page < totalPages -
                      2) { //if page value is less than totalPage value by -2 then add this (...) before the last li or page
-                     console.log('step7');
+
                      liTag += `<li class="dots"><span>...</span></li>`;
                  }
-                if((page == 1 && totalPages == 3) || (page == 3 && totalPages == 4) || (page == 3 && totalPages == 5)){
+                 if ((page == 1 && totalPages == 3) || (page == 3 && totalPages == 4) || (page == 3 && totalPages == 5)) {
 
-                }else{
-                    liTag +=
-                     `<li class="last numb" onclick="createPagination(totalPages, ${totalPages},element_pagination)"><span>${totalPages}</span></li>`;
+                 } else {
+                     console.log("estnewtest");
+                     liTag +=
+                         `<li class="last numb" onclick="createPagination(totalPages, ${totalPages},element_pagination)"><span>${totalPages}</span></li>`;
 
-                }
+                 }
 
-               
+
                  console.log(`step8:${totalPages}`);
              }
 
@@ -1249,7 +1363,7 @@
          function showEngineer(v, page) {
              // console.log('ispage no  is asijas' + page);
              var perpageshow = 5;
-            //  var last_index_page = 1;
+             //  var last_index_page = 1;
              if (page == 1) {
                  var startindex = 0;
                  var endindex = 4;
@@ -1260,14 +1374,13 @@
                  var endindex = 0 + (calno - 1);
 
              }
-             console.log('ispage no  is asijas' + startindex);
-             console.log('ispage no  is asijas' + endindex);
+
              $('#all_engr_show').html('');
              for (let k = startindex; k <= endindex; k++) {
                  if (v.length == k) {
                      break;
                  }
-                
+
 
                  if (v[k].signupoption == 1) {
                      var image = v[k].pic;
@@ -1275,14 +1388,16 @@
                      var image = `{{ asset('engrphoto/${v[k].pic}') }}`;
 
                  }
+                 console.log(v[k]);
                  $('#all_engr_show').append(`<div class="card">
     
                    <div class="doctor-widget searchcard">
         <div class="doc-info-left">
-            <div class="doctor-img">
+            <div class="doctor-img" style="position:relative">
                 {{-- <a href="doctor-profile.html"> --}}
-                   
+                    <i id="showonline_status_${v[k].id}" class="fa fa-circle showonline_status" style="font-size:12px;color:${v[k].onlinestatus};position:absolute;right:-3px;top:-3px"></i>
                     <img src="${image }"  alt="Engr Image" style="width: 100%;height: 100px;" >
+                   
                 {{-- </a> --}}
             </div>
             <div class="doc-info-cont">
@@ -1292,7 +1407,7 @@
                     <h5 class="doc-department" style="text-align: left"><img src="{{ asset('newpanel/assets/img/specialities/specialities-05.png') }}"  alt="Speciality">AUTO CAD</h5>
                 </div>
                 <div id="client_engr_chat_box">
-                    <h5 class="doc-department" style="text-align: left;"><a href="javascript:void(0)" style="font-size: 14px;color: #757575;" ><i class="far fa-comment"></i> Chat</a></h5>
+                    <h5 class="doc-department" style="text-align: left;"><a href="javascript:void(0)" onclick="clientchat_box(${v[k].id},{{ Auth::user()->id }},'${v[k].fname}','${image}','${v[k].onlinestatus}')" style="font-size: 14px;color: #757575;" ><i class="far fa-comment"></i> Chat</a></h5>
                 </div>
                 {{-- <div class="rating">
                     <i class="fas fa-star filled"></i>
@@ -1332,13 +1447,13 @@
                     <span>Artitect</span>
                 </div> --}}
                 <div id="showhideactionbtn" class="mt-3">
-                    <div class="clinic-booking">
+                    <div class="clinic-booking" translate="no">
                         <form method="post">
                             @csrf
                             <input type="text" name="userid" value="${v[k].id}" hidden>
                             <input type="text" name="bookingid" value="${v[k].id}" hidden>
                           
-                            <button class="btn-info p-0 px-2 btn w-45" type="submit" formaction="{{ route('viewprofileeng') }}"><i class="fa fa-eye" aria-hidden="true"></i>Profile</button>
+                            <button  class="btn-info p-0 px-2 btn w-45" type="submit" formaction="{{ route('viewprofileeng') }}"><i class="fa fa-eye" aria-hidden="true"></i>Profile</button>
                             <button class="btn-info p-0 px-2 btn w-45" type="submit" onclick="shoemodeldate(${v.id})" ><i class="fa fa-check" aria-hidden="true"></i>Book</button>
                         </form>
                     </div>
@@ -1350,13 +1465,13 @@
             <div class="clini-infos">
                 <ul>
                     <li><i class="far fa-thumbs-up"></i> 98%</li>
-                    <li><a href="javascript:void(0)" ><i class="far fa-comment"></i> Chat</a></li>
+                    <li><a href="javascript:void(0)" onclick="clientchat_box(${v[k].id},{{ Auth::user()->id }},'${v[k].fname}','${image}','${v[k].onlinestatus}')"><i class="far fa-comment"></i> Chat</a></li>
                     {{-- <li><i class="fas fa-map-marker-alt"></i> Florida, USA</li> --}}
                     {{-- <li><i class="far fa-money-bill-alt"></i> $300 - $1000 <i class="fas fa-info-circle" data-toggle="tooltip" title="Lorem Ipsum"></i> </li> --}}
                 </ul>
             </div>
             <div class="clinic-booking">
-                <form method="post">
+                <form method="post" translate="no">
                     @csrf
                     <input type="text" name="userid" value="${v[k].id}" hidden>
                     <input type="text" name="bookingid" value="${v[k].id}" hidden>
@@ -1373,6 +1488,54 @@
              }
 
          }
+
+         setInterval(() => {
+
+             if (allengr_array.length > 0) {
+                 var arr_id_engr = allengr_array.map((ind, val) => {
+                     return ind.id;
+                 });
+
+                 $.ajax({
+                     url: '{{ url('getallonlineenge_arr') }}',
+                     type: 'post',
+                     data: {
+                         engr_arr: arr_id_engr
+                     },
+                     success: function(data) {
+                         console.log('test online is : ' + data);
+                         const elements = document.querySelectorAll('.showonline_status');
+                         Array.from(elements).forEach((element, index) => {
+
+                             $(element).css('color', '#f13535')
+
+                         });
+                         $('.showonline_status_engr').css('color', '#f13535');
+                         if (data.length > 0) {
+
+                             $.each(data, function(ind, val) {
+                                 if ($('#showonline_status_' + val)) {
+                                     // console.log($('#showonline_status_'+val));
+                                     $('#showonline_status_' + val).css('color', '#5bc155');
+                                 }
+
+                                 if ($('#showonlinestatusupdate' + val)) {
+
+                                     //  console.log($('#showonline_status_'+val));
+
+
+                                     $('#showonline_status_engr' + val).css('color', '#5bc155');
+                                     console.log('Active chat of ' + val)
+                                 }
+                             });
+
+                         }
+                     }
+                 });
+             }
+
+
+         }, 5000);
      </script>
      <script
          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry,places"

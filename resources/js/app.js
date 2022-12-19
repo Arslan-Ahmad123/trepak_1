@@ -8,7 +8,35 @@ function scrollToBottom() {
    const messages = document.getElementsByClassName('chat_scroll_one')[0];
    messages.scrollTop = messages.scrollHeight;
 }
+function timeSince(date) {
+
+    var seconds = Math.floor((new Date() - date) / 1000);
+  
+    var interval = seconds / 31536000;
+  
+    if (interval > 1) {
+      return Math.floor(interval) + " years";
+    }
+    interval = seconds / 2592000;
+    if (interval > 1) {
+      return Math.floor(interval) + " months";
+    }
+    interval = seconds / 86400;
+    if (interval > 1) {
+      return Math.floor(interval) + " days";
+    }
+    interval = seconds / 3600;
+    if (interval > 1) {
+      return Math.floor(interval) + " hours";
+    }
+    interval = seconds / 60;
+    if (interval > 1) {
+      return Math.floor(interval) + " minutes";
+    }
+    return Math.floor(seconds) + " seconds";
+  }
  const d = new Date();
+ var differhuman = timeSince(d);
 var hour = d.getHours();
 var minute = d.getMinutes();
 hour = (hour % 12) || 12;
@@ -17,7 +45,8 @@ var monthname = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 
 var month = d.getMonth();
 var year = d.getFullYear();
 var date = d.getDate();
-var c_date = monthname[month]+'-'+date+'-'+year+' '+hour + ":" + minute +' '+ suffix  ;
+
+var c_date = hour + ":" + minute +' '+ suffix  ;
 $(document).ready(function(){
     $(document).on('click', '#submitmsg', function(e){ 
     
@@ -55,7 +84,7 @@ $(document).ready(function(){
                                         if(innerDiv != null){
                                             
                                         //     var app_s ="<div class='outgoing'>"+
-                                        //     "<div class='bubble'>"+
+                                         //     "<div class='bubble'>"+
                                         //       "<p>"+message+"</p>"+
                                         //     "</div>"+
                                         //   "</div>";
@@ -72,6 +101,16 @@ $(document).ready(function(){
                                         success:function(data){
                                             console.log(data);
                                             if(data == 'user'){
+                                                var ele_today_chat = document.getElementById('today_msg');
+                                                if(ele_today_chat != null){
+                                                   
+                                                }else{
+                                                    
+                                                    let date_div = `<div id="today_msg" style="text-align: center;margin: 0px auto;width: 30%;background-color: #a6afa6;padding: 4px 0px;border-radius: 4px;font-size: 14px;font-weight: bold;"><span>Today</span></div>`;
+                                               
+                                                $('#chatbox' + reciverid).append(date_div);
+                                                }
+                                                
                                                 var app_s ="<div class='outgoing'>"+
                                                 "<span  style='font-size:12px;'>"+c_date+"</span>"+"<br>"+
                                                 "<div class='bubble'>"+
@@ -102,6 +141,7 @@ $(document).ready(function(){
                                                   
                                             </li>`;
                                             $('#chatbox'+reciverid).append(app_s);
+                                            console.log('new message add');
                                             scrollToBottoms();
                                             
                                              }
@@ -119,6 +159,7 @@ $(document).ready(function(){
                         }
         });
         window.Echo.private('onechat').listen('oneChatevent',(e)=>{
+            console.log('asaskas dadash doadasd d adiodoijwoie oiejqwesdasd');
             console.warn('reciver_id' + e.reciverid);
             console.warn('sender_id' + e.senderid);
             console.warn('sender_id' + e.sendmes);
@@ -126,7 +167,7 @@ $(document).ready(function(){
             .getElementById('chatbody'+e.reciverid)
             .querySelector('#chatbox'+e.senderid);
             if(innerDiv != null){
-               
+               console.log('user is active now');
                 $.ajax({
                     url: "http://127.0.0.1:8000/fetchrole",
                 type:'post',
@@ -171,6 +212,8 @@ $(document).ready(function(){
                 
                
                 
+            }else {
+                console.log('no found div');
             }
             // $.ajax({
             //     url:'fetchspec',

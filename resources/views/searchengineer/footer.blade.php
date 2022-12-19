@@ -113,6 +113,34 @@
      }
  </script>
  @stack('childscript')
+ <script>
+ function googleTranslateElementInit() {
+    if(getCookie('googtrans') == '/en/en'){
+        document.cookie = "googtrans=;expires=Thu, 01 Jan 1970 00:00:00 GMT"
+                setCookie('googtrans', '/en/EN', 1);
+            }else{
+                console.log('this is theadjsaiodsa doasjdoijasodijaoidjaoi');
+            }
+       new google.translate.TranslateElement({ pageLanguage: 'EN', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
+   }
+   function getCookie(name) {
+            let cookie = {};
+            document.cookie.split(';').forEach(function(el) {
+                let [k, v] = el.split('=');
+                cookie[k.trim()] = v;
+            })
+           
+            return cookie[name];
+        }
+       
+        function setCookie(key, value, expiry) {
+            var expires = new Date();
+            expires.setTime(expires.getTime() + (expiry * 24 * 60 * 60 * 1000));
+            document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
+        }
+           
+ </script>
+ <script type="text/javascript" src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
  </body>
 

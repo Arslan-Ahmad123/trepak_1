@@ -2,19 +2,22 @@
     .activebtnchat {
         background-image: linear-gradient(to bottom right, rgb(217 210 210), rgb(34 34 33));
     }
-    .footer{
+
+    .footer {
         position: sticky;
         top: 0%;
         margin-top: 170px;
     }
+
     @media only screen and (max-width: 992px) {
-        .footer{   
-        margin-top: 170px;
-    } 
+        .footer {
+            margin-top: 170px;
+        }
     }
+
     @media only screen and (max-width: 400px) {
-        #text_bact_btn_list{
-            display:none;
+        #text_bact_btn_list {
+            display: none;
         }
 
     }
@@ -45,16 +48,14 @@
                             </div>
                         </form> --}}
                         <div class="row mt-2" style="margin-left:0px !important;margin-right:0px !important;">
-                            <div class="col-6 py-2 activebtnchat individualgroupchat0" 
-                                onclick="changeactivestatus(0)" >
+                            <div class="col-6 py-2 activebtnchat individualgroupchat0" onclick="changeactivestatus(0)">
                                 <a href="javascript:void(0)" class="px-5 py-1"
                                     style="    background-color: #edf9f9;
                                 border-radius: 11px;">
                                     Chats
                                 </a>
                             </div>
-                            <div class="col-6 py-2 individualgroupchat1" 
-                                onclick="changeactivestatus(1)">
+                            <div class="col-6 py-2 individualgroupchat1" onclick="changeactivestatus(1)">
                                 <a href="javascript:void(0)" class="px-5 py-1"
                                     style="    background-color: #edf9f9;
                                 border-radius: 11px;">
@@ -91,10 +92,11 @@
 
                     <!-- Chat Right -->
                     <div class="chat-cont-right">
-                        <div class="chat-header"  style="
+                        <div class="chat-header"
+                            style="
                         background-color: darkseagreen;
                         border-radius: 10px;">
-                           
+
                             <a id="back_user_list" class="back-user-list">
                                 <i class="material-icons">{{ AUth::user()->fname . ' ' . AUth::user()->lname }}</i>
                             </a>
@@ -110,10 +112,11 @@
                                     <div class="user-status">online</div>
                                 </div>
                             </div>
-                            <i onclick="backfriendlist()" class="fa fa-arrow-left" aria-hidden="true"  id="back_btn_chatoption"><span class="ml-2" id="text_bact_btn_list">Back</span></i>
+                            <i onclick="backfriendlist()" class="fa fa-arrow-left" aria-hidden="true"
+                                id="back_btn_chatoption"><span class="ml-2" id="text_bact_btn_list">Back</span></i>
 
                         </div>
-                        
+
                         <div>
 
                             <input type="text" id="forconditiondiv" value="for_con" hidden>
@@ -243,18 +246,40 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <script>
         $(document).ready(function() {
+            $.ajax({
+                url: '{{ url('userstatusonline') }}',
+                method: 'get',
+                success: function(data) {
+                    console.log(data);
+                }
+            });
+
             addcontent();
 
         });
-        if(window.innerHeight > 715){
-                var footer_class =  document.getElementById('footer').classList;
-                footer_class.remove('footer_lp');
-                footer_class.add('footer_pc');
-            }else{
-                var footer_class =  document.getElementById('footer').classList;
-                footer_class.remove('footer_pc');
-                footer_class.add('footer_lp');
-            }
+        window.onbeforeunload = function() {
+
+            $.ajax({
+                url: '{{ url('userstatusoffline') }}',
+                method: 'get',
+                success: function(data) {
+                    console.log(data);
+                }
+            });
+        };
+        $("#filter_eng").click(function() {
+            $("#profilenavlater").slideToggle('slow');
+        });
+        if (window.innerHeight > 715) {
+            var footer_class = document.getElementById('footer').classList;
+            footer_class.remove('footer_lp');
+            footer_class.add('footer_pc');
+        } else {
+            var footer_class = document.getElementById('footer').classList;
+            footer_class.remove('footer_pc');
+            footer_class.add('footer_lp');
+        }
+
         function addcontent() {
 
             $('#show_engr_group').html("");
@@ -286,7 +311,7 @@
                                 "</div>" +
                                 "</div>" +
                                 "</a>";
-                           
+
                             $('#show_engr_group').append(item);
                         } else {
                             var item =
@@ -308,7 +333,7 @@
                                 "</div>" +
                                 "</div>" +
                                 "</a>";
-                           
+
                             $('#show_engr_group').append(item);
                         }
 
@@ -342,12 +367,38 @@
                         engrid: engrid
                     },
                     success: function(data) {
-                        console.log(001);
-                        var mess = data.data;
-                        $.each(mess, function(res, value) {
 
-                            if (value.senderid == engrid) {
-                                var msg = `<li class="media sent">
+                        var mess = data.data;
+                        var index_msgs = 0;
+                        var date_msg_check = '';
+                        $.each(mess, function(res, value) {
+                            let date_cur = new Date();
+                            var monthname = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug',
+                                'Sep', 'Oct', 'Nov', 'Dec'
+                            ];
+                            let chk_month = date_cur.getMonth();
+                            let chk_year = date_cur.getFullYear();
+                            let chk_date = date_cur.getDate();
+                            let make_current_date = chk_date + '-' + monthname[chk_month] + '-' +
+                                chk_year;
+                                // if (value.created_at == make_current_date) {
+                                //    console.log(value.created_at +' : '+make_current_date+ 'db-cr found')
+                                // } else {
+                                //     console.log(value.created_at +' : '+make_current_date+ 'db-cr not found')
+                                // }
+                            if (index_msgs == 0) {
+                                if (value.created_at == make_current_date) {
+                                    var date_div =
+                                        `<div id="today_msg" style="text-align: center;margin: 0px auto;width: 30%;background-color: #a6afa6;padding: 4px 0px;border-radius: 4px;font-size: 14px;font-weight: bold;"><span>Today</span></div>`;
+                                } else {
+                                    var date_div =
+                                        `<div style="text-align: center;margin: 0px auto;width: 30%;background-color: #a6afa6;padding: 4px 0px;border-radius: 4px;font-size: 14px;font-weight: bold;"><span>${value.created_at}</span></div>`;
+                                }
+
+                                date_msg_check = value.created_at;
+                                $('.messageboxdiv').append(date_div);
+                                if (value.senderid == engrid) {
+                                    var msg = `<li class="media sent">
                                         <div class="media-body">
                                             <div class="msg-box">
                                                 <div>
@@ -355,17 +406,18 @@
                                                     <ul class="chat-msg-info">
                                                         <li>
                                                             <div class="chat-time">
-                                                                <span>${value.created_at}</span>
+                                                                <span>${value.updated_at}</span>
                                                             </div>
                                                         </li>
                                                     </ul>
+                                                   
                                                 </div>
                                             </div>
                                         </div>
                                     </li>`;
-                                $('.messageboxdiv').append(msg);
-                            } else {
-                                var msg = `<li class="media received">
+                                    $('.messageboxdiv').append(msg);
+                                } else {
+                                    var msg = `<li class="media received">
                                        
                                        <div class="media-body">
                                            <div class="msg-box">
@@ -375,7 +427,7 @@
                                                    <ul class="chat-msg-info">
                                                        <li>
                                                            <div class="chat-time">
-                                                               <span>${value.created_at}</span>
+                                                               <span>${value.updated_at}</span>
                                                            </div>
                                                        </li>
                                                    </ul>
@@ -384,7 +436,106 @@
                                          </div>  
                                          
                                    </li>`;
-                                $('.messageboxdiv').append(msg);
+                                    $('.messageboxdiv').append(msg);
+                                }
+                            } else {
+                                if (value.created_at == date_msg_check) {
+                                    if (value.senderid == engrid) {
+                                        var msg = `<li class="media sent">
+                                        <div class="media-body">
+                                            <div class="msg-box">
+                                                <div>
+                                                    <p>${value.message}</p>
+                                                    <ul class="chat-msg-info">
+                                                        <li>
+                                                            <div class="chat-time">
+                                                                <span>${value.updated_at}</span>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                   
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>`;
+                                        $('.messageboxdiv').append(msg);
+                                    } else {
+                                        var msg = `<li class="media received">
+                                       
+                                       <div class="media-body">
+                                           <div class="msg-box">
+                                               <div>
+                                                   <p>${value.message}</p>
+                                                  
+                                                   <ul class="chat-msg-info">
+                                                       <li>
+                                                           <div class="chat-time">
+                                                               <span>${value.updated_at}</span>
+                                                           </div>
+                                                       </li>
+                                                   </ul>
+                                               </div>
+                                           </div>
+                                         </div>  
+                                         
+                                   </li>`;
+                                        $('.messageboxdiv').append(msg);
+                                    }
+                                } else {
+                                    if (value.created_at == make_current_date) {
+                                        console.log('found');
+                                        var date_div =
+                                            `<div id="today_msg" style="text-align: center;margin: 0px auto;width: 30%;background-color: #a6afa6;padding: 4px 0px;border-radius: 4px;font-size: 14px;font-weight: bold;"><span>Today</span></div>`;
+                                    } else {
+                                        console.log('not found');
+                                        var date_div =
+                                            `<div style="text-align: center;margin: 0px auto;width: 30%;background-color: #a6afa6;padding: 4px 0px;border-radius: 4px;font-size: 14px;font-weight: bold;"><span>${value.created_at}</span></div>`;
+                                    }
+                                    date_msg_check = value.created_at;
+                                    $('.messageboxdiv').append(date_div);
+                                    if (value.senderid == engrid) {
+                                        var msg = `<li class="media sent">
+                                        <div class="media-body">
+                                            <div class="msg-box">
+                                                <div>
+                                                    <p>${value.message}</p>
+                                                    <ul class="chat-msg-info">
+                                                        <li>
+                                                            <div class="chat-time">
+                                                                <span>${value.updated_at}</span>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                   
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>`;
+                                        $('.messageboxdiv').append(msg);
+                                    } else {
+                                        var msg = `<li class="media received">
+                                       
+                                       <div class="media-body">
+                                           <div class="msg-box">
+                                               <div>
+                                                   <p>${value.message}</p>
+                                                  
+                                                   <ul class="chat-msg-info">
+                                                       <li>
+                                                           <div class="chat-time">
+                                                               <span>${value.updated_at}</span>
+                                                           </div>
+                                                       </li>
+                                                   </ul>
+                                               </div>
+                                           </div>
+                                         </div>  
+                                         
+                                   </li>`;
+                                        $('.messageboxdiv').append(msg);
+                                    }
+                                }
+
                             }
                             var sendmess_btn = ` <input type="text" name="senderid" id="senderid"  value="{{ Auth::check() ? Auth::user()->id : '' }}" hidden/>
                                 <input type="text" name="reciverid" id="reciverid"  value="${id}" hidden/ >
@@ -393,6 +544,7 @@
                                     <button type="submit" id="submitmsg" style="position:absolute;right:2%;top:20%"><i class="fab fa-telegram-plane" ></i></button>
                                 </div>`;
                             $('#input_group').html(sendmess_btn);
+                            index_msgs++;
                         });
                         scrollToBottom();
 
@@ -567,11 +719,12 @@
         }
 
         function scrollToBottom() {
-           
+
             const messages = document.getElementsByClassName('chat_scroll_one')[0];
             messages.scrollTop = messages.scrollHeight;
         }
-        function backfriendlist(){
+
+        function backfriendlist() {
             $('#chat_window_div').removeClass('chat-slide');
         }
     </script>

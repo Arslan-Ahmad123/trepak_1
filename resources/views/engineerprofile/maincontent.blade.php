@@ -1,273 +1,354 @@
-
+<link rel="stylesheet" href="{{ asset('inteltelphone/css/intlTelInput.min.css') }}">
 <style>
-	#footer{
-		transform: translateY(110px);
-	}
-	.alink {
-	  display: inline-block;
-	  text-align: center;
-	  cursor: pointer;
-	}
-	input[type="text"],
-	button {
-	  padding: 4px 8px;
-	  border: 0;
-	  outline: 0;
-	}
-	button {
-	  background-color: transparent;
-	  cursor: pointer;
-	}
-	button:hover i {
-	  color: #79c7c5;
-	  transform: scale(1.2);
-	}
-	
-	/* container */
-	.customchatbox {
-	  width: 450px;
-	  height: 70vh;
-	  position: fixed;
-	  bottom: 2%;
-	  right: 2%;
-	  /* transform: translate(-50%, -50%); */
-	  z-index: 1;
-	  border-radius: 10px;
-	  background-color: #f9fbff;
-	  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-	  overflow: hidden;
-	}
-	
-	/* chat_box */
-	.chat_box {
-	  display: flex;
-	  flex-direction: column;
-	  height: 100%;
-	}
-	.chat_box > * {
-	  padding: 8px;
-	}
-	
-	/* head */
-	.head {
-	  display: flex;
-	  align-items: center;
-	}
-	.head .user {
-	  display: flex;
-	  align-items: center;
-	  flex-grow: 1;
-	}
-	.head .user .avatar {
-	  margin-right: 8px;
-	}
-	.head .user .avatar img {
-	  display: block;
-	  border-radius: 50%;
-	}
-	.head .bar_tool {
-	  display: flex;
-	}
-	.head .bar_tool i {
-	  padding: 5px;
-	  width: 30px;
-	  height: 30px;
-	  display: flex;
-	  align-items: center;
-	  justify-content: center;
-	}
-	
-	/* body */
-	.chatbody {
-	  flex-grow: 1;
-	  background-color: #eee;
-	  overflow-y:auto;
-	  height: 500px;
-	}
-	.chatbody .bubble {
-	  display: inline-block;
-	  padding: 10px;
-	  margin-bottom: 5px;
-	  border-radius: 15px;
-	}
-	.chatbody .bubble p {
-	  color: #f9fbff;
-	  font-size: 14px;
-	  text-align: left;
-	  line-height: 0.6;
-	}
-	.chatbody .incoming {
-	  text-align: left;
-	}
-	.chatbody .incoming .bubble {
-	  background-color: #b2b2b2;
-	}
-	.chatbody .outgoing {
-	  text-align: right;
-	}
-	.chatbody .outgoing .bubble {
-	  background-color: #79c7c5;
-	}
-	
-	/* foot */
-	.foot {
-	  display: flex;
-	}
-	.foot .msg {
-	  flex-grow: 1;
-	}
-	
+    #footer {
+        transform: translateY(110px);
+    }
 
-	@media screen and (max-width:520px){
-	
-	  .customchatbox {
-	  width: 315px;
-	  height: 70vh;
-	}
-	}
-	</style>
-			<div class="breadcrumb-bar topsection">
+    .alink {
+        display: inline-block;
+        text-align: center;
+        cursor: pointer;
+    }
 
-				<div class="container-fluid">
-					<div class="row align-items-center">
-						<div class="col-md-12 col-12">
-							<nav aria-label="breadcrumb" class="page-breadcrumb">
-								<ol class="breadcrumb">
-									<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Engineer Profile</li>
-								</ol>
-							</nav>
-							<h2 class="breadcrumb-title">Engineer Profile</h2>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- /Breadcrumb -->
-			@php
-				if(session()->has('indexengrid')){
-					session()->forget('indexengrid');
-					session()->forget('indexroute');
-				}
-			@endphp
-			{{-- ==========================chat box ========================	 --}}
-			
-			 {{-- ===========modal for select order date================== --}}
- <div class="modal" tabindex="-1" role="dialog" id="orderdetail_modal">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">Select Date</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<form action="{{ route('proceed') }}" method="post">
-				@csrf
-				<div class="modal-body">
-					<div class="form-group">
-						<label for="selectdateorder">Select Date</label>
-						<input class="form-control" type="date" name="engr_date" id="selectdateorder"
-							min="<?php echo date('Y-m-d'); ?>" value="<?php echo date('Y-m-d'); ?>">
-						<input class="form-control" type="text" value="{{ $engr->id }}" name="engr_id"  hidden>
+    input[type="text"],
+    button {
+        padding: 4px 8px;
+        border: 0;
+        outline: 0;
+    }
 
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="submit" class="btn btn-primary">Place Order</button>
-					{{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
-				</div>
-			</form>
+    button {
+        background-color: transparent;
+        cursor: pointer;
+    }
 
-		</div>
-	</div>
+    button:hover i {
+        color: #79c7c5;
+        transform: scale(1.2);
+    }
+
+    /* container */
+    .customchatbox {
+        width: 450px;
+        height: 70vh;
+        position: fixed;
+        bottom: 2%;
+        right: 2%;
+        /* transform: translate(-50%, -50%); */
+        z-index: 1;
+        border-radius: 10px;
+        background-color: #f9fbff;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        overflow: hidden;
+    }
+
+    /* chat_box */
+    .chat_box {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .chat_box>* {
+        padding: 8px;
+    }
+
+    /* head */
+    .head {
+        display: flex;
+        align-items: center;
+    }
+
+    .head .user {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+    }
+
+    .head .user .avatar {
+        margin-right: 8px;
+    }
+
+    .head .user .avatar img {
+        display: block;
+        border-radius: 50%;
+    }
+
+    .head .bar_tool {
+        display: flex;
+    }
+
+    .head .bar_tool i {
+        padding: 5px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* body */
+    .chatbody {
+        flex-grow: 1;
+        background-color: #eee;
+        overflow-y: auto;
+        height: 500px;
+    }
+
+    .chatbody .bubble {
+        display: inline-block;
+        padding: 10px;
+        margin-bottom: 5px;
+        border-radius: 15px;
+    }
+
+    .chatbody .bubble p {
+        color: #f9fbff;
+        font-size: 14px;
+        text-align: left;
+        line-height: 0.6;
+        padding: 4px;
+        margin-bottom: 0px;
+        margin-top: 0px;
+    }
+
+    .chatbody .incoming {
+        text-align: left;
+    }
+
+    .chatbody .incoming .bubble {
+        background-color: #b2b2b2;
+    }
+
+    .chatbody .outgoing {
+        text-align: right;
+    }
+
+    .chatbody .outgoing .bubble {
+        background-color: #79c7c5;
+    }
+
+    /* foot */
+    .foot {
+        display: flex;
+    }
+
+    .foot .msg {
+        flex-grow: 1;
+    }
+
+
+    @media screen and (max-width:520px) {
+
+        .customchatbox {
+            width: 315px;
+            height: 70vh;
+        }
+    }
+</style>
+<div class="breadcrumb-bar topsection">
+
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-12 col-12">
+                <nav aria-label="breadcrumb" class="page-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Engineer Profile</li>
+                    </ol>
+                </nav>
+                <h2 class="breadcrumb-title">Engineer Profile</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Breadcrumb -->
+@php
+    if (session()->has('indexengrid')) {
+        session()->forget('indexengrid');
+        session()->forget('indexroute');
+    }
+@endphp
+{{-- ==========================chat box ========================	 --}}
+
+{{-- ===========modal for select order date================== --}}
+<div class="modal" tabindex="-1" role="dialog" id="orderdetail_modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Book Order Modal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('proceed') }}" method="post">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="selectdateorder">Select Date</label>
+                        <input class="form-control" type="date" name="engr_date" id="selectdateorder"
+                            min="<?php echo date('Y-m-d'); ?>" value="<?php echo date('Y-m-d'); ?>">
+                        <input class="form-control" type="text" value="{{ $engr->id }}" name="engr_id" hidden>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Place Order</button>
+                    {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
+                </div>
+            </form>
+
+        </div>
+    </div>
 </div>
 {{-- ===========modal for select order date================== --}}
-		
-			<div class="container customchatbox" style="display:none">
-				<div class="chat_box">
-				  <div class="head">
-					<div class="user">
-					  <div class="avatar">
-						@php
-							if(Auth::user()->signupoption == 1){
-								$img = Auth::user()->pic;
-							}else{
-								$img = asset('engrphoto/'.Auth::user()->pic);
-							}
-						@endphp
-						<img src="{{ $img }}" />
-					  </div>
-					  <div class="name">{{ Auth::user()->fname }}</div>
-					</div>
-					<ul class="bar_tool">
-					  <li><span class="alink"><a href="javascript:void(0)" onclick="closeclientchatbox()"><i class="fa fa-times" aria-hidden="true"></i></a></span></li>
-					</ul>
-				  </div>
-				  <div class="chatbody" id="chatbody{{getuseronline()}}">
-					<div id="chatbox{{ $engr->id }}">
-						<div class="incoming">
-							<div class="bubble">
-							  <p>What are you getting.. Oh, oops sorry dude.</p>
-							</div>
-						  </div>
-						  <div class="outgoing">
-							<div class="bubble lower">
-							  <p>Nah, it's cool.</p>
-							</div>
-							<div class="bubble">
-							  <p>Well you should get your Dad a cologne. Here smell it. Oh wait! ...</p>
-							</div>
-						  </div>
-					</div>
-					
-					
-				  </div>
-				  <div class="foot" style="position: relative">
-					<form method='post' action="#">
-						@csrf
-						<input type="text" name="message" id="message" class="msg" placeholder="Type a message..." />
-						<input type="text" name="senderid" id="senderid"  value="{{ (Auth::check())?Auth::user()->id:''}}" hidden/>
-						<input type="text" name="reciverid" id="reciverid"  value="{{ $engr->id }}" hidden/>
-						<button type="submit" id="submitmsg" style="position: absolute;right:2px;"><i class="fas fa-paper-plane"></i></button>
-					</form>
-				  </div>
-				</div>
-			  </div>
-			  {{-- ==========================chat box ========================	 --}}
-			<!-- Page Content -->
-			<div class="content">
-				<div class="container">
 
-					<!-- Doctor Widget -->
-					<div class="card">
-						<div class="card-body">
-							<div class="doctor-widget">
-								<div class="doc-info-left">
-									@php
-							if($engr->signupoption == 1){
-								$engrimg = $engr->pic;
-							}else{
-								$engrimg = asset('engrphoto/'.$engr->pic);
-							}
-						@endphp
-									<div class="doctor-img">
+{{-- ===========modal for Video Consultation================== --}}
+<div class="modal" tabindex="-1" role="dialog" id="videoconsultant_modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Video Consultant</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('videoconsultantbook') }}" method="post">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="client_date">Select Date</label>
+                        <input class="form-control" type="date" name="client_date" id="client_date"
+                            min="<?php echo date('Y-m-d'); ?>" value="<?php echo date('Y-m-d'); ?>" required>
+                        <input class="form-control" type="text" value="{{ $engr->id }}" name="engr_id_video"
+                            hidden>
+                        <input class="form-control" type="text" value="{{ Auth::user()->id }}" name="client_id_video"
+                            hidden>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="client_time">Select Time</label>
+                        <input class="form-control" type="time" name="client_time" id="client_time" min="08:00:00"
+                            max="20:00:00" required>
+
+
+                    </div>
+                    <div class="form-group">
+                        <label for="mobile">Mobile</label>
+                        <input type="text" class="form-control" name="mobile" id="mobile"
+                            style="border: 1px solid #dfd8d8;" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Book Video Consultation</button>
+                    {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{{-- ===========modal for select Video Consultation================== --}}
+
+<div class="container customchatbox" style="display:none">
+    <div class="chat_box">
+        <div class="head">
+            <div class="user">
+                <div class="avatar" style="position: relative">
+                    <img id="picofreciver" />
+                    <i class="fa fa-circle showonline_status_engr"
+                        style="font-size:12px;position:absolute;right:3px;top:0px"></i>
+                </div>
+                <div class="name" id="nameofreciver">
+                    <span id="name_engineer"></span>
+
+
+                </div>
+            </div>
+            <ul class="bar_tool">
+                <li><span class="alink"><a href="javascript:void(0)" onclick="closeclientchatbox()"><i
+                                class="fa fa-times" aria-hidden="true"></i></a></span></li>
+            </ul>
+        </div>
+        <div class="chatbody" id="chatbody{{ getuseronline() }}">
+            <div id="chatbox{{ $engr->id }}">
+                <div class="incoming">
+                    <div class="bubble">
+                        <p>What are you getting.. Oh, oops sorry dude.</p>
+                    </div>
+                </div>
+                <div class="outgoing">
+                    <div class="bubble lower">
+                        <p>Nah, it's cool.</p>
+                    </div>
+                    <div class="bubble">
+                        <p>Well you should get your Dad a cologne. Here smell it. Oh wait! ...</p>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="foot" style="position: relative">
+            <form method='post' action="#">
+                @csrf
+                <input type="text" name="message" id="message" class="msg"
+                    placeholder="Type a message..." />
+                <input type="text" name="senderid" id="senderid"
+                    value="{{ Auth::check() ? Auth::user()->id : '' }}" hidden />
+                <input type="text" name="reciverid" id="reciverid" value="{{ $engr->id }}" hidden />
+                <button type="submit" id="submitmsg" style="position: absolute;right:2px;"><i
+                        class="fas fa-paper-plane"></i></button>
+            </form>
+        </div>
+    </div>
+</div>
+{{-- ==========================chat box ========================	 --}}
+<!-- Page Content -->
+<div class="content">
+    <div class="container">
+
+        <!-- Doctor Widget -->
+        <div class="card">
+            <div class="card-body">
+                <div class="doctor-widget">
+                    <div class="doc-info-left">
+                        @php
+                            if ($engr->signupoption == 1) {
+                                $engrimg = $engr->pic;
+                            } else {
+                                $engrimg = asset('engrphoto/' . $engr->pic);
+                            }
+                        @endphp
+                        <div class="doctor-img" style="position:relative">
+                            {{-- <a href="doctor-profile.html"> --}}
+                            <i id="showonline_status_{{ $engr->id }}" class="fa fa-circle showonline_status"
+                                style="font-size:12px;color:{{ $engr->onlinestatus }};position:absolute;right:-3px;top:-3px"></i>
+                            <img src="{{ $engrimg }}" alt="Engr Image" style="width: 100%;height: 100%;">
+                            <input type="hidden" id="engineer_id_status" value="{{ $engr->id }}">
+                            <input type="hidden" id="engineer_status_color" value="{{ $engr->onlinestatus }}">
+
+                            {{-- </a> --}}
+                        </div>
+                        {{-- <div class="doctor-img">
 										<img src="{{ $engrimg }}" class="img-fluid" alt="User Image">
-									</div>
-									<div class="doc-info-cont">
-										<h4 class="doc-name">{{ $engr->fname }}</h4>
-										<p class="doc-speciality">{{ getcategoryname($engr->engrcategoryid) }}</p>
-										{{-- <p class="doc-department"><img src="{{ asset('newpanel/assets/img/specialities/specialities-05.png') }}" class="img-fluid" alt="Speciality">{{ $engr->specialization }}</p> --}}
-										<div class="rating">
-											<i class="fas fa-star filled"></i>
-											<i class="fas fa-star filled"></i>
-											<i class="fas fa-star filled"></i>
-											<i class="fas fa-star filled"></i>
-											<i class="fas fa-star"></i>
-											<span class="d-inline-block average-rating">(35)</span>
-										</div>
-										<div class="clinic-details">
-											<p class="doc-location"><i class="fas fa-map-marker-alt"></i> {{ $engr->city.' '.$engr->state.', '.$engr->country }} </p>
-											{{-- <ul class="clinic-gallery">
+									</div> --}}
+                        <div class="doc-info-cont">
+                            <h4 class="doc-name">{{ $engr->fname }}</h4>
+                            <p class="doc-speciality">{{ getcategoryname($engr->engrcategoryid) }}</p>
+                            {{-- <p class="doc-department"><img src="{{ asset('newpanel/assets/img/specialities/specialities-05.png') }}" class="img-fluid" alt="Speciality">{{ $engr->specialization }}</p> --}}
+                            <div class="rating">
+                                <i class="fas fa-star filled"></i>
+                                <i class="fas fa-star filled"></i>
+                                <i class="fas fa-star filled"></i>
+                                <i class="fas fa-star filled"></i>
+                                <i class="fas fa-star"></i>
+                                <span class="d-inline-block average-rating">(35)</span>
+                            </div>
+                            <div class="clinic-details">
+                                <p class="doc-location"><i class="fas fa-map-marker-alt"></i>
+                                    {{ $engr->city . ' ' . $engr->state . ', ' . $engr->country }} </p>
+                                {{-- <ul class="clinic-gallery">
 												<li>
 													<a href=" {{ asset('newpanel/assets/img/features/feature-01.jpg') }}" data-fancybox="gallery">
 														<img src="{{ asset('newpanel/assets/img/features/feature-01.jpg') }}" alt="Feature">
@@ -289,109 +370,127 @@
 													</a>
 												</li>
 											</ul> --}}
-										</div>
-										<div  id="showhideactionbtn" class="mt-2">
-											
-												<button  onclick="shoemodeldate()" class="btn btn-primary">Book Appointment</button>
-											
-											{{-- <a class="apt-btn" href="{{ route('booking',['id'=>$engr->id]) }}">Book Appointment</a> --}}
-										</div>
-										{{-- <div class="clinic-services">
+                            </div>
+                            <div id="showhideactionbtn" class="mt-2">
+                                <div class="clini-infos">
+                                    <ul>
+
+                                        {{-- <li><i class="far fa-money-bill-alt"></i> ${{ $engr->pricerange }} per hour </li> --}}
+                                        <li>
+                                            <a href="javascript:void(0)"
+                                                onclick="clientchat_box({{ $engr->id }},{{ Auth::check() ? Auth::user()->id : '' }},'{{ $engr->fname }}','{{ $engrimg }}','{{ $engr->onlinestatus }}')">
+                                                <i class="far fa-comment-alt"></i> Chat
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <button onclick="showmodelvideo()" class="btn btn-primary">Book Video
+                                    Consultation</button>
+                                <button onclick="shoemodeldate()" class="btn btn-primary"
+                                    style="padding: 8px 33px;margin-top: 5px;">Book Appointment</button>
+
+                                {{-- <a class="apt-btn" href="{{ route('booking',['id'=>$engr->id]) }}">Book Appointment</a> --}}
+                            </div>
+                            {{-- <div class="clinic-services">
 											<span>AUTO CAD</span>
 											<span>3D GRAPH</span>
 										</div> --}}
-									</div>
-								</div>
-								<div class="doc-info-right">
-									<div class="clini-infos">
-										<ul>
-											<li><i class="far fa-thumbs-up"></i> 99%</li>
-											{{-- <li><i class="far fa-money-bill-alt"></i> ${{ $engr->pricerange }} per hour </li> --}}
-											<li>
-												<a href="javascript:void(0)"  >
-													<i class="far fa-comment-alt"></i> Chat
-												</a>
-											</li>
-										</ul>
-									</div>
-									
-									<div class="clinic-booking">
-										
-											
-											<button  onclick="shoemodeldate()" class="btn btn-primary">Book Appointment</button>
-										
-										{{-- <a class="apt-btn" href="{{ route('booking',['id'=>$engr->id]) }}">Book Appointment</a> --}}
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- /Doctor Widget -->
+                        </div>
+                    </div>
+                    <div class="doc-info-right">
+                        <div class="clini-infos">
+                            <ul>
+                                <li><i class="far fa-thumbs-up"></i> 99%</li>
+                                {{-- <li><i class="far fa-money-bill-alt"></i> ${{ $engr->pricerange }} per hour </li> --}}
+                                <li>
+                                    <a href="javascript:void(0)"
+                                        onclick="clientchat_box({{ $engr->id }},{{ Auth::check() ? Auth::user()->id : '' }},'{{ $engr->fname }}','{{ $engrimg }}','{{ $engr->onlinestatus }}')">
+                                        <i class="far fa-comment-alt"></i> Chat
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
 
-					<!-- Doctor Details Tab -->
-					<div class="card">
-						<div class="card-body pt-0">
-						
-							<!-- Tab Menu -->
-							<nav class="user-tabs mb-4">
-								<ul class="nav nav-tabs nav-tabs-bottom nav-justified">
-									<li class="nav-item">
-										<a class="nav-link active" href="#doc_overview" data-toggle="tab">Overview</a>
-									</li>
-									{{-- <li class="nav-item">
+                        <div class="clinic-booking">
+
+                            <button onclick="showmodelvideo()" class="btn btn-primary">Book Video
+                                Consultation</button>
+                            <button onclick="shoemodeldate()" class="btn btn-primary "
+                                style="padding: 0px 33px;margin-top: 5px;">Book Appointment</button>
+
+                            {{-- <a class="apt-btn" href="{{ route('booking',['id'=>$engr->id]) }}">Book Appointment</a> --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Doctor Widget -->
+
+        <!-- Doctor Details Tab -->
+        <div class="card">
+            <div class="card-body pt-0">
+
+                <!-- Tab Menu -->
+                <nav class="user-tabs mb-4">
+                    <ul class="nav nav-tabs nav-tabs-bottom nav-justified">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#doc_overview" data-toggle="tab">Overview</a>
+                        </li>
+                        {{-- <li class="nav-item">
 										<a class="nav-link" href="#doc_locations" data-toggle="tab">Locations</a>
 									</li> --}}
-									<li class="nav-item">
-										<a class="nav-link" href="#doc_reviews" data-toggle="tab">Reviews</a>
-									</li>
-									{{-- <li class="nav-item">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#doc_reviews" data-toggle="tab">Reviews</a>
+                        </li>
+                        {{-- <li class="nav-item">
 										<a class="nav-link" href="#doc_business_hours" data-toggle="tab">Comments</a>
 									</li> --}}
-								</ul>
-							</nav>
-							<!-- /Tab Menu -->
-							
-							<!-- Tab Content -->
-							<div class="tab-content pt-0">
-							
-								<!-- Overview Content -->
-								<div role="tabpanel" id="doc_overview" class="tab-pane fade show active">
-									<div class="row">
-										<div class="col-md-12 col-lg-9">
-										
-											<!-- About Details -->
-											<div class="widget about-widget">
-												<h3 class="widget-title">About Me</h3>
-												<p>{{ $engr->about }}.</p>
-												<a href="{{ asset('engr_cv/'.$engr->cv) }}" tabindex="-1" >Download CV</a>
-												
-											</div>
-											<!-- /About Details -->
-										
-											<!-- Education Details -->
-											<div class="widget education-widget">
-												{{-- <h3 class="widget-title">CV</h3> --}}
-												<div class="experience-box">
-													{{-- <iframe
+                    </ul>
+                </nav>
+                <!-- /Tab Menu -->
+
+                <!-- Tab Content -->
+                <div class="tab-content pt-0">
+
+                    <!-- Overview Content -->
+                    <div role="tabpanel" id="doc_overview" class="tab-pane fade show active">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-9">
+
+                                <!-- About Details -->
+                                <div class="widget about-widget">
+                                    <h3 class="widget-title">About Me</h3>
+                                    <p>{{ $engr->about }}.</p>
+                                    <a href="{{ asset('engr_cv/' . $engr->cv) }}" tabindex="-1">Download CV</a>
+
+                                </div>
+                                <!-- /About Details -->
+
+                                <!-- Education Details -->
+                                <div class="widget education-widget">
+                                    {{-- <h3 class="widget-title">CV</h3> --}}
+                                    <div class="experience-box">
+                                        {{-- <iframe
 														src="https://drive.google.com/viewerng/viewer?embedded=true&url=http://infolab.stanford.edu/pub/papers/{{ $engr->cv }}#toolbar=0&scrollbar=0"
 														frameBorder="0"
 														scrolling="auto"
 														height="100%"
 														width="100%"
 													></iframe> --}}
-													{{-- {{ asset('engr_cv/'.$engr->cv) }} --}}
-													{{-- @php
+                                        {{-- {{ asset('engr_cv/'.$engr->cv) }} --}}
+                                        {{-- @php
 														$engrcv = explode('.',$engr->cv);
 													
-													@endphp --}} 
-													{{-- <iframe src="{{ asset('engr_cv/'.$engr->cv) }}" width="100%" height="500px"></iframe> --}}
-													{{-- <object width="400px" height="400px" data="{{ asset('engr_cv/'.$engr->cv) }}"></object> --}}
-													{{-- <iframe src="{{ asset('engr_cv/'.$engr->cv) }}"
+													@endphp --}}
+                                        {{-- <iframe src="{{ asset('engr_cv/'.$engr->cv) }}" width="100%" height="500px"></iframe> --}}
+                                        {{-- <object width="400px" height="400px" data="{{ asset('engr_cv/'.$engr->cv) }}"></object> --}}
+                                        {{-- <iframe src="{{ asset('engr_cv/'.$engr->cv) }}"
 														style="width:600px; height:500px;" frameborder="0">
 													</iframe> --}}
-													{{-- {{ asset('engr_cv/'.$engr->cv) }}
+                                        {{-- {{ asset('engr_cv/'.$engr->cv) }}
 													<embed src="{{ asset('engr_cv/AAFinal.pdf') }}" type="application/pdf" > --}}
-													{{-- <ul class="experience-list">
+                                        {{-- <ul class="experience-list">
 														<li>
 															<div class="experience-user">
 																<div class="before-circle"></div>
@@ -401,17 +500,17 @@
 																	{{-- <a href="#/" class="name">{{ $engr->university }}</a>
 																	
 																	<div>{{ $engr->education }}</div> --}}
-																	{{-- <span class="time">{{ $engr->degreedate }}</span> --
+                                        {{-- <span class="time">{{ $engr->degreedate }}</span> --
 																</div>
 															</div>
 														</li>
 													</ul> --}}
-												</div>
-											</div>
-											<!-- /Education Details -->
-									
-											<!-- Experience Details -->
-											{{-- <div class="widget experience-widget">
+                                    </div>
+                                </div>
+                                <!-- /Education Details -->
+
+                                <!-- Experience Details -->
+                                {{-- <div class="widget experience-widget">
 												<h4 class="widget-title">Work & Experience</h4>
 												<div class="experience-box">
 													<ul class="experience-list">
@@ -422,7 +521,7 @@
 															<div class="experience-content">
 																<div class="timeline-content">
 																	{{-- <a href="#/" class="name">{{ $engr->company }}</a> --}}
-																	{{-- <span class="time">{{ $engr->experience }}(years)</span> --
+                                {{-- <span class="time">{{ $engr->experience }}(years)</span> --
 																</div>
 															</div>
 														</li>
@@ -441,9 +540,9 @@
 													</ul>
 												</div>
 											</div> --}}
-											<!-- /Experience Details -->
-								
-											{{-- <!-- Awards Details -->
+                                <!-- /Experience Details -->
+
+                                {{-- <!-- Awards Details -->
 											<div class="widget awards-widget">
 												<h4 class="widget-title">Awards</h4>
 												<div class="experience-box">
@@ -488,9 +587,9 @@
 												</div>
 											</div>
 											<!-- /Awards Details --> --}}
-											
-											<!-- Services List -->
-											{{-- <div class="service-list">
+
+                                <!-- Services List -->
+                                {{-- <div class="service-list">
 												<h4>Services</h4>
 												<ul class="clearfix">
 													<li>Construction </li>
@@ -500,9 +599,9 @@
 													
 												</ul>
 											</div> --}}
-											<!-- /Services List -->
-											
-											{{-- <!-- Specializations List -->
+                                <!-- /Services List -->
+
+                                {{-- <!-- Specializations List -->
 											<div class="service-list">
 												<h4>Specializations</h4>
 												<ul class="clearfix">
@@ -516,12 +615,12 @@
 											</div>
 											<!-- /Specializations List --> --}}
 
-										</div>
-									</div>
-								</div>
-								<!-- /Overview Content -->
-								
-								{{-- <!-- Locations Content -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Overview Content -->
+
+                    {{-- <!-- Locations Content -->
 								<div role="tabpanel" id="doc_locations" class="tab-pane fade">
 								
 									<!-- Location List -->
@@ -687,46 +786,47 @@
 								</div>
 								<!-- /Locations Content -->
 								 --}}
-								<!-- Reviews Content -->
-								<div role="tabpanel" id="doc_reviews" class="tab-pane fade">
-								
-									<!-- Review Listing -->
-									<div class="widget review-listing">
-										<ul class="comments-list">
-										@if(count($engr->comment) > 0)
-											<!-- Comment List -->
-											@foreach ($engr->comment as $cmt)
-											<li>
-												<div class="comment">
-													<img class="avatar avatar-sm rounded-circle" alt="User Image" src="{{ asset('engrphoto/'.Auth::user()->pic) }}">
-													<div class="comment-body" style="width:100%">
-														<div class="meta-data">
-															<span class="comment-author">{{ Auth::user()->fname }}</span>
-															<span class="comment-date">{{$cmt['created_at']}}</span>
-															<div class="review-count rating">
-															@php
-																$service_r = $cmt['service'];
-																$t_star = 5;
-																$r_star = $t_star - $service_r
-															@endphp
-															@for ($i=0;$i <$service_r;$i++)
-															<i class="fas fa-star filled"></i>
-															@endfor
-															@for ($k=0;$k <$r_star;$k++)
-															<i class="fas fa-star"></i>
-															@endfor
-																
-																{{-- <i class="fas fa-star filled"></i>
+                    <!-- Reviews Content -->
+                    <div role="tabpanel" id="doc_reviews" class="tab-pane fade">
+
+                        <!-- Review Listing -->
+                        <div class="widget review-listing">
+                            <ul class="comments-list">
+                                @if (count($engr->comment) > 0)
+                                    <!-- Comment List -->
+                                    @foreach ($engr->comment as $cmt)
+                                        <li>
+                                            <div class="comment">
+                                                <img class="avatar avatar-sm rounded-circle" alt="User Image"
+                                                    src="{{ asset('engrphoto/' . Auth::user()->pic) }}">
+                                                <div class="comment-body" style="width:100%">
+                                                    <div class="meta-data">
+                                                        <span class="comment-author">{{ Auth::user()->fname }}</span>
+                                                        <span class="comment-date">{{ $cmt['created_at'] }}</span>
+                                                        <div class="review-count rating">
+                                                            @php
+                                                                $service_r = $cmt['service'];
+                                                                $t_star = 5;
+                                                                $r_star = $t_star - $service_r;
+                                                            @endphp
+                                                            @for ($i = 0; $i < $service_r; $i++)
+                                                                <i class="fas fa-star filled"></i>
+                                                            @endfor
+                                                            @for ($k = 0; $k < $r_star; $k++)
+                                                                <i class="fas fa-star"></i>
+                                                            @endfor
+
+                                                            {{-- <i class="fas fa-star filled"></i>
 																<i class="fas fa-star filled"></i>
 																<i class="fas fa-star filled"></i>
 																<i class="fas fa-star"></i> --}}
-															</div>
-														</div>
-														
-														<p class="comment-content">
-															{{ $cmt['comment'] }}
-														</p>
-														{{-- <div class="comment-reply">
+                                                        </div>
+                                                    </div>
+
+                                                    <p class="comment-content">
+                                                        {{ $cmt['comment'] }}
+                                                    </p>
+                                                    {{-- <div class="comment-reply">
 															<a class="comment-btn" href="#">
 																<i class="fas fa-reply"></i> Reply
 															</a>
@@ -740,32 +840,35 @@
 															</a>
 														</p>
 														</div> --}}
-													</div>
-												</div>
-												
-												<!-- Comment Reply -->
-												<ul class="comments-reply">
-													<li>
-													
-														<div class="comment">
-															<img class="avatar avatar-sm rounded-circle" alt="User Image" src="{{ asset('engrphoto/'.getuser($cmt['engrid'])->pic) }}">
-															<div class="comment-body" style="width:100%">
-																<div class="meta-data">
-																	<span class="comment-author">{{ getuser($cmt['engrid'])->fname }}</span>
-																	<span class="comment-date">{{ $cmt['repliesdate'] }}</span>
-																	{{-- <div class="review-count rating">
+                                                </div>
+                                            </div>
+
+                                            <!-- Comment Reply -->
+                                            <ul class="comments-reply">
+                                                <li>
+
+                                                    <div class="comment">
+                                                        <img class="avatar avatar-sm rounded-circle" alt="User Image"
+                                                            src="{{ asset('engrphoto/' . getuser($cmt['engrid'])->pic) }}">
+                                                        <div class="comment-body" style="width:100%">
+                                                            <div class="meta-data">
+                                                                <span
+                                                                    class="comment-author">{{ getuser($cmt['engrid'])->fname }}</span>
+                                                                <span
+                                                                    class="comment-date">{{ $cmt['repliesdate'] }}</span>
+                                                                {{-- <div class="review-count rating">
 																		<i class="fas fa-star filled"></i>
 																		<i class="fas fa-star filled"></i>
 																		<i class="fas fa-star filled"></i>
 																		<i class="fas fa-star filled"></i>
 																		<i class="fas fa-star"></i>
 																	</div> --}}
-																</div>
-																@if($cmt['replies'] != null &&  $cmt['replies'] != "")
-																<p class="comment-content">
-																	{{ $cmt['replies'] }}
-																</p>
-																{{-- <div class="comment-reply">
+                                                            </div>
+                                                            @if ($cmt['replies'] != null && $cmt['replies'] != '')
+                                                                <p class="comment-content">
+                                                                    {{ $cmt['replies'] }}
+                                                                </p>
+                                                                {{-- <div class="comment-reply">
 																	<a class="comment-btn" href="#">
 																		<i class="fas fa-reply"></i> Reply
 																	</a>
@@ -779,101 +882,102 @@
 																		</a>
 																	</p>
 																</div> --}}
-																@else
-														No Replies!!
-														@endif
-															</div>
-														</div>
-														
-													</li>
-												</ul>
-												<!-- /Comment Reply -->
-												
-											</li>
-											@endforeach
-											
-											<!-- /Comment List -->
-										@else
-										No Comment Found!! 
-										@endif	
-										</ul>
-										
-										
-										
-									</div>
-									<!-- /Review Listing -->
-								
-									<!-- Write Review -->
-									<div class="write-review">
-										
-										<h4>Write a review for <strong>{{ Auth::user()->fname.' '.Auth::user()->lname  }}</strong></h4>
-										
-										<!-- Write Review Form -->
-										<form method="post" action="{{ route('commentmessage') }}">
-											@csrf
-											<input type="hidden" value="{{ $engr->id }}" name="engr_id">
-											<div class="form-group">
-												<label>Services Rating</label>
-												<div class="star-rating">
-													<input id="star-5" type="radio" name="rating" value="5" >
-													<label for="star-5" title="5 stars">
-														<i class="active fa fa-star"></i>
-													</label>
-													<input id="star-4" type="radio" name="rating" value="4" >
-													<label for="star-4" title="4 stars">
-														<i class="active fa fa-star"></i>
-													</label>
-													<input id="star-3" type="radio" name="rating" value="3" >
-													<label for="star-3" title="3 stars">
-														<i class="active fa fa-star"></i>
-													</label>
-													<input id="star-2" type="radio" name="rating" value="2" >
-													<label for="star-2" title="2 stars">
-														<i class="active fa fa-star"></i>
-													</label>
-													<input id="star-1" type="radio" name="rating" value="1" >
-													<label for="star-1" title="1 star">
-														<i class="active fa fa-star"></i>
-													</label>
-												</div>
-											</div>
-											<div class="form-group">
-												<label>Response Rating</label>
-												<div class="star-rating">
-													<input id="res-5" type="radio" name="responserating" value="5" >
-													<label for="res-5" title="5 stars">
-														<i class="active fa fa-star"></i>
-													</label>
-													<input id="res-4" type="radio" name="responserating" value="4" >
-													<label for="res-4" title="4 stars">
-														<i class="active fa fa-star"></i>
-													</label>
-													<input id="res-3" type="radio" name="responserating" value="3" >
-													<label for="res-3" title="3 stars">
-														<i class="active fa fa-star"></i>
-													</label>
-													<input id="res-2" type="radio" name="responserating" value="2" >
-													<label for="res-2" title="2 stars">
-														<i class="active fa fa-star"></i>
-													</label>
-													<input id="res-1" type="radio" name="responserating" value="1" >
-													<label for="res-1" title="1 star">
-														<i class="active fa fa-star"></i>
-													</label>
-												</div>
-											</div>
-											{{-- <div class="form-group">
+                                                            @else
+                                                                No Replies!!
+                                                            @endif
+                                                        </div>
+                                                    </div>
+
+                                                </li>
+                                            </ul>
+                                            <!-- /Comment Reply -->
+
+                                        </li>
+                                    @endforeach
+
+                                    <!-- /Comment List -->
+                                @else
+                                    No Comment Found!!
+                                @endif
+                            </ul>
+
+
+
+                        </div>
+                        <!-- /Review Listing -->
+
+                        <!-- Write Review -->
+                        <div class="write-review">
+
+                            <h4>Write a review for <strong>{{ Auth::user()->fname . ' ' . Auth::user()->lname }}</strong>
+                            </h4>
+
+                            <!-- Write Review Form -->
+                            <form method="post" action="{{ route('commentmessage') }}">
+                                @csrf
+                                <input type="hidden" value="{{ $engr->id }}" name="engr_id">
+                                <div class="form-group">
+                                    <label>Services Rating</label>
+                                    <div class="star-rating">
+                                        <input id="star-5" type="radio" name="rating" value="5">
+                                        <label for="star-5" title="5 stars">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                        <input id="star-4" type="radio" name="rating" value="4">
+                                        <label for="star-4" title="4 stars">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                        <input id="star-3" type="radio" name="rating" value="3">
+                                        <label for="star-3" title="3 stars">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                        <input id="star-2" type="radio" name="rating" value="2">
+                                        <label for="star-2" title="2 stars">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                        <input id="star-1" type="radio" name="rating" value="1">
+                                        <label for="star-1" title="1 star">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Response Rating</label>
+                                    <div class="star-rating">
+                                        <input id="res-5" type="radio" name="responserating" value="5">
+                                        <label for="res-5" title="5 stars">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                        <input id="res-4" type="radio" name="responserating" value="4">
+                                        <label for="res-4" title="4 stars">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                        <input id="res-3" type="radio" name="responserating" value="3">
+                                        <label for="res-3" title="3 stars">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                        <input id="res-2" type="radio" name="responserating" value="2">
+                                        <label for="res-2" title="2 stars">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                        <input id="res-1" type="radio" name="responserating" value="1">
+                                        <label for="res-1" title="1 star">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                                {{-- <div class="form-group">
 												<label>Title of your review</label>
 												<input class="form-control" type="text" placeholder="If you could say it in one sentence, what would you say?">
 											</div> --}}
-											<div class="form-group">
-												<label>Your review</label>
-												<textarea id="review_desc" name="msg_cmt" maxlength="100" class="form-control" required></textarea>
-											  
-											  {{-- <div class="d-flex justify-content-between mt-3"><small class="text-muted"><span id="chars">100</span> characters remaining</small></div> --}}
-											</div>
-											<hr>
-											{{-- <div class="form-group">
+                                <div class="form-group">
+                                    <label>Your review</label>
+                                    <textarea id="review_desc" name="msg_cmt" maxlength="100" class="form-control" required></textarea>
+
+                                    {{-- <div class="d-flex justify-content-between mt-3"><small class="text-muted"><span id="chars">100</span> characters remaining</small></div> --}}
+                                </div>
+                                <hr>
+                                {{-- <div class="form-group">
 												<div class="terms-accept">
 													<div class="custom-checkbox">
 													   <input type="checkbox" id="terms_accept">
@@ -881,21 +985,21 @@
 													</div>
 												</div>
 											</div> --}}
-											<div class="submit-section">
-												<button type="submit" class="btn btn-primary submit-btn">Add Review</button>
-											</div>
-										</form>
-										<!-- /Write Review Form -->
-										
-									</div>
-									<!-- /Write Review -->
-						
-								</div>
-								<!-- /Reviews Content -->
-								
-								<!-- Business Hours Content -->
+                                <div class="submit-section">
+                                    <button type="submit" class="btn btn-primary submit-btn">Add Review</button>
+                                </div>
+                            </form>
+                            <!-- /Write Review Form -->
 
-								{{-- <div role="tabpanel" id="doc_business_hours" class="tab-pane fade">
+                        </div>
+                        <!-- /Write Review -->
+
+                    </div>
+                    <!-- /Reviews Content -->
+
+                    <!-- Business Hours Content -->
+
+                    {{-- <div role="tabpanel" id="doc_business_hours" class="tab-pane fade">
 									<div class="row">
 										<div class="col-md-6 offset-md-3">
 											
@@ -971,97 +1075,178 @@
 									</div>
 								</div> --}}
 
-								<!-- /Business Hours Content -->
-								
-							</div>
-						</div>
-					</div>
-					<!-- /Doctor Details Tab -->
+                    <!-- /Business Hours Content -->
 
-				</div>
-			</div>		
-			<!-- /Page Content -->
-   
-		   
-		</div>
-		<!-- /Main Wrapper -->
-		
-		                     
-		
-	
-				@push('childscript')
-				<script src="{{asset('js/app.js')}}"></script>
-				{{-- <script type="text/javascript" src="/js/bootstrap.js"></script> --}}
-					<script>
-						$(document).ready(function(){
-							$('.customchatbox').hide();
+                </div>
+            </div>
+        </div>
+        <!-- /Doctor Details Tab -->
+
+    </div>
+</div>
+<!-- /Page Content -->
+
+
+</div>
+<!-- /Main Wrapper -->
 
 
 
-});
-					function clientchat_box(engrid,clientid){
-						
-					$('.customchatbox').hide('slow');
-					var clientid ='{{ (Auth::check())?Auth::user()->id:"not login" }}';
-					if(clientid == "not login"){
-						window.location.href = "{{ URL::to('login') }}";
+
+@push('childscript')
+    <script src="{{ asset('inteltelphone/js/intlTelInput.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
+    {{-- <script type="text/javascript" src="/js/bootstrap.js"></script> --}}
+    <script>
+        $(document).ready(function() {
+            var input = document.querySelector("#mobile");
+            intlTelInput(input, {
+                initialCountry: "auto",
+                geoIpLookup: function(success, failure) {
+                    $.get("https://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+                        var countryCode = (resp && resp.country) ? resp.country : "";
+                        success(countryCode);
+                    });
+                },
+                utilsScript: "{{ asset('inteltelphone/js/utils.js') }}",
+            });
+            $('.customchatbox').hide();
+
+
+
+        });
+
+        function clientchat_box(engrid, clientid, engr_name, engr_img, engr_status) {
+
+            $('.customchatbox').hide('slow');
+            var clientid = '{{ Auth::check() ? Auth::user()->id : 'not login' }}';
+            if (clientid == "not login") {
+                window.location.href = "{{ URL::to('login') }}";
+            } else {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: "{{ URL::to('onegetchatmsg') }}",
+                    method: 'post',
+                    data: {
+                        senderid: clientid,
+                        reciverid: engrid
+                    },
+                    success: function(data) {
+                        $('#picofreciver').attr('src', engr_img);
+                        $('#name_engineer').text(engr_name);
+                        $('.showonline_status_engr').css('color', engr_status)
+                        $('.customchatbox').show('slow');
+                        $('.customchatbox').attr('id', 'clientengr' + engrid + clientid);
+                        const innerDiv = document
+                            .getElementById('chatbody' + clientid)
+                            .querySelector('#chatbox' + engrid);
+                        if (innerDiv != null) {
+                            $('#chatbox' + engrid).html('');
+                            var index_msgs = 0;
+                            var date_msg_check = '';
+                            $.each(data, function(res, value) {
+                                console.log(value);
+                                if (index_msgs == 0) {
+                                    let date_div =
+                                        `<div style="text-align: center;margin: 0px auto;width: 30%;background-color: #a6afa6;padding: 4px 0px;border-radius: 4px;font-size: 14px;font-weight: bold;"><span>${value.created_at}</span></div>`;
+                                    date_msg_check = value.created_at;
+                                    $('#chatbox' + engrid).append(date_div);
+                                } else {
+
+                                    if (value.created_at == date_msg_check) {
+
+                                    } else {
+                                        let date_div =
+                                            `<div style="text-align: center;margin: 0px auto;width: 30%;background-color: #a6afa6;padding: 4px 0px;border-radius: 4px;font-size: 14px;font-weight: bold;"><span>${value.created_at}</span></div>`;
+                                        date_msg_check = value.created_at;
+                                        $('#chatbox' + engrid).append(date_div);
+                                    }
+                                    if (value.senderid == clientid) {
+                                        var app_s =
+
+                                            "<div class='outgoing'>" +
+                                            "<span style='font-size:12px'> " + value.updated_at +
+                                            "</span>" +
+                                            "<br>" +
+                                            "<div class='bubble'>" +
+                                            "<p>" + value.message + "</p>" +
+
+                                            "</div>" +
+                                            "</div>";
+                                    } else {
+                                        var app_s =
+                                            "<div class='incoming'>" +
+                                            "<span style='font-size:12px'> " + value.updated_at +
+                                            "</span>" +
+                                            "<br>" +
+                                            "<div class='bubble'>" +
+                                            "<p>" + value.message + "</p>" +
+                                            "</div>" +
+                                            "</div>";
+                                    }
+
+
+                                    $('#chatbox' + engrid).append(app_s);
+
+
+                                }
+                                index_msgs++;
+                            });
+                        } else {
+                            alert("Not reciver online");
+                        }
+
+                    }
+                });
+            }
+
+
+
+        }
+
+        function closeclientchatbox() {
+            $('.customchatbox').hide('slow');
+        }
+
+        function shoemodeldate() {
+            event.preventDefault();
+            $('#orderdetail_modal').appendTo('body').modal('show');
+
+        }
+
+        function showmodelvideo() {
+            event.preventDefault();
+            $('#videoconsultant_modal').appendTo('body').modal('show');
+        }
+
+        setInterval(() => {
+            let engr_profile = $('#engineer_id_status').val();
+
+
+
+            $.ajax({
+                url: '{{ url('onlineenge_arr') }}',
+                type: 'post',
+                data: {
+                    engr_arr: engr_profile
+                },
+                success: function(data) {
+					if(data == 'yes'){
+						$('.showonline_status').css('color','#5bc155')
+						$('.showonline_status_engr').css('color','#5bc155')
 					}else{
-						$.ajaxSetup({
-							headers: {
-								'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-							}
-						});
-					$.ajax({
-						url:"{{ URL::to('onegetchatmsg') }}",
-						method:'post',
-						data:{senderid:clientid,reciverid:engrid},
-						success:function(data){
-							$('.customchatbox').show('slow');
-					        $('.customchatbox').attr('id','clientengr'+engrid+clientid);
-							const innerDiv = document
-							.getElementById('chatbody'+clientid)
-							.querySelector('#chatbox'+engrid);
-							if(innerDiv != null){
-								$('#chatbox'+engrid).html('');
-								$.each(data,function(res,value){
-									if(value.senderid == clientid){
-										var app_s ="<div class='outgoing'>"+
-								    "<div class='bubble'>"+
-								      "<p>"+value.message+"</p>"+
-								    "</div>"+
-								  "</div>";
-									}else{
-										var app_s ="<div class='incoming'>"+
-								    "<div class='bubble'>"+
-								      "<p>"+value.message+"</p>"+
-								    "</div>"+
-								  "</div>";
-									}
-									
-								   
-								    $('#chatbox'+engrid).append(app_s);
-								});
-								   
-								}else{
-								    alert("Not reciver online");
-								}
-							
-						}
-					});
+						$('.showonline_status').css('color','#f13535')
+						$('.showonline_status_engr').css('color','#f13535')
 					}
-					
-					
-
-				}
-				
-				function closeclientchatbox(){
-					$('.customchatbox').hide('slow');
-				}
-				function shoemodeldate() {
-					event.preventDefault();
-					$('#orderdetail_modal').appendTo('body').modal('show');
-            
                 }
-				
-					</script>
-				@endpush
+            });
+
+
+
+        }, 5000);
+    </script>
+@endpush

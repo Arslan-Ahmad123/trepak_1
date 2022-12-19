@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class oneChatevent implements ShouldBroadcast
+class sendVideoevent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -20,15 +20,16 @@ class oneChatevent implements ShouldBroadcast
      *
      * @return void
      */
-    public $senderid;
-    public $reciverid;
-    public $sendmes;
-    public function __construct($senderid,$reciverid,$sendmes)
+    public $clientinfo;
+    public $engrinfo;
+    public $orderinfo;
+    // public function __construct($client_info)
+    public function __construct($client_info,$engineer_info,$order_info)
     {
-        Log::info(['sendmessage'=>$sendmes]);
-        $this->senderid = $senderid;
-        $this->reciverid = $reciverid;
-        $this->sendmes = $sendmes;
+        $this->clientinfo = $client_info;
+        $this->engrinfo = $engineer_info;
+        $this->orderinfo = $order_info;  
+       
     }
 
     /**
@@ -38,7 +39,6 @@ class oneChatevent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        Log::info('Event of message work');
-        return new PrivateChannel('onechat');
+        return [];
     }
 }

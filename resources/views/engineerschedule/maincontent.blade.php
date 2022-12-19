@@ -21,7 +21,7 @@
 				<div class="container-fluid">
 
 					<div class="row">
-						<div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
+						<div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar" translate="no">
 						
 							<!-- Profile Sidebar -->
 							<div class="profile-sidebar">

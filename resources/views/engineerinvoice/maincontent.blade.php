@@ -21,7 +21,7 @@
 				<div class="container-fluid">
 
 					<div class="row">
-						<div class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar">
+						<div class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar" translate="no">
 						
 						
 							<!-- Profile Sidebar -->
@@ -290,6 +290,29 @@
 			<!-- /Page Content -->
 			@push('childscript')
 			<script>
+				$(document).ready(function(){
+					$.ajax({
+						url:'{{ url("userstatusonline") }}',
+						method:'get',
+						success:function(data){
+							console.log(data);
+						}
+					});
+
+				});
+				$("#filter_eng").click(function(){
+			   $("#profilenavlater").slideToggle('slow');
+			});
+			window.onbeforeunload = function () {
+				  
+				$.ajax({
+						url:'{{ url("userstatusoffline") }}',
+						method:'get',
+						success:function(data){
+							console.log(data);
+						}
+					});
+            };
 				$("#filter_eng").click(function(){
 			   $("#profilenavlater").slideToggle('slow');
 			});

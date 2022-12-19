@@ -4,7 +4,7 @@
 <!-- doccure/search.html  30 Nov 2019 04:12:16 GMT -->
 <head>
 		<meta charset="utf-8">
-		<title>TrePak Engineering Portal</title>
+		<title translate="no">TrePak Engineering Portal</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 		<meta name="csrf-token" content="{{ csrf_token() }}" />
 		

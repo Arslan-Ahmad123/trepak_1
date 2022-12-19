@@ -34,7 +34,7 @@ class conformationEngineerNotification
         //     $message->to($user['email']);
         //     $message->subject('Event Testing');
         // });
-         \Mail::to( $user['email'])->send(
+         Mail::to( $user['email'])->send(
             new conformationMail()
         );
         // dd($user);

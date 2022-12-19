@@ -1,64 +1,65 @@
  <style>
-         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 
-.pagination ul {
+     .pagination ul {
 
-    display: flex;
-    flex-wrap: wrap;
-    background: #fff;
-    position: relative;
-    left: 35%;
-    padding: 8px;
-    border-radius: 50px;
-    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
-}
+         display: flex;
+         flex-wrap: wrap;
+         background: #fff;
+         position: relative;
+         left: 35%;
+         padding: 8px;
+         border-radius: 50px;
+         box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+     }
 
-.pagination ul li {
-    color: #20B2AA;
-    list-style: none;
-    line-height: 45px;
-    text-align: center;
-    font-size: 18px;
-    font-weight: 500;
-    cursor: pointer;
-    user-select: none;
-    transition: all 0.3s ease;
-}
+     .pagination ul li {
+         color: #20B2AA;
+         list-style: none;
+         line-height: 45px;
+         text-align: center;
+         font-size: 18px;
+         font-weight: 500;
+         cursor: pointer;
+         user-select: none;
+         transition: all 0.3s ease;
+     }
 
-.pagination ul li.numb {
-    list-style: none;
-    height: 45px;
-    width: 45px;
-    margin: 0 3px;
-    line-height: 45px;
-    border-radius: 50%;
-}
+     .pagination ul li.numb {
+         list-style: none;
+         height: 45px;
+         width: 45px;
+         margin: 0 3px;
+         line-height: 45px;
+         border-radius: 50%;
+     }
 
-.pagination ul li.numb.first {
-    margin: 0px 3px 0 -5px;
-}
+     .pagination ul li.numb.first {
+         margin: 0px 3px 0 -5px;
+     }
 
-.pagination ul li.numb.last {
-    margin: 0px -5px 0 3px;
-}
+     .pagination ul li.numb.last {
+         margin: 0px -5px 0 3px;
+     }
 
-.pagination ul li.dots {
-    font-size: 22px;
-    cursor: default;
-}
+     .pagination ul li.dots {
+         font-size: 22px;
+         cursor: default;
+     }
 
-.pagination ul li.btn {
-    padding: 0 20px;
-    border-radius: 50px;
-}
+     .pagination ul li.btn {
+         padding: 0 20px;
+         border-radius: 50px;
+     }
 
-.pagination li.active,
-.pagination ul li.numb:hover,
-.pagination ul li:first-child:hover,
-.pagination ul li:last-child:hover {
-    color: #fff;
-    background: #20B2AA;
-} 
+     .pagination li.active,
+     .pagination ul li.numb:hover,
+     .pagination ul li:first-child:hover,
+     .pagination ul li:last-child:hover {
+         color: #fff;
+         background: #20B2AA;
+     }
+
      .alink {
          display: inline-block;
          text-align: center;
@@ -189,21 +190,20 @@
 
 
      @media screen and (max-width:520px) {
-        .pagination ul {
+         .pagination ul {
 
 
-width:100%;
+             width: 100%;
 
-}
+         }
 
          .customchatbox {
              width: 315px;
              height: 70vh;
          }
      }
-     @media only screen and (max-width: 400px) {
-       
-    }
+
+     @media only screen and (max-width: 400px) {}
 
      .slidecontainer {
          width: 100%;
@@ -252,7 +252,6 @@ width:100%;
      .select2-container--default {
          display: none;
      }
-    
  </style>
 
  <!-- Breadcrumb -->
@@ -332,10 +331,12 @@ width:100%;
                              <div class="filter-widget">
                                  <div class="form-group">
                                      Select City
-                                     <input type="text" onfocus="checkerror()"  onblur="getcordinataddress()" class="form-control"
-                                         name="cityname" id="selectcity" placeholder="Select City"
+                                     <input type="text" onfocus="checkerror()" onblur="getcordinataddress()"
+                                         class="form-control" name="cityname" id="selectcity" placeholder="Select City"
                                          style="position:relative;border:1px solid rgb(180, 177, 177)">
-                                         <span id="error_msg_show" style="color:red;font-weight: 600;font-size:15px;display:none">Select Correct City Name!!</span>
+                                     <span id="error_msg_show"
+                                         style="color:red;font-weight: 600;font-size:15px;display:none">Select Correct
+                                         City Name!!</span>
                                      <input type="hidden" name="addresslat" id="addresslat">
                                      <input type="hidden" name="addresslon" id="addresslon">
                                  </div>
@@ -383,17 +384,20 @@ width:100%;
                              <div class="filter-widget">
                                  <div class="form-group">
                                      Select City
-                                     <input type="text" onfocus="checkerror_sm()" onblur="getcordinataddresss()" class="form-control"
-                                         name="cityname" id="selectcitys" placeholder="Select City"
+                                     <input type="text" onfocus="checkerror_sm()" onblur="getcordinataddresss()"
+                                         class="form-control" name="cityname" id="selectcitys" placeholder="Select City"
                                          style="position:relative;border:1px solid rgb(180, 177, 177)">
-                                         <span id="error_msg_show_sm" style="color:red;font-weight: 600;font-size:15px;display:none">Select Correct City Name!!</span>
+                                     <span id="error_msg_show_sm"
+                                         style="color:red;font-weight: 600;font-size:15px;display:none">Select Correct
+                                         City Name!!</span>
                                      <input type="hidden" name="addresslat" id="addresslats">
                                      <input type="hidden" name="addresslon" id="addresslons">
                                  </div>
                              </div>
 
                              <div class="btn-search">
-                                 <button type="submit" id="search_btns" disabled class="btn btn-block">Search</button>
+                                 <button type="submit" id="search_btns" disabled
+                                     class="btn btn-block">Search</button>
                              </div>
                          </form>
                      </div>
@@ -403,15 +407,17 @@ width:100%;
              </div>
 
              <div class="col-md-12 col-lg-8 col-xl-9">
-                <div class="row">
-                    <div class="col-md-12" id="all_engr_show">
- 
-                    </div>
-                    <div class="col-md-12">
-                       <div class="pagination">
-                        <ul> <!--pages or li are comes from javascript --> </ul>
-                       </div>
-                 </div>
+                 <div class="row">
+                     <div class="col-md-12" id="all_engr_show">
+
+                     </div>
+                     <div class="col-md-12">
+                         <div class="pagination">
+                             <ul>
+                                 <!--pages or li are comes from javascript -->
+                             </ul>
+                         </div>
+                     </div>
                  </div>
 
                  {{-- @include('searchengineer.searchengrpage')
@@ -547,8 +553,8 @@ width:100%;
      <script src="{{ asset('js/app.js') }}"></script>
      <script>
          //  ============function for show map and clients=================
-           //  ============function for  clients with pagination=================
-           var totalPages = 0;
+         //  ============function for  clients with pagination=================
+         var totalPages = 0;
          var allengr_array;
          var page = 1;
          var element_pagination = document.querySelector(".pagination ul");
@@ -560,18 +566,18 @@ width:100%;
              fetch('{{ route('returnsession') }}').then((res) => {
                  return res.json()
              }).then((res) => {
-                 console.log('output res: ' + res.length);
+               
 
                  var output = "";
                  $('#all_engr_show').html('');
                  if (res.length > 0) {
-                    let gettotalpage = Math.ceil(res.length / 5);
-                    
-                    totalPages = gettotalpage;
-                  
-                    allengr_array = res;
-                    showEngineer(allengr_array,page);
-                    createPagination(totalPages, page,element_pagination);
+                     let gettotalpage = Math.ceil(res.length / 5);
+
+                     totalPages = gettotalpage;
+
+                     allengr_array = res;
+                     showEngineer(allengr_array, page);
+                     createPagination(totalPages, page, element_pagination);
                  } else {
                      $('#all_engr_show').html('No Engineer Found!!');
                  }
@@ -658,7 +664,7 @@ width:100%;
 
                  },
                  success: function(data) {
-                     console.log(data);
+                   
                      $('.customchatbox').show('slow');
                      $('.customchatbox').attr('id', 'clientengr' + engrid + clientid);
                      $('.chatboxdiv').attr('id', 'chatbox' + engrid);
@@ -707,7 +713,7 @@ width:100%;
              try {
                  make_cord(make_map);
              } catch (e) {
-                 console.log(e);
+                
              }
          }
 
@@ -716,10 +722,10 @@ width:100%;
                  $('#lat_cur').val(position.coords.latitude);
                  $('#lon_cur').val(position.coords.longitude);
                  callback();
-                 console.log('1st');
+             
              }
              const error = () => {
-                 console.log("error");
+               
                  callback();
              }
 
@@ -727,9 +733,9 @@ width:100%;
              navigator.permissions.query({
                  name: 'geolocation'
              }).then(function(result) {
-                 console.log(result);
+               
                  if (result.state == 'denied' || result.state == 'gratned') {
-                   
+
                  }
              });
              // setTimeout(()=>{
@@ -746,13 +752,13 @@ width:100%;
                  type: 'get',
                  async: false,
                  success: function(data) {
-                 
+
                      if (data.length > 0) {
                          $.each(data, function(index, value) {
                              if (index == 0) {
                                  firstengr[index] = value;
                              }
-                             console.log('user lat: '+value.client_lat +' user lon: '+value.client_lon);
+                          
                              $('#lat_cur').val(value.client_lat);
                              $('#lon_cur').val(value.client_lon);
                              allengr[index] = value;
@@ -763,15 +769,15 @@ width:100%;
                              type: 'get',
                              async: false,
                              success: function(data) {
-                               
-                                $.each(data, function(index, value) { 
-                                    console.log('lat: '+value.client_lat +' lon: '+value.client_lon);
-                                    $('#lat_cur').val(value.client_lat);
-                                 $('#lon_cur').val(value.client_lon);
+
+                                 $.each(data, function(index, value) {
+                                   
+                                     $('#lat_cur').val(value.client_lat);
+                                     $('#lon_cur').val(value.client_lon);
                                  });
-                               
-                               
-                                
+
+
+
 
 
                              }
@@ -815,7 +821,7 @@ width:100%;
              var checkuserlogin = {{ Auth::user() ? '1' : '0' }};
              console.warn(checkuserlogin);
              if (checkuserlogin == 1 || $('#lat_cur').val() != "") {
-                
+
 
 
                  var style_s = [{
@@ -841,40 +847,40 @@ width:100%;
                  let infoWindow = new google.maps.InfoWindow();
                  var distance_boolean = [];
                  var lon_s = [];
-                var lat_s = [];
+                 var lat_s = [];
                  $.each(allengr, function(i, m) {
                      //  var latLngA = {'lat':32.1877,'lng':74.1945};
                      //  var latLngB = {'lat':m.lan,'lng':m.lng};
                      var latitude1 = latitude_cur;
                      var longitude1 = longitude_cur;
-                //    ================== 
-                if (lon_s.includes(m.longitude) && lat_s.includes(m.latitude)) {
-                        function randomInRange(min, max) {
-                            return Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math
-                                .random() * (max - min) + min);
-                        }
-                        let variation = randomInRange(0.1, 5) / 500;
+                     //    ================== 
+                     if (lon_s.includes(m.longitude) && lat_s.includes(m.latitude)) {
+                         function randomInRange(min, max) {
+                             return Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math
+                                 .random() * (max - min) + min);
+                         }
+                         let variation = randomInRange(0.1, 5) / 500;
 
-                        var latitude2 = (m.latitude * 1)  + variation;
-                        var longitude2 = (m.longitude * 1)  + variation;
-                    } else {
-                        var latitude2 = m.latitude ;
-                        var longitude2 = m.longitude ;
-                    }
-                    lon_s.push(m.longitude);
-                    lat_s.push(m.latitude);
+                         var latitude2 = (m.latitude * 1) + variation;
+                         var longitude2 = (m.longitude * 1) + variation;
+                     } else {
+                         var latitude2 = m.latitude;
+                         var longitude2 = m.longitude;
+                     }
+                     lon_s.push(m.longitude);
+                     lat_s.push(m.latitude);
 
-                //    ================== 
-                    
+                     //    ================== 
+
                      var distance = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(
                          latitude1, longitude1), new google.maps.LatLng(latitude2, longitude2));
                      var distance_km = distance / 1000;
 
                      if (distance_km < 1) {
-                        distance_boolean.push('no');
-                    } else {
-                        distance_boolean.push('yes');
-                    }
+                         distance_boolean.push('no');
+                     } else {
+                         distance_boolean.push('yes');
+                     }
                      if (distance_km < 80) {
                          // var idfetch =  m.id;
                          // var url = '{{ route('fetchcategorynamemap', ':id') }}';
@@ -903,7 +909,7 @@ width:100%;
                              anchor: new google.maps.Point(15, 30),
                          };
                          var image = {
-                            url: "{{ asset('engrphoto/googlemap2.png') }}",
+                             url: "{{ asset('engrphoto/googlemap2.png') }}",
                              size: new google.maps.Size(80, 81),
                              origin: new google.maps.Point(0, 0),
                              anchor: new google.maps.Point(20, 40),
@@ -913,7 +919,7 @@ width:100%;
 
                          let marker_s = new google.maps.Marker({
                              position: new google.maps.LatLng(latitude2, longitude2),
-                             
+
                              title: m.fname,
                              label: {
                                  text: parseFloat(distance_km).toFixed(0) + 'KM',
@@ -927,7 +933,7 @@ width:100%;
 
 
                          (function(marker, m) {
-                             console.log('opjhwhoqweqw bqwkjhdsdnsdjoia sdsdiasdijasidj j dsajdsjd');
+                          
                              google.maps.event.addListener(marker, "click", function(e) {
 
                                  //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
@@ -941,9 +947,9 @@ width:100%;
                      }
                  });
                  if (distance_boolean.includes('no')) {
-                   
-                } else {
-                    new google.maps.Marker({
+
+                 } else {
+                     new google.maps.Marker({
                          position: new google.maps.LatLng(latitude_cur, longitude_cur),
                          shape: shape,
                          title: 'Current location',
@@ -956,7 +962,7 @@ width:100%;
                          map: map,
 
                      });
-                }
+                 }
              } else {
                  let infoWindow = new google.maps.InfoWindow();
                  $.each(allengr, function(i, m) {
@@ -1006,15 +1012,15 @@ width:100%;
                      var image = {
                          url: "{{ asset('engrphoto/googlemap2.png') }}",
                          size: new google.maps.Size(80, 81),
-                             origin: new google.maps.Point(0, 0),
-                             anchor: new google.maps.Point(20, 40),
-                             scaledSize: new google.maps.Size(40, 39)
+                         origin: new google.maps.Point(0, 0),
+                         anchor: new google.maps.Point(20, 40),
+                         scaledSize: new google.maps.Size(40, 39)
                      };
 
 
                      let marker_s = new google.maps.Marker({
                          position: new google.maps.LatLng(latitude2, longitude2),
-                        
+
                          title: m.fname,
 
                          map: map,
@@ -1046,7 +1052,7 @@ width:100%;
          function getcordinataddress() {
              setTimeout(() => {
                  var value_city = $('#selectcity').val();
-                 console.log('the name of city is: '+ value_city);
+              
                  if (value_city != "") {
                      var geocoder = new google.maps.Geocoder();
                      geocoder.geocode({
@@ -1060,11 +1066,11 @@ width:100%;
                              document.getElementById('search_btn').disabled = false;
 
                          } else {
-                            $('#error_msg_show').show('slow');
-                            $('#addresslat').val('');
-                            $('#addresslon').val('');
-                            document.getElementById('search_btn').disabled = true;
-                             console.log("Something got wrong " + status);
+                             $('#error_msg_show').show('slow');
+                             $('#addresslat').val('');
+                             $('#addresslon').val('');
+                             document.getElementById('search_btn').disabled = true;
+                            
                          }
                      });
                  } else {
@@ -1092,11 +1098,11 @@ width:100%;
                              document.getElementById('search_btns').disabled = false;
 
                          } else {
-                            $('#error_msg_show_sm').show('slow');
-                            $('#addresslats').val('');
-                            $('#addresslons').val('');
-                            document.getElementById('search_btns').disabled = true;
-                             console.log("Something got wrong " + status);
+                             $('#error_msg_show_sm').show('slow');
+                             $('#addresslats').val('');
+                             $('#addresslons').val('');
+                             document.getElementById('search_btns').disabled = true;
+                            
                          }
                      });
                  } else {
@@ -1107,134 +1113,162 @@ width:100%;
              }, 500);
 
          }
-         function checkerror(){
-          
-            $('#error_msg_show').hide('slow');
+
+         function checkerror() {
+
+             $('#error_msg_show').hide('slow');
          }
-         function checkerror_sm(){
-          $('#error_msg_show_sm').hide('slow');
-       }
+
+         function checkerror_sm() {
+             $('#error_msg_show_sm').hide('slow');
+         }
+
          function shoemodeldate(id) {
              event.preventDefault();
              $('#orderdetail_modal').appendTo('body').modal('show');
              $('#select_engrid').val(id);
          }
 
+         
+         // pagination with js 
 
          function createPagination(totalPages, page, element) {
+           
 
-showEngineer(allengr_array, page);
+           showEngineer(allengr_array, page);
 
-let liTag = '';
-let active;
-let beforePage = page > 1 ? page - 1 : 1;
-let afterPage = page > 1 ? page + 1 : 1;
-console.warn('tlpage:' + totalPages);
+           let liTag = '';
+           let active;
+           let beforePage = page > 1 ? page - 1 : 1;
+           let afterPage = page > 1 ? page + 1 : 1;
+           console.warn('tlpage:' + totalPages);
 
 
-if (page > 1) { //show the next button if the page value is greater than 1
-    liTag +=
-        `<li class="btn prev" onclick="createPagination(totalPages, ${page - 1},element_pagination)"><span><i class="fas fa-angle-left"></i> Prev</span></li>`;
-    console.log('test1')
+           if (page > 1) { //show the next button if the page value is greater than 1
+               liTag +=
+                   `<li class="btn prev" onclick="createPagination(totalPages, ${page - 1},element_pagination)"><span><i class="fas fa-angle-left"></i> Prev</span></li>`;
+            
 
-}
+           }
 
-if (page > 2) { //if page value is less than 2 then add 1 after the previous button
-    liTag +=
-        `<li class="first numb" onclick="createPagination(totalPages, 1,element_pagination)"><span>1</span></li>`;
-    console.log('test2')
-    if (page > 3) { //if page value is greater than 3 then add this (...) after the first li or page
-        liTag += `<li class="dots"><span>...</span></li>`;
-        console.log('test3')
-    }
-}
+           if (page > 2) { //if page value is less than 2 then add 1 after the previous button
+              if(page == 3 && totalPages == 4){
 
-// how many pages or li show before the current li
-if (page == totalPages) {
-    // beforePage = beforePage - 2;
-} else if (page == totalPages - 1) {
-    beforePage = beforePage - 1;
+              }else{
+                  liTag +=
+                   `<li class="first numb" onclick="createPagination(totalPages, 1,element_pagination)"><span>1</span></li>`;
 
-}
-// how many pages or li show after the current li
-if (page == 1) {
-    afterPage = afterPage + 2;
-} else if (page == 2) {
-    afterPage = afterPage + 1;
-}
-console.warn('before[age no]:' + beforePage);
-console.warn('afterpage[age no]:' + afterPage);
-for (var plength = beforePage; plength <= afterPage; plength++) {
-    if (plength > totalPages) { //if plength is greater than totalPage length then continue
-        continue;
-    }
-    if (plength == 0) { //if plength is 0 than add +1 in plength value
-        plength = plength + 1;
-    }
-    if (page == plength) { //if page is equal to plength than assign active string in the active variable
-        active = "active";
-    } else { //else leave empty to the active variable
-        active = "";
-    }
-    if (totalPages == 1) {
-        liTag += `<li class="numb ${active}" ><span>${plength}</span></li>`;
-    } else {
-        liTag +=
-            `<li class="numb ${active}" onclick="createPagination(totalPages, ${plength},element_pagination)"><span>${plength}</span></li>`;
-    }
+              } 
+             
+               if (page > 3) { //if page value is greater than 3 then add this (...) after the first li or page
+                   liTag += `<li class="dots"><span>...</span></li>`;
+                 
+               }
+           }
 
-}
+           // how many pages or li show before the current li
+           if (page == totalPages) {
+               // beforePage = beforePage - 2;
+           } else if (page == totalPages - 1) {
+               beforePage = beforePage - 1;
 
-if (page < totalPages - 1) { //if page value is less than totalPage value by -1 then show the last li or page
-    if (page < totalPages -
-        2) { //if page value is less than totalPage value by -2 then add this (...) before the last li or page
-        liTag += `<li class="dots"><span>...</span></li>`;
-    }
-    liTag +=
-        `<li class="last numb" onclick="createPagination(totalPages, ${totalPages},element_pagination)"><span>${totalPages}</span></li>`;
-    console.log('test5')
-}
+           }
+           // how many pages or li show after the current li
+           if (page == 1) {
+               afterPage = afterPage + 2;
+           } else if (page == 3) {
+               afterPage = afterPage + 1;
+           }
+           console.warn('before[age no]:' + beforePage);
+           console.warn('afterpage[age no]:' + afterPage);
+           for (var plength = beforePage; plength <= afterPage; plength++) {
+               if (plength > totalPages) { //if plength is greater than totalPage length then continue
+                 
+                   continue;
 
-if (page < totalPages) { //show the next button if the page value is less than totalPage(20)
-    liTag +=
-        `<li class="btn next" onclick="createPagination(totalPages, ${page + 1},element_pagination)"><span>Next <i class="fas fa-angle-right"></i></span></li>`;
-}
+               }
+               if (plength == 0) { //if plength is 0 than add +1 in plength value
 
-element.innerHTML = liTag; //add li tag inside ul tag
-return liTag; //reurn the li tag
-}
-// pagination with js
+                   plength = plength + 1;
+               }
+               if (page == plength) { //if page is equal to plength than assign active string in the active variable
 
-function showEngineer(v, page) {
-// console.log('ispage no  is asijas' + page);
-var perpageshow = 5;
-var last_index_page = 4;
-if (page == 1) {
-    var startindex = 0;
-    var endindex = last_index_page;
-} else {
-    let calnopre = page - 1;
-    let calno = page * perpageshow;
-    var startindex = 0 + (calnopre * perpageshow);
-    var endindex = last_index_page + (calno - 1);
+                   active = "active";
 
-}
-console.log('ispage no  is asijas' + startindex);
-console.log('ispage no  is asijas' + endindex);
-$('#all_engr_show').html('');
-for (let k = startindex; k <= endindex; k++) {
-    if (v.length == k) {
-        break;
-    }
-    console.log(v[k].fname);
+               } else { //else leave empty to the active variable
+                   active = "";
+               }
+               if (totalPages == 1) {
+                  
+                   liTag += `<li class="numb ${active}" ><span>${plength}</span></li>`;
+               } else {
+                  
+                   liTag +=
+                       `<li class="numb ${active}" onclick="createPagination(totalPages, ${plength},element_pagination)"><span>${plength}</span></li>`;
+               }
 
-    if (v[k].signupoption == 1) {
-        var image = v[k].pic;
-    } else {
-        var image = `{{ asset('engrphoto/${v[k].pic}') }}`;
+           }
 
-    }
-    $('#all_engr_show').append(`<div class="card">
+           if (page < totalPages - 1) { //if page value is less than totalPage value by -1 then show the last li or page
+             
+              if (page < totalPages -
+                   2) { //if page value is less than totalPage value by -2 then add this (...) before the last li or page
+                  
+                   liTag += `<li class="dots"><span>...</span></li>`;
+               }
+              if((page == 1 && totalPages == 3) || (page == 3 && totalPages == 4) || (page == 3 && totalPages == 5)){
+
+              }else{
+                  liTag +=
+                   `<li class="last numb" onclick="createPagination(totalPages, ${totalPages},element_pagination)"><span>${totalPages}</span></li>`;
+
+              }
+
+             
+             
+           }
+
+           if (page < totalPages) { //show the next button if the page value is less than totalPage(20)
+             
+               liTag +=
+                   `<li class="btn next" onclick="createPagination(totalPages, ${page + 1},element_pagination)"><span>Next <i class="fas fa-angle-right"></i></span></li>`;
+           }
+
+           element.innerHTML = liTag; //add li tag inside ul tag
+         
+           return liTag; //reurn the li tag
+       }
+       // pagination with js
+
+         function showEngineer(v, page) {
+           
+             var perpageshow = 5;
+             var last_index_page = 4;
+             if (page == 1) {
+                 var startindex = 0;
+                 var endindex = last_index_page;
+             } else {
+                 let calnopre = page - 1;
+                 let calno = page * perpageshow;
+                 var startindex = 0 + (calnopre * perpageshow);
+                 var endindex = last_index_page + (calno - 1);
+
+             }
+          
+             $('#all_engr_show').html('');
+             for (let k = startindex; k <= endindex; k++) {
+                 if (v.length == k) {
+                     break;
+                 }
+              
+
+                 if (v[k].signupoption == 1) {
+                     var image = v[k].pic;
+                 } else {
+                     var image = `{{ asset('engrphoto/${v[k].pic}') }}`;
+
+                 }
+                 $('#all_engr_show').append(`<div class="card">
 
       <div class="doctor-widget searchcard">
 <div class="doc-info-left">
@@ -1329,9 +1363,9 @@ for (let k = startindex; k <= endindex; k++) {
 </div>
 
 </div>`);
-}
+             }
 
-}
+         }
      </script>
      <script
          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry,places"

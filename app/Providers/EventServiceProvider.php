@@ -24,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
          'App\Events\conformemail' => [
             'App\Listeners\conform_email',
         ],
+        'App\Events\sendVideoevent' => [
+            'App\Listeners\sendVideolistener',
+        ],
     ];
 
     /**

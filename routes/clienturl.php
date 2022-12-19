@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\index;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\VideoConsaltantController;
 
 
 Route::middleware(['isUser'])->prefix('user')->group(function () {
@@ -29,6 +30,10 @@ Route::middleware(['isUser'])->prefix('user')->group(function () {
     Route::post('/proceed',[index::class,'proceed'])->name('proceed');
     Route::get('/proceedlogin',[index::class,'proceedlogin'])->name('proceedlogin');
     Route::get('/proceed',[index::class,'loginproceed'])->name('proceeds');
+    Route::post('videoconsultantbook',[VideoConsaltantController::class,'bookvideo'])->name('videoconsultantbook');
+    Route::post('clientreplyvideo',[index::class,'clientreplyvideo'])->name('clientreplyvideo');
+    Route::get('clientvideoconsultant',[VideoConsaltantController::class,'clientvideoconsultant'])->name('clientvideoconsultant');
+    
 });
 // Route::post('/user_register',[index::class,'registerformshow'])->name('user_register');
 Route::get('/user_regis',[index::class,'register_show'])->name('user_regis')->middleware('Preventpage');
