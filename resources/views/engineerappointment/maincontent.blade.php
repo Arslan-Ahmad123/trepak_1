@@ -240,13 +240,13 @@
 										</div>
 									</div>
 									<div class="appointment-action">
-										<a href="#" class="btn btn-sm bg-info-light" data-toggle="modal" data-target="#appt_details">
+										<button onclick="showorderinfo({{ $datas->id }})" class="btn btn-sm bg-info-light mr-2">
 											<i class="far fa-eye"></i> View
-										</a>
-										<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
+										</button>
+										<a href="javascript:void(0);" onClick="acceptAppointment({{$datas->id}})" class="btn btn-sm bg-success-light">
 											<i class="fas fa-check"></i> Accept
 										</a>
-										<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
+										<a href="javascript:void(0);" onclick="cancelAppointment({{$datas->id}})" class="btn btn-sm bg-danger-light">
 											<i class="fas fa-times"></i> Cancel
 										</a>
 									</div>
@@ -302,6 +302,56 @@
 
 			</div>		
 			<!-- /Page Content -->
+			{{-- client modal for show info of order  --}}
+			<div class="modal"  id="clientinfoorder">
+				<div class="modal-dialog" role="document">
+				  <div class="modal-content">
+					<div class="modal-header">
+					  <h5 class="modal-title" style="font-weight:bold;">Order Info</h5>
+					  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					  </button>
+					</div>
+					<div class="modal-body">
+					 <div class="row">
+						<div class="col-6">
+							<h6 >Client Name:<span id="client_name" style="font-weight: bold;"></span> </h6>
+							<h6 > Address: <span id="client_add" style="font-weight: bold;"></span></h6>
+						</div>
+						<div class="col-6">	
+							<h6>Engineer Name:<span id="engr_name" style="font-weight: bold;"></span> </h6>
+							<h6>Engineer Category:<span id="engr_category" style="font-weight: bold;"></span></h6>
+							<h6>Address: <span id="engr_add" style="font-weight: bold;"></span></h6>
+						</div>
+						<hr style="width: 100%;height: 2px;background-color: grey">
+						<div class="col-3">
+						</div>
+						<div class="col-5">
+							<h6>Date:</h6>
+							<h6>Consulting Fee:</h6>
+							<h6>Booking Fee:</h6>
+							<hr style="width: 100%;height: 2px;background-color: grey">
+							<h6 style="font-weight: bold;">Total Fee:</h6>
+						</div>
+						<div class="col-4">
+							<h6 id="meeting_date">22-10-5</h6>
+							<h6 id="consultingfee">10</h6>
+							<h6 id="bookingfee">50</h6>
+							<hr style="width: 100%;height: 2px;background-color: grey">
+							<h6 id="totalfee" style="font-weight: bold;">60</h6>
+						</div>
+					 </div>
+					</div>
+					
+				  </div>
+				</div>
+			</div>
+			{{-- client modal for show info of order  --}}
+
+
+
+
+
 			@push('childscript')
 			<script>
 				$(document).ready(function(){
@@ -343,5 +393,54 @@
 						  }
 					  });
 			  };
+
+			function showorderinfo(id){
+				console.log(id);
+				$.ajax({
+					url:'/engineer/fetchorderinfo/'+id,
+					method:'get',
+					success:function(data){
+						$('#client_name').text(' '+data[2].fname+' '+data[2].lname);	
+						$('#client_add').text(' '+data[2].city+' '+data[2].country);	
+						$('#engr_name').text(' '+data[1].fname+' '+data[1].lname);	
+						$('#engr_add').text(' '+data[1].city+' '+data[1].country);	
+						$('#engr_category').text(' '+data[3]);	
+						$('#meeting_date').text(data[0].meetingdate);	
+						$('#consultingfee').text('$'+data[0].consultingfee);	
+						$('#bookingfee').text('$'+data[0].bookingfee);	
+						$('#totalfee').text('$'+data[0].tlprice);	
+						let d = new Date(data[0].meetingdate);
+						console.log(d.toLocaleDateString());
+						$('#clientinfoorder').appendTo("body").modal({
+								backdrop: 'static',
+								keyboard: true, 
+								show: true
+						}); 
+					}
+				});
+			}
+			function acceptAppointment(id) {
+				$.ajax({
+					url:'/engineer/acceptappointment/'+id,
+					method:'get',
+					success:function(data){
+						// console.log(data);
+						location.reload();
+					}
+				});
+			}
+			function cancelAppointment(id) {
+				
+				$.ajax({
+					url:'/engineer/cancelappointment/'+id,
+					method:'get',
+					success:function(data){
+						// console.log(data);
+						location.reload();
+					}
+				});
+			}
+
+
 			</script>
 			@endpush

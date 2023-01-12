@@ -62,6 +62,7 @@
 												</a>
 											</li>
 											
+											
 											{{-- <li>
 												<a href="{{ route('clientchat') }}">
 													<i class="fas fa-comments"></i>
@@ -237,7 +238,8 @@
 																	</td>
 																	<td>{{ $orders->meetingdate }}</td>
 																	<td>{{ $orders->tlprice }}</td>
-																	<td><span class="badge badge-pill bg-{{($orders->engrstatus == 0)?'light':'success'  }}">{{ ($orders->engrstatus == 0)?'Pending':'Conform' }}</span></td>
+																	<td><span class="badge badge-pill bg-{{($orders->engrstatus == 0)?'light':(($orders->engrstatus == 2)?'danger text-dark':'success text-dark')}}">{{($orders->engrstatus == 0)?'Pending':(($orders->engrstatus == 2)?'Cancel':'Confirm')}}</span>
+																	</td>
 																	<td><span class="badge badge-pill bg-{{($orders->clientstatus == 0)?'light':'success'  }}">{{ ($orders->clientstatus == 0)?'Un Completed':'Completed' }}</span></td>
 																	
 																	<td class="text-right">
@@ -309,7 +311,8 @@
 																	</td>
 																	<td>{{ $orders->meetingdate }}</td>
 																	<td>{{ $orders->tlprice }}</td>
-																	<td><span class="badge badge-pill bg-{{($orders->engrstatus == 0)?'light':'success'  }}">{{ ($orders->engrstatus == 0)?'Pending':'Conform' }}</span></td>
+																	<td><span class="badge badge-pill bg-{{($orders->engrstatus == 0)?'light':(($orders->engrstatus == 2)?'danger text-dark':'success text-dark')}}">{{($orders->engrstatus == 0)?'Pending':(($orders->engrstatus == 2)?'Cancel':'Confirm')}}</span>
+																	</td>
 																	<td><span class="badge badge-pill bg-{{($orders->clientstatus == 0)?'light':'success'  }}">{{ ($orders->clientstatus == 0)?'Pending':'Completed' }}</span></td>
 																	
 																	<td class="text-right">
@@ -318,6 +321,12 @@
 																			<button onclick="showorderinfo({{ $orders->id }})" class="btn btn-sm bg-info-light">
 																				<i class="far fa-eye"></i> View
 																			</button>
+																			@if(now()->format('Y-m-d')>=$orders->meetingdate && $orders->engrstatus==1)
+																			<button onclick="openmodel1({{$orders->engrid}},{{$orders->clientid}},{{$orders->id}})" class="btn btn-sm bg-info-light">
+																				<i class="far fa-eye"></i> Complete
+																			</button>
+																			@endif
+																			
 																		</div>
 																	</td>
 																</tr>
@@ -468,6 +477,60 @@
 				</div>
 			  </div>
 			  {{-- client modal for show info of order  --}}
+			{{-- client modal for show info of order  --}}
+			<div class="modal"  id="completeinfoorder">
+				<div class="modal-dialog" role="document">
+				  <div class="modal-content">
+					<div class="modal-header">
+					  <h5 class="modal-title" style="font-weight:bold;">Order Status</h5>
+					  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					  </button>
+					</div>
+					<div class="modal-body">
+					 <div class="row">
+						<div class="col-6">Rating</div>
+						<div class="star-rating">
+							<input id="star-5" type="radio" name="rating" value="5">
+							<label for="star-5" title="5 stars">
+								<i class="active fa fa-star"></i>
+							</label>
+							<input id="star-4" type="radio" name="rating" value="4">
+							<label for="star-4" title="4 stars">
+								<i class="active fa fa-star"></i>
+							</label>
+							<input id="star-3" type="radio" name="rating" value="3">
+							<label for="star-3" title="3 stars">
+								<i class="active fa fa-star"></i>
+							</label>
+							<input id="star-2" type="radio" name="rating" value="2">
+							<label for="star-2" title="2 stars">
+								<i class="active fa fa-star"></i>
+							</label>
+							<input id="star-1" type="radio" name="rating" value="1">
+							<label for="star-1" title="1 star">
+								<i class="active fa fa-star"></i>
+							</label>
+						</div>
+					 </div>
+					 <div class="row">
+						<div class="col-12">
+							<label>Your review</label>
+							<textarea id="order_review" name="order_review" class="form-control"></textarea>
+
+							{{-- <div class="d-flex justify-content-between mt-3"><small class="text-muted"><span id="chars">100</span> characters remaining</small></div> --}}
+						</div>
+					 </div>
+					 <input type="hidden" id="engrid" name="engrid">
+					 <input type="hidden" id="clientid" name="clientid">
+					 <input type="hidden" id="orderid" name="orderid">
+					 <button class="btn btn-success" data-dismiss="modal" onClick="completeorder()" >Comeplete</button>
+					</div>
+					
+				  </div>
+				</div>
+			  </div>
+			  {{-- client modal for show info of order  --}}
 			  
 
 			  @push('childscript')
@@ -499,6 +562,75 @@
 									}); 
 								}
 							});
+						}
+						function openmodel1(engrid,clientid,orderid) {
+							$('#completeinfoorder').appendTo("body").modal({
+											backdrop: 'static',
+											keyboard: true, 
+											show: true
+									});
+							$("#engrid").val(engrid);
+							$("#clientid").val(clientid);
+							$("#orderid").val(orderid);
+						}
+						
+						function completeorder(){
+							// console.log(id);
+							var rating=$('input[name="rating"]:checked');
+							var order_review=$("#order_review").val();
+							var engrid=$("#engrid").val();
+							var clientid=$("#clientid").val();
+							var orderid=$("#orderid").val();
+							var order_review=$("#order_review").val();
+							if(rating.length>0) {
+								rating=rating[0].value;
+								
+								$.ajax({
+								url:'/user/clientrating/',
+								method:'post',
+								data:{
+									engrid:engrid,
+									clientid:clientid,
+									orderid:orderid,
+									rating:rating,
+								},
+								success:function(data){
+									console.log(data);
+								}
+							});
+
+								
+							}
+							if(order_review !='') {
+								$.ajax({
+								url:'/user/clientreview/',
+								method:'post',
+								data:{
+									engrid:engrid,
+									clientid:clientid,
+									orderid:orderid,
+									review:order_review,
+								},
+								success:function(data){
+									console.log(data);
+								}
+								});
+
+
+
+							}
+
+
+							$.ajax({
+								url:'/user/completeorder/'+orderid,
+								method:'get',
+								success:function(data){
+									console.log(data);
+								}
+								});
+							location.reload();
+
+
 						}
 					
 				</script>

@@ -55,6 +55,7 @@
                                             placeholder="FIrst Name" name="fname" :value="old('fname')" required
                                             autofocus />
                                     </div>
+
                                     <!-- Last Name -->
                                     <div class="mt-4">
                                         <x-label for="lname" :value="__('Last Name')" />
@@ -343,7 +344,7 @@
     <script>
         var input = document.querySelector("#mobile");
         intlTelInput(input, {
-            initialCountry: "auto",
+            initialCountry: "pk",
             geoIpLookup: function(success, failure) {
                 $.get("https://ipinfo.io", function() {}, "jsonp").always(function(resp) {
                     var countryCode = (resp && resp.country) ? resp.country : "";

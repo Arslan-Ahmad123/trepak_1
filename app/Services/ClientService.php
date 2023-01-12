@@ -51,12 +51,12 @@ class ClientService
     }
     public function searchEnginerCategoryWise($id)
     {
-        $categoryname = engCategory::find($id);   
+        $categoryname = engCategory::find($id);
         $new_longitude =  Auth::user()->longitude;
         $new_latitude = Auth::user()->latitude;
         $countryname = Auth::user()->country;
         $engr_array = [];
-        $user = User::where('role', 'enge')->where('engrcategoryid', $id)->where('country',$countryname)->get()->toArray();
+        $user = User::where('role', 'enge')->where('engrcategoryid', $id)->where('country', $countryname)->get()->toArray();
         $engr = User::where('role', 'enge')->where('engrcategoryid', $id)->paginate(10);
         $allengr = User::where('role', 'enge')->where('engrcategoryid', $id)->get();
         $totalengr = User::where('role', 'enge')->count();
@@ -86,10 +86,10 @@ class ClientService
                     $users['user_id'] = asset('engrphoto/' . $users['pic']);
                 }
                 // $userid = $users['id'];
-                
-                   
-                
-                    (Cache::has('userlogin'.$users['id']))?$users['onlinestatus'] = '#5bc155':$users['onlinestatus'] = '#f13535';
+
+
+
+                (Cache::has('userlogin' . $users['id'])) ? $users['onlinestatus'] = '#5bc155' : $users['onlinestatus'] = '#f13535';
                 $engr_array[] = $users;
             }
         }
@@ -103,9 +103,61 @@ class ClientService
 
         return ['engr' => $engr, 'tlengr' => $totalengr, 'cate_name' => $categoryname, 'category_id' => $id, 'allengr' => json_encode($allengr)];
     }
+    public function searchEnginerCategoryWise1($id)
+    {
+        $categoryname = engCategory::find($id);
+        $new_longitude =  Auth::user()->longitude;
+        $new_latitude = Auth::user()->latitude;
+        $countryname = Auth::user()->country;
+        $engr_array = [];
+        $user = User::where('role', 'enge')->where('engrcategoryid', $id)->get()->toArray();
+        $engr = User::where('role', 'enge')->where('engrcategoryid', $id)->paginate(10);
+        $allengr = User::where('role', 'enge')->where('engrcategoryid', $id)->get();
+        $totalengr = User::where('role', 'enge')->where('engrcategoryid', $id)->count();
+
+        foreach ($allengr as $users) {
+
+            $old_longitude = $users['longitude'];
+            $old_latitude = $users['latitude'];
+            $dLat = deg2rad($new_latitude - $old_latitude);
+            $dLon = deg2rad($new_longitude - $old_longitude);
+            $radius = 6371;
+            $a = sin($dLat / 2) * sin($dLat / 2) +
+                cos(deg2rad($old_latitude)) * cos(deg2rad($new_latitude)) *
+                sin($dLon / 2) * sin($dLon / 2);
+            $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+            $d = $radius * $c; // Distance in km
+
+            // array_push($users, $d);
+            // array_push($users,$categoryname->engrcategory);
+            $users['distance'] = $d;
+            $users['categoryname'] = $categoryname->engrcategory;
+            $users['user_id'] = Auth::user()->id;
+            if ($users['signupoption'] == 1) {
+                $users['imagepath'] = $users['pic'];
+            } else {
+                $users['user_id'] = asset('engrphoto/' . $users['pic']);
+            }
+            // $userid = $users['id'];
+
+
+
+            (Cache::has('userlogin' . $users['id'])) ? $users['onlinestatus'] = '#5bc155' : $users['onlinestatus'] = '#f13535';
+            $engr_array[] = $users;
+        }
+
+        if (session()->has('all_engrs')) {
+            session()->forget('all_engrs');
+            session()->push('all_engrs', $engr_array);
+        } else {
+            session()->push('all_engrs', $engr_array);
+        }
+
+        return ['engr' => $engr, 'tlengr' => $totalengr, 'cate_name' => $categoryname, 'category_id' => $id, 'allengr' => $allengr];
+    }
     public function searchEngineraddressWise($id, $city, $lat, $lon)
     {
-       
+
 
         $categoryname = engCategory::find($id);
         $engr = User::where('role', 'enge')->where('engrcategoryid', $id)->paginate(10);
@@ -116,7 +168,7 @@ class ClientService
         $engr_array = [];
         $client_array = [];
         $countryname = Auth::user()->country;
-        $user = User::where('role', 'enge')->where('engrcategoryid', $id)->where('country',$countryname)->get()->toArray();
+        $user = User::where('role', 'enge')->where('engrcategoryid', $id)->where('country', $countryname)->get()->toArray();
 
         if (count($user) > 0) {
             foreach ($user as $users) {
@@ -145,15 +197,15 @@ class ClientService
                     } else {
                         $users['user_id'] = asset('engrphoto/' . $users['pic']);
                     }
-                    
-                    (Cache::has('userlogin'.$users['id']))?$users['onlinestatus'] = '#5bc155':$users['onlinestatus'] = '#f13535';
+
+                    (Cache::has('userlogin' . $users['id'])) ? $users['onlinestatus'] = '#5bc155' : $users['onlinestatus'] = '#f13535';
                     $engr_array[] = $users;
                 }
             }
-           
-          
+
+
             if (count($engr_array) > 0) {
-               
+
                 if (session()->has('search_client_address')) {
                     session()->forget('search_client_address');
                 }
@@ -167,7 +219,7 @@ class ClientService
                 if (session()->has('all_engrs')) {
                     session()->forget('all_engrs');
                 }
-               
+
                 $client_array['client_lon'] = $lon;
                 $client_array['client_lat'] = $lat;
                 if (session()->has('search_client_address')) {
@@ -190,7 +242,7 @@ class ClientService
                 session()->push('search_client_address', $client_array);
             }
         }
-     
+
         return ['engr' => $engr, 'tlengr' => $totalengr, 'cate_name' => $categoryname, 'category_id' => $id, 'allengr' => json_encode($allengr)];
     }
     public function logoutClient()
@@ -201,7 +253,7 @@ class ClientService
     }
     public function viewEngineerComment($res)
     {
-       
+
         if (session()->has('cmt_engrid')) {
             $engr_id = session()->get('cmt_engrid');
         } elseif (session()->has('indexroute')) {
@@ -209,22 +261,22 @@ class ClientService
         } else {
             $engr_id = $res->userid;
         }
-        
+
         // dd(User::where('id',$res->userid)->get());
         $value = Auth::user()->id;
         $engr = User::with(['comment' => function ($q) use ($value) {
             $q->where('clientid', '=', $value); // '=' is optional
         }])->where('id', $engr_id)->get()->toArray();
-        
+
         // if($res->has('userid')){
 
         // }
-        if(Cache::has('userlogin'.$engr[0]['id'])){  
-            $engr[0]['onlinestatus']='#5bc155';
-       }else{
-        $engr[0]['onlinestatus']='#f13535';
-       }
-      
+        if (Cache::has('userlogin' . $engr[0]['id'])) {
+            $engr[0]['onlinestatus'] = '#5bc155';
+        } else {
+            $engr[0]['onlinestatus'] = '#f13535';
+        }
+
         // dd(json_encode()); 
         $object = (object) $engr[0];
         return $object;

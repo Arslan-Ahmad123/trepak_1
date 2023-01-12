@@ -450,7 +450,7 @@
 				</div>
 
 			</div>	
-			{{ Route::current()->getName() }}	
+			{{-- {{ Route::current()->getName() }}	 --}}
 			<!-- /Page Content -->
 			@push('childscript')
 			<script>

@@ -1,9 +1,9 @@
 @php
-    $count = count($engr);
+    $count = count($engrs);
 @endphp
 
 @if($count > 0)
-@foreach($engr as $engr)
+@foreach($engrs as $engr)
 <!-- Doctor Widget -->
 <div class="card">
     

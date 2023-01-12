@@ -483,6 +483,9 @@
                 
             @endphp
             @foreach ($all_category as $r)
+            @php
+                $engrs= \App\Models\User::where('role','enge')->where('engrcategoryid',$r->id)->get();
+            @endphp
                 <div class="col-lg-3 col-md-4 col-sm-6 col-12 mx-auto mx-md-0 maindiv_cat">
                     <a href="{{ route('searchengineer', $r->id) }}">
                         <div class="civil">
@@ -491,7 +494,7 @@
 
                             <div class="civilhover">
                                 <h6>{{ $r->engrcategory }}</h6>
-                                <p>Total Engineer : 1025</p>
+                                <p>Total Engineer : {{$engrs->count()}}</p>
                             </div>
                         </div>
                     </a>
@@ -1366,7 +1369,7 @@ text-transform: capitalize;">
             }
             new google.translate.TranslateElement({
                 pageLanguage: 'EN',
-                includedLanguages: 'en,ar,ur',
+                includedLanguages: 'en,ar,ur,sv,zh-CN',
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE
             }, 'google_translate_element');
             //    console.log($('.goog-te-menu-value span:first-child').text());

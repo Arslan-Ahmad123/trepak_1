@@ -18,54 +18,53 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
 
-route::get('/timeformat',function(){
-$date= '17:00';
-$newDate = \Carbon\Carbon::createFromFormat('H:i',$date)->format('h:i A');
-dd($newDate);
+route::get('/timeformat', function () {
+    $date = '17:00';
+    $newDate = \Carbon\Carbon::createFromFormat('H:i', $date)->format('h:i A');
+    dd($newDate);
 });
 Route::get('/', [index::class, 'showindex'])->name('home');
 Route::get('/indexpage', [index::class, 'showindex_page'])->name('indexpage');
 Route::get('/index_page', [index::class, 'showindex_page'])->name('index_page');
 // Route::view('/indexpage', [index::class,'showindex_page'])->name('indexpage');
 // ===================email ===========================
-Route::get('userstatusonline',function(){
-    if(Cache::has('userlogin'.Auth::user()->id)){
-       
-    }else{
-        Cache::put('userlogin'.Auth::user()->id,true);
+Route::get('userstatusonline', function () {
+    if (Cache::has('userlogin' . Auth::user()->id)) {
+    } else {
+        Cache::put('userlogin' . Auth::user()->id, true);
     }
     return response()->json('yes make a new active status');
 });
-Route::get("getallonlineenge",function(){
-$getalluser = User::select('id')->where('role','enge')->get()->toArray();
-$online_engr = [];
-foreach($getalluser as $id_user){
-     if(Cache::has('userlogin'.$id_user['id'])){  
-            $online_engr[]=$id_user['id'];
-     }
-}
-return response()->json($online_engr);
+Route::get("getallonlineenge", function () {
+    $getalluser = User::select('id')->where('role', 'enge')->get()->toArray();
+    $online_engr = [];
+    foreach ($getalluser as $id_user) {
+        if (Cache::has('userlogin' . $id_user['id'])) {
+            $online_engr[] = $id_user['id'];
+        }
+    }
+    return response()->json($online_engr);
 })->name('getallonlineenge');
-Route::post('onlineenge_arr',function(Request $res){
-    if(Cache::has('userlogin'.$res->engr_arr)){  
+Route::post('onlineenge_arr', function (Request $res) {
+    if (Cache::has('userlogin' . $res->engr_arr)) {
         return response()->json('yes');
-    }else{
+    } else {
         return response()->json('no');
     }
 })->name('onlineenge_arr');
-Route::post("getallonlineenge_arr",function(Request $res){
+Route::post("getallonlineenge_arr", function (Request $res) {
     $getalluser = $res->engr_arr;
     $online_engr = [];
-    foreach($getalluser as $id_user){
-         if(Cache::has('userlogin'.$id_user)){  
-                $online_engr[]=$id_user;
-         }
+    foreach ($getalluser as $id_user) {
+        if (Cache::has('userlogin' . $id_user)) {
+            $online_engr[] = $id_user;
+        }
     }
     return response()->json($online_engr);
 })->name('getallonlineenge_arr');
-Route::get('userstatusoffline',function(){
-    if(Cache::has('userlogin'.Auth::user()->id)){
-        Cache::pull('userlogin'.Auth::user()->id);
+Route::get('userstatusoffline', function () {
+    if (Cache::has('userlogin' . Auth::user()->id)) {
+        Cache::pull('userlogin' . Auth::user()->id);
     }
     return response()->json('yes offline status');
 });
@@ -176,7 +175,7 @@ Route::get('/fetchallrangeengr', function () {
     return response()->json($getuser);
 });
 Route::get('/fetchallrangeengrdfl', function () {
-    $getuser = User::with('category')->where('role', 'enge')->where('country','pakistan')
+    $getuser = User::with('category')->where('role', 'enge')->where('country', 'pakistan')
         ->get()->toArray();
     return response()->json($getuser);
 });
@@ -237,11 +236,11 @@ Route::get('/google/callback', function () {
     } else {
         $user = Socialite::driver('google')->stateless()->user();
         $users       =   User::where(['email' => $user->email])->first();
-       
+
         event(new Registered($users));
-      
+
         if ($users) {
-            if($users->signupoption == 0){
+            if ($users->signupoption == 0) {
                 User::where(['email' => $user->email])->update([
                     'pic' => $user->avatar,
                     'fname' => $user->name,
@@ -277,8 +276,8 @@ Route::get('/google/callback', function () {
                         }
                     }
                 }
-               
-                Cache::put('userlogin'.Auth::user()->id,true);
+
+                Cache::put('userlogin' . Auth::user()->id, true);
             } elseif (Auth::user()->role == 'user') {
                 if (session()->has('search_id')) {
                     return redirect()->route('search_engineer');
@@ -376,15 +375,15 @@ Route::get('/facebook/callback', function () {
         $user = Socialite::driver('facebook')->stateless()->user();
         $users       =   User::where(['email' => $user->email])->first();
         event(new Registered($users));
-        session()->set('user_login','yes');
+        session()->set('user_login', 'yes');
         if ($users) {
-            if($users->signupoption == 0){
+            if ($users->signupoption == 0) {
                 User::where(['email' => $user->email])->update([
-                'pic' => $user->avatar,
-                'fname' => $user->name,
-                'password' => Hash::make('null12345'),
-                'signupoption' => 1,
-            ]);
+                    'pic' => $user->avatar,
+                    'fname' => $user->name,
+                    'password' => Hash::make('null12345'),
+                    'signupoption' => 1,
+                ]);
             }
             Auth::login($users);
             if (Auth::user()->role == 'enge') {
@@ -415,9 +414,8 @@ Route::get('/facebook/callback', function () {
                         }
                     }
                 }
-              
-                Cache::put('userlogin'.Auth::user()->id,true);
 
+                Cache::put('userlogin' . Auth::user()->id, true);
             } elseif (Auth::user()->role == 'user') {
                 if (session()->has('search_id')) {
                     return redirect()->route('search_engineer');
@@ -560,21 +558,19 @@ Route::get('getdistance', function () {
 
 Route::get('returnsession', function () {
     $res = session()->get('all_engrs');
-    if($res == null){
+    if ($res == null) {
         return response()->json([]);
-    }else{
+    } else {
         return response()->json($res[0]);
     }
-   
 })->name('returnsession');
 Route::get('returnclientsession', function () {
     $res = session()->get('search_client_address');
-    if($res == null){
+    if ($res == null) {
         return response()->json([]);
-    }else{
+    } else {
         return response()->json($res);
     }
-    
 })->name('returnclientsession');
 Route::post('getuserlanlog', function (Request $res) {
     $new_longitude =  $res->lon;
@@ -611,25 +607,24 @@ Route::post('getuserlanlog', function (Request $res) {
     //     session()->push('all_engrs', $engr_array);
     // }
 });
-Route::get('clienteng_register_page',function(){
-    if(Auth::check()){
+Route::get('clienteng_register_page', function () {
+    if (Auth::check()) {
         return redirect()->route('home');
-    }else{
+    } else {
         return view('registerpage.registerpageview');
     }
 })->name('clienteng_register_page');
 
-Route::get('complaintcell',function(){
-    $data = appointmentInfo::where('clientid',Auth::user()->id)->distinct()->get(['engrid']);
-   
-    return view('client.complaintcell.complaintcell')->with( ['data'=>$data]);
+Route::get('complaintcell', function () {
+    $data = appointmentInfo::where('clientid', Auth::user()->id)->distinct()->get(['engrid']);
 
+    return view('client.complaintcell.complaintcell')->with(['data' => $data]);
 })->name('complaintcell');
 Route::post('getuserlanlog_cn', function (Request $res) {
     $new_longitude =  $res->lon;
     $new_latitude = $res->lat;
     $engr_array = [];
-    $user = User::where('role', 'enge')->where('country',$res->country)->get()->toArray();
+    $user = User::where('role', 'enge')->where('country', $res->country)->get()->toArray();
 
     foreach ($user as $users) {
         $category = engCategory::find($users['engrcategoryid']);

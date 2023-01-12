@@ -364,17 +364,18 @@
                          <h4 class="card-title mb-0">Search Filter</h4>
                      </div>
                      <div class="card-body">
-                         <form action="{{ route('searchbarengineer') }}" method="post">
+                         {{-- <form action="{{ route('searchbarengineer') }}" name="myform1" id="myform1" method="post"> --}}
+                         <form action="{{ route('filterengineer1') }}" name="myform1" id="myform1" method="post">
                              @csrf
-                             <div class="slidecontainer">
+                             {{-- <div class="slidecontainer">
                                  Price Range
                                  <input type="range" min="500" max="5000" value="500" step="500"
                                      class="slider" id="myRange">
                                  <p>Value: <span id="demo"></span></p>
-                             </div>
+                             </div> --}}
 
 
-                             <div class="filter-widget">
+                             {{-- <div class="filter-widget">
                                  <h4>Select Specialist</h4>
                                  <select id="engrcategory" class="form-control" name="date">
                                      @php
@@ -386,8 +387,8 @@
                                              {{ $res->engrcategory }}</option>
                                      @endforeach
                                  </select>
-                             </div>
-                             <div class="filter-widget">
+                             </div> --}}
+                             {{-- <div class="filter-widget">
                                  <div class="form-group">
                                      Select City
                                      <input type="text" onfocus="checkerror()" onblur="getcordinataddress()"
@@ -399,9 +400,55 @@
                                      <input type="hidden" name="addresslat" id="addresslat">
                                      <input type="hidden" name="addresslon" id="addresslon">
                                  </div>
+                             </div> --}}
+                             <div class="filter-widget">
+                                 <div class="form-group">
+                                     Select Rating
+                                     <div class="star-rating">
+                                        <input id="star-5" type="radio" name="rating" value="5">
+                                        <label for="star-5" title="5 stars">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                        <input id="star-4" type="radio" name="rating" value="4">
+                                        <label for="star-4" title="4 stars">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                        <input id="star-3" type="radio" name="rating" value="3">
+                                        <label for="star-3" title="3 stars">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                        <input id="star-2" type="radio" name="rating" value="2">
+                                        <label for="star-2" title="2 stars">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                        <input id="star-1" type="radio" name="rating" value="1">
+                                        <label for="star-1" title="1 star">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                    </div>
+                                 </div>
                              </div>
+                             <div class="filter-widget">
+                                 <div class="form-group">
+                                    Select Rating
+                                    <select class="form-control" name="review" id="review">
+                                        <option value="0">Select Review</option>
+                                        <option value="1">Most Reviews</option>
+                                    </select>
+                                 </div>
+                             </div>
+                             <div class="filter-widget">
+                                 <div class="form-group">
+                                    Select Experience
+                                    <select class="form-control" name="experience" id="experience">
+                                        <option value="0">Select Experience</option>
+                                        <option value="1">Most Experience</option>
+                                    </select>
+                                 </div>
+                             </div>
+                             <input type="hidden" name="cat_id1" id="cat_id1" value="{{$cate_name->id}}">
                              <div class="btn-search">
-                                 <button type="submit" id="search_btn" disabled class="btn btn-block">Search</button>
+                                 <button type="submit" id="search_btn" class="btn btn-block">Search</button>
                              </div>
                          </form>
                      </div>
@@ -453,7 +500,7 @@
 
                  <div id="result"></div>
 
-                 <div id="mapid" style="width: 100%; height: 400px;" class="mb-3"></div>
+                 {{-- <div id="mapid" style="width: 100%; height: 400px;" class="mb-3"></div> --}}
 
                  {{-- <div id=""></div> --}}
                  <input type="text" id="lat_cur" hidden>
@@ -880,7 +927,7 @@
                  name: 'geolocation'
              }).then(function(result) {
                  console.log(result);
-                 if (result.state == 'denied' || result.state == 'gratned') {
+                 if (result.state == 'denied' || result.state == 'granted') {
 
                  }
              });
@@ -897,13 +944,11 @@
                  type: 'get',
                  async: false,
                  success: function(data) {
-
-                     console.log('fetch all user :' + data.length)
+                    console.log('fetch all user :' + data.length)
 
                      $.each(data, function(index, value) {
                          allengr[index] = value;
                      });
-
                  }
              });
 
@@ -1465,7 +1510,7 @@
             <div class="clini-infos">
                 <ul>
                     <li><i class="far fa-thumbs-up"></i> 98%</li>
-                    <li><a href="javascript:void(0)" onclick="clientchat_box(${v[k].id},{{ Auth::user()->id }},'${v[k].fname}','${image}','${v[k].onlinestatus}')"><i class="far fa-comment"></i> Chat</a></li>
+                    <li><a href="{{ route('viewprofileeng') }}" onclick="clientchat_box(${v[k].id},{{ Auth::user()->id }},'${v[k].fname}','${image}','${v[k].onlinestatus}')"><i class="far fa-comment"></i> Chat</a></li>
                     {{-- <li><i class="fas fa-map-marker-alt"></i> Florida, USA</li> --}}
                     {{-- <li><i class="far fa-money-bill-alt"></i> $300 - $1000 <i class="fas fa-info-circle" data-toggle="tooltip" title="Lorem Ipsum"></i> </li> --}}
                 </ul>
