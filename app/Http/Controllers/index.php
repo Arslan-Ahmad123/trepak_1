@@ -197,10 +197,10 @@ class index extends Controller
         } else {
             $engrs = User::where('role', '=', 'enge')->where('engrcategoryid', '=', $res->id)->get();
         }
-        if (isset($rating)) {
+        if ($rating != '') {
             foreach ($engrs as $engr) {
                 (Cache::has('userlogin' . $engr->id)) ? $engr['onlinestatus'] = '#5bc155' : $engr['onlinestatus'] = '#f13535';
-                $count1 = EngrRating::where('engr_id', '=', $engr['id'])->where('rating', '=', $rating)->count();
+                $count1 = EngrRating::where('user_id', '=', $engr['id'])->where('rating', '=', $rating)->count();
                 if ($count1 == 0) {
                     $engr = [];
                 } else {
@@ -210,7 +210,7 @@ class index extends Controller
             }
             if ($review != 0) {
                 foreach ($engrs1 as $engr1) {
-                    $count2 = EngrReview::where('engr_id', '=', $engr1['id'])->where('review', '!=', '')->count();
+                    $count2 = EngrReview::where('user_id', '=', $engr1['id'])->where('review', '!=', '')->count();
                     if ($count2 == 0) {
                         $engr1 = [];
                     } else {
@@ -236,8 +236,11 @@ class index extends Controller
                 $engrs1 = $engrs2;
             }
         } else if ($review != 0) {
+            foreach ($engrs as $engr) {
+                (Cache::has('userlogin' . $engr->id)) ? $engr['onlinestatus'] = '#5bc155' : $engr['onlinestatus'] = '#f13535';
+            }
             foreach ($engrs as $engr1) {
-                $count2 = EngrReview::where('engr_id', '=', $engr1['id'])->where('review', '!=', '')->count();
+                $count2 = EngrReview::where('user_id', '=', $engr1['id'])->where('review', '!=', '')->count();
                 if ($count2 == 0) {
                     $engr1 = [];
                 } else {
@@ -260,15 +263,20 @@ class index extends Controller
                     }
                 }
             }
-            $engrs1 = $engrs2;
+            if (isset($engrs2)) {
+                $engrs1 = $engrs2;
+            }
         }
-
         $category = engCategory::find($res->id);
-        if (empty($engrs1)) {
+        if ($rating == '' && $review == 0) {
+            foreach ($engrs as $engr) {
+                (Cache::has('userlogin' . $engr->id)) ? $engr['onlinestatus'] = '#5bc155' : $engr['onlinestatus'] = '#f13535';
+            }
             $data = ['engrs' => $engrs, 'category' => $category];
         } else {
             $data = ['engrs' => $engrs1, 'category' => $category];
         }
+        // dd($data);
         return view('searchengineer.searchengineerview')->with($data);
     }
 
@@ -276,8 +284,19 @@ class index extends Controller
     public function engineer_search()
     {
         if (session()->has('search_id')) {
-            $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise(session()->get('search_id'));
-            return view('searchengineer.searchengineerview')->with($resultSearchEngineer);
+            // $resultSearchEngineer = $this->clientservices->searchEnginerCategoryWise(session()->get('search_id'));
+            // return view('searchengineer.searchengineerview')->with($resultSearchEngineer);
+
+
+
+            $engrs = User::where('role', '=', 'enge')->where('engrcategoryid', '=', session()->get('search_id'))->paginate(5);
+            foreach ($engrs as $engr) {
+                (Cache::has('userlogin' . $engr['id'])) ? $engr['onlinestatus'] = '#5bc155' : $engr['onlinestatus'] = '#f13535';
+                $engrs1[] = $engr;
+            }
+            $category = engCategory::find(session()->get('search_id'));
+            $data = ['engrs' => $engrs, 'category' => $category];
+            return view('searchengineer.searchengineerview')->with($data);
         } else {
             return redirect(RouteServiceProvider::INDEXPAGE);
         }
@@ -598,17 +617,17 @@ class index extends Controller
     }
     public function clientrating(Request $request)
     {
-        $engr_id = $request->engrid;
-        $client_id = $request->clientid;
-        $order_id = $request->orderid;
+        $engr_id = (int)$request->engrid;
+        $client_id = (int)$request->clientid;
+        $order_id = (int)$request->orderid;
         $rating = $request->rating;
-        $res = EngrRating::create([
-            'engr_id' => $engr_id,
-            'client_id' => $client_id,
-            'order_id' => $order_id,
-            'rating' => $rating
-        ]);
-        if ($res) {
+        // return $request;
+        $engrRating = new EngrRating();
+        $engrRating->user_id = $engr_id;
+        $engrRating->client_id = $client_id;
+        $engrRating->order_id = $order_id;
+        $engrRating->rating = $rating;
+        if ($engrRating->save()) {
             return response()->json("Rating Added Successfully");
         } else {
             return response()->json("Rating not Added");
@@ -620,13 +639,12 @@ class index extends Controller
         $client_id = $request->clientid;
         $order_id = $request->orderid;
         $review = $request->review;
-        $res = EngrReview::create([
-            'engr_id' => $engr_id,
-            'client_id' => $client_id,
-            'order_id' => $order_id,
-            'review' => $review
-        ]);
-        if ($res) {
+        $engrReview = new EngrReview();
+        $engrReview->user_id = $engr_id;
+        $engrReview->client_id = $client_id;
+        $engrReview->order_id = $order_id;
+        $engrReview->review = $review;
+        if ($engrReview->save()) {
             return response()->json("Review Added Successfully");
         } else {
             return response()->json("Review not Added");

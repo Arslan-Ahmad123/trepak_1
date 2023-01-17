@@ -573,18 +573,19 @@
 							$("#clientid").val(clientid);
 							$("#orderid").val(orderid);
 						}
-						
+						// $.ajaxSetup({
+						// headers: {
+						// 	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+						// }
+						// });
 						function completeorder(){
 							// console.log(id);
-							var rating=$('input[name="rating"]:checked');
+							var rating=$('input[name="rating"]:checked').val();
 							var order_review=$("#order_review").val();
 							var engrid=$("#engrid").val();
 							var clientid=$("#clientid").val();
 							var orderid=$("#orderid").val();
-							var order_review=$("#order_review").val();
-							if(rating.length>0) {
-								rating=rating[0].value;
-								
+							if(rating>0) {
 								$.ajax({
 								url:'/user/clientrating/',
 								method:'post',
@@ -620,7 +621,7 @@
 
 							}
 
-
+							
 							$.ajax({
 								url:'/user/completeorder/'+orderid,
 								method:'get',

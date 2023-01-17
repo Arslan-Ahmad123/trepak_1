@@ -1426,7 +1426,7 @@
                      break;
                  }
 
-
+                 
                  if (v[k].signupoption == 1) {
                      var image = v[k].pic;
                  } else {

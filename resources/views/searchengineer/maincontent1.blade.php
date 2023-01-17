@@ -546,11 +546,11 @@
                                  <div class="clinic-booking">
                                      <form method="post" translate="no">
                                          @csrf
-                                         <input type="text" name="userid" value="${v[k].id}" hidden>
-                                         <input type="text" name="bookingid" value="${v[k].id}" hidden>
+                                         <input type="text" name="userid" value="{{$engr->id}}" hidden>
+                                         <input type="text" name="bookingid" value="{{$engr->id}}" hidden>
 
                                          <button class="btn-info p-0 px-2 btn w-45" type="submit" formaction="{{ route('viewprofileeng') }}"><i class="fa fa-eye" aria-hidden="true"></i>Profile</button>
-                                         <button class="btn-info p-0 px-2 btn w-45" type="submit" onclick="shoemodeldate(${v[k].id})"><i class="fa fa-check" aria-hidden="true"></i>Book</button>
+                                         <button class="btn-info p-0 px-2 btn w-45" type="button" onClick="shoemodeldate({{$engr->id}})"><i class="fa fa-check" aria-hidden="true"></i>Book</button>
                                      </form>
                                      {{-- <a class="apt-btn" href="{{ route('booking',['id'=>$engr->id]) }}"><i class="fa fa-check" aria-hidden="true"></i>Book</a> --}}
                                  </div>
@@ -619,13 +619,14 @@
                      <span aria-hidden="true">&times;</span>
                  </button>
              </div>
+             @if(count($engrs)>0)
              <form action="{{ route('proceed') }}" method="post">
                  @csrf
                  <div class="modal-body">
                      <div class="form-group">
                          <label for="selectdateorder">Select Date</label>
                          <input class="form-control" type="date" name="engr_date" id="selectdateorder" min="<?php echo date('Y-m-d'); ?>" value="<?php echo date('Y-m-d'); ?>">
-                         <input class="form-control" type="text" name="engr_id" id="select_engrid" hidden>
+                         <input class="form-control" type="text" name="engr_id" id="{{$engr->id}}" hidden>
 
                      </div>
                  </div>
@@ -634,7 +635,7 @@
                      {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
                  </div>
              </form>
-
+            @endif
          </div>
      </div>
  </div>
@@ -709,7 +710,11 @@
          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=places,geometry"
          async></script> --}}
  <script>
-
+    function shoemodeldate(id) {
+             event.preventDefault();
+             $('#orderdetail_modal').appendTo('body').modal('show');
+             $('#select_engrid').val(id);
+         }
  </script>
  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDefv55aRSdLiSHe-SgrGrrjp3QWlQspt4&callback=initMap&v=weekly&channel=2&libraries=geometry,places" async></script>
  @endpush
